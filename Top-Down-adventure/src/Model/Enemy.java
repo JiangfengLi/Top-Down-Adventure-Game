@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.HashMap;
+
 /**
  * Abstract class for enemies. Provides methods and fields that all types
  * of enemies will need
@@ -7,43 +9,16 @@ package Model;
  * @author Wes Rodgers
  *
  */
-public abstract class Enemy {
-	private int currentHP;
-	private int maxHP;
+public abstract class Enemy extends Character{
+
+	private HashMap<Item, Float> drops;
 	
 	/**
-	 * Getter for current HP
+	 * Getter for the enemy's drop table
 	 * 
-	 * @return the enemy's current HP
+	 * @return a HashMap mapping the item as a key and a float representing drop chance as the value
 	 */
-	public int getHP() {
-		return this.currentHP;
-	}
-	
-	/**
-	 * Adds health to the enemy's current HP
-	 * 
-	 * @param amount the amount of health to be restored
-	 */
-	public void addHP(int amount) {
-		currentHP = currentHP + amount >= maxHP ? maxHP : currentHP + amount;
-	}
-	
-	/**
-	 * Subtracts health from the enemy's current HP
-	 * 
-	 * @param amount the amount of health the enemy loses
-	 */
-	public void loseHP(int amount) {
-		currentHP = currentHP - amount <= 0 ? 0 : currentHP - amount;
-	}
-	
-	/**
-	 * Boolean check for whether the enemy is dead or not
-	 * 
-	 * @return true if currentHP == 0, false otherwise
-	 */
-	public boolean isDead() {
-		return currentHP == 0;
+	public HashMap<Item, Float> getDrops() {
+		return this.drops;
 	}
 }

@@ -11,13 +11,23 @@ import java.util.ArrayList;
  *
  */
 public abstract class Area {
-	private ArrayList<Object> obstacles;
+	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
 	
-	public ArrayList<Object> getObstacles(){
+	/**
+	 * getter for the obstacles in an area
+	 * 
+	 * @return an ArrayList of the obstacles in an area
+	 */
+	public ArrayList<Obstacle> getObstacles(){
 		return obstacles;
 	}
 	
+	/**
+	 * getter for the enemies in an area
+	 * 
+	 * @return an ArrayList of the enemies in an area
+	 */
 	public ArrayList<Enemy> getEnemies(){
 		return enemies;
 	}

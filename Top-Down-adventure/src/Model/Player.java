@@ -6,48 +6,17 @@ package Model;
  * @author Wes Rodgers
  *
  */
-public class Player {
-	private int currentHP;
-	private int maxHP;
-	
+public class Player extends Character{
+
+	/**
+	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
+	 * to fit whatever we actually decide on.
+	 */
 	public Player() {
-		currentHP = 3;
-		maxHP = 3;
+		super();
+		this.currentHP = 3;
+		this.maxHP = 3;
 	}
 	
-	/**
-	 * Getter for current HP
-	 * 
-	 * @return the players current HP
-	 */
-	public int getHP() {
-		return this.currentHP;
-	}
 	
-	/**
-	 * Adds health to the player's current HP
-	 * 
-	 * @param amount the amount of health to be restored
-	 */
-	public void addHP(int amount) {
-		currentHP = currentHP + amount >= maxHP ? maxHP : currentHP + amount;
-	}
-	
-	/**
-	 * Subtracts health from the player's current HP
-	 * 
-	 * @param amount the amount of health the player loses
-	 */
-	public void loseHP(int amount) {
-		currentHP = currentHP - amount <= 0 ? 0 : currentHP - amount;
-	}
-	
-	/**
-	 * Boolean check for whether the player is dead or not
-	 * 
-	 * @return true if currentHP == 0, false otherwise
-	 */
-	public boolean isDead() {
-		return currentHP == 0;
-	}
 }
