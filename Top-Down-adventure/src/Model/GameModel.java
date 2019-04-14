@@ -29,5 +29,11 @@ public class GameModel {
 	public Player getPlayer() {
 		return this.player;
 	}
+
+	public void updatePlayerPosition(int xMovement, int yMovement) {
+		player.updateX(xMovement);
+		player.updateY(yMovement);
+		
+	}
 	
 }

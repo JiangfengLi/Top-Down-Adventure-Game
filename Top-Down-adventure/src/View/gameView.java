@@ -4,6 +4,7 @@ import Model.buttonMaker;
 import controller.GameController;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -19,6 +20,7 @@ public class gameView {
 	private Stage myStage;
 	
 	private GameController controller;
+	private boolean wPressed, aPressed, sPressed, dPressed;
 	
 	public gameView() {
 		myPane = new AnchorPane();
@@ -64,6 +66,17 @@ public class gameView {
 	 * updates the player's position in the area
 	 */
 	public void updateCharacterPosition() {
+		/********NOTE********
+		 * These are placeholder values, but 
+		 * this is probably the easiest way to tell how
+		 * much to move during a given turn
+		 */
+		int xMovement = dPressed ? 5 : 0;
+		xMovement += aPressed ? -5 : 0;
+		int yMovement = wPressed ? 5 : 0;
+		yMovement = sPressed ? 5 : 0;
+		
+		controller.updatePlayerPosition(xMovement, yMovement);
 	}
 	
 	/**
@@ -87,6 +100,9 @@ public class gameView {
 		}
 	}
 	
+	/**
+	 * Plays a death animation for the character
+	 */
 	private void deathAnimation() {
 		// TODO Auto-generated method stub
 		
@@ -97,5 +113,44 @@ public class gameView {
 	 */
 	public void checkWeaponCollision() {
 		
+	}
+	
+	/**
+	 * sets up listeners for key press and key release
+	 * so we can tell when a combination of keys are pressed
+	 * and move diagonally as appropriate. 
+	 */
+	public void setupMovementListeners() {
+		myScene.setOnKeyPressed((e)->{
+			if(e.getCode() == KeyCode.W) {
+				wPressed = true;
+			}
+			if(e.getCode() == KeyCode.S) {
+				sPressed = true;
+			}
+			
+			if(e.getCode() == KeyCode.A) {
+				aPressed = true;
+			}
+			if(e.getCode() == KeyCode.D) {
+				dPressed = true;
+			}
+		});
+		
+		myScene.setOnKeyReleased((e)->{
+			if(e.getCode() == KeyCode.W) {
+				wPressed = false;
+			}
+			if(e.getCode() == KeyCode.S) {
+				sPressed = false;
+			}
+			
+			if(e.getCode() == KeyCode.A) {
+				aPressed = false;
+			}
+			if(e.getCode() == KeyCode.D) {
+				dPressed = false;
+			}
+		});
 	}
 }

@@ -25,5 +25,16 @@ public class GameController {
 	public boolean playerDead() {
 		return model.getPlayer().isDead();
 	}
+
+	/**
+	 * Updates the character model with the distance that the player
+	 * moved during that tick
+	 * 
+	 * @param xMovement the amount and direction to move along the x-axis
+	 * @param yMovement the amount and direction to move along the y-axis
+	 */
+	public void updatePlayerPosition(int xMovement, int yMovement) {
+		model.updatePlayerPosition(xMovement, yMovement);		
+	}
 	
 }

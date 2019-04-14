@@ -16,7 +16,6 @@ public class Player extends Character{
 		super();
 		this.currentHP = 3;
 		this.maxHP = 3;
-	}
-	
+	}	
 	
 }
