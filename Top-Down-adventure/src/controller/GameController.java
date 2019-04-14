@@ -1,44 +1,24 @@
 package controller;
 
+import Model.Enemy;
+import Model.GameModel;
+
 /**
  * The controller part of the MVC paradigm for the game.
- * Provides methods to update position, check collision,
- * and update models of different events.
  * 
  * @author Wes Rodgers
  *
  */
 public class GameController {
 
-	/**
-	 * updates the player's position in the area
-	 */
-	public void updateCharacterPosition() {
-		
+	private GameModel model;
+	
+	public GameController(GameModel model) {
+		this.model = model;
 	}
-	
-	/**
-	 * updates the enemies' positions in the area
-	 */
-	public void updateEnemyPosition() {
-		
+
+	public boolean playerDead() {
+		return model.getPlayer().isDead();
 	}
-	
-	/**
-	 * checks for player death
-	 */
-	public void checkDeath() {
-		
-	}
-	
-	/**
-	 * checks to see if the weapon hit an enemy
-	 */
-	public void checkWeaponCollision() {
-		
-	}
-	
-	
-	
 	
 }

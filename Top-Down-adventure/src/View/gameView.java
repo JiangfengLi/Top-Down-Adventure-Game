@@ -1,6 +1,7 @@
 package View;
 
 import Model.buttonMaker;
+import controller.GameController;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -16,6 +17,8 @@ public class gameView {
 	private AnchorPane myPane;
 	private Scene myScene;
 	private Stage myStage;
+	
+	private GameController controller;
 	
 	public gameView() {
 		myPane = new AnchorPane();
@@ -55,5 +58,44 @@ public class gameView {
 		Image back = new Image(BACK_GROUND,300,400,false,true);
 		BackgroundImage backGround = new BackgroundImage(back, null, null, BackgroundPosition.DEFAULT, null);
 		myPane.setBackground(new Background(backGround));
+	}
+	
+	/**
+	 * updates the player's position in the area
+	 */
+	public void updateCharacterPosition() {
+	}
+	
+	/**
+	 * updates the enemies' positions in the area
+	 */
+	public void updateEnemyPosition() {
+	}
+	
+	/**
+	 * checks for player death
+	 * @return 
+	 */
+	public void checkDeath() {
+		if(controller.playerDead()) {
+			deathAnimation();
+			/*********TODO***********
+			 * after playing a death animation,
+			 * set area and player position to 
+			 * after-death location, fill health 
+			 */
+		}
+	}
+	
+	private void deathAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * checks to see if the weapon hit an enemy
+	 */
+	public void checkWeaponCollision() {
+		
 	}
 }
