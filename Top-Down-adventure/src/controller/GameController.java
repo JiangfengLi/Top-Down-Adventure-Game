@@ -17,6 +17,11 @@ public class GameController {
 		this.model = model;
 	}
 
+	/**
+	 * boolean check for whether the player is
+	 * dead.
+	 * @return true if the player is dead, false otherwise
+	 */
 	public boolean playerDead() {
 		return model.getPlayer().isDead();
 	}
