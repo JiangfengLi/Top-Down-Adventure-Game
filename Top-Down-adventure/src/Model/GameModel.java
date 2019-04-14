@@ -15,6 +15,8 @@ public class GameModel {
 	private Area currArea;
 	private GameMap map;
 	
+	private GameState gameState;
+	
 	public GameModel() {
 		player = new Player();
 		map = new GameMap();
