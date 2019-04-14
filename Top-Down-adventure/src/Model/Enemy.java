@@ -21,4 +21,25 @@ public abstract class Enemy extends Character{
 	public HashMap<Item, Float> getDrops() {
 		return this.drops;
 	}
+
+	/**
+	 * Method stub for determining whether the
+	 * enemy has a straight line path to the player
+	 * without any collision objects in the way
+	 * @return
+	 */
+	public abstract boolean playerIsVisible();
+
+	public void moveTowardsPlayer() {
+		if(playerIsVisible()) {
+			//****TODO*****
+			// move directly towards the player
+		}
+		else {
+			//****TODO*****
+			//route around the closest obstacle
+			//between enemy and player
+		}
+		
+	}
 }

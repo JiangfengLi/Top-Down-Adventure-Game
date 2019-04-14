@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Wes Rodgers
  *
  */
-public abstract class Area {
+public class Area {
 	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
 	

@@ -32,10 +32,19 @@ public class GameModel {
 		return this.player;
 	}
 
+	/**
+	 * moves the player character
+	 * 
+	 * @param xMovement the amount to move along the x-axis
+	 * @param yMovement the amount to move along the y-axis
+	 */
 	public void updatePlayerPosition(int xMovement, int yMovement) {
 		player.updateX(xMovement);
-		player.updateY(yMovement);
-		
+		player.updateY(yMovement);		
+	}
+	
+	public Area getCurrentArea() {
+		return currArea;
 	}
 	
 }

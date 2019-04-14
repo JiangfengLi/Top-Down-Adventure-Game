@@ -37,4 +37,16 @@ public class GameController {
 		model.updatePlayerPosition(xMovement, yMovement);		
 	}
 	
+	/**
+	 * Calculates pathing for enemies, moves flying enemies randomly
+	 * and moves ground enemies towards player.
+	 */
+	public void updateEnemyPositions() {
+		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+			enemy.moveTowardsPlayer();
+		}
+	}
+
+
+	
 }
