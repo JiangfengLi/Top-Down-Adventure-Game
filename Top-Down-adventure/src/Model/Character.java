@@ -5,12 +5,10 @@ package Model;
  * @author Wes Rodgers
  *
  */
-public abstract class Character {
+public abstract class Character extends GameObject{
 
 	protected int currentHP;
 	protected int maxHP;
-	protected int xPosition;
-	protected int yPosition;
 
 	/**
 	 * Getter for current HP
@@ -46,23 +44,5 @@ public abstract class Character {
 	 */
 	public boolean isDead() {
 		return currentHP == 0;
-	}
-	
-	/**
-	 * updates the x coordinate of this character
-	 * 
-	 * @param xMovement the amount to move the character
-	 */
-	public void updateX(int xMovement) {
-		xPosition += xMovement;
-	}
-
-	/**
-	 * updates the y coordinate of this character
-	 * 
-	 * @param yMovement the amount to move the character
-	 */
-	public void updateY(int yMovement) {
-		yPosition += yMovement;
 	}
 }

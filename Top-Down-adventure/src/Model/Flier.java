@@ -11,6 +11,10 @@ public class Flier extends Enemy {
 		
 	}
 
+	/**
+	 * returns whether the enemy can see the player
+	 * @return true, fliers don't collide with objects
+	 */
 	@Override
 	public boolean playerIsVisible() {
 		return true;

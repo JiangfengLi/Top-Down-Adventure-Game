@@ -7,5 +7,9 @@ package Model;
  *
  */
 public class Heart extends Item {
-
+	
+	public Heart(int[] location) {
+		this.imageFile = "";
+		this.location = location;
+	}
 }

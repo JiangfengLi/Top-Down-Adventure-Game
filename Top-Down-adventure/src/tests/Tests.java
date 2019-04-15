@@ -85,7 +85,11 @@ class Tests {
 	}
 	
 	@Test
-	void testItem() {
+	void testArrow() {
+		
+	}
+	
+	void testHeart() {
 		
 	}
 }
