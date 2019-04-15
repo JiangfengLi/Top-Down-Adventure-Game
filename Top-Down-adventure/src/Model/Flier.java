@@ -8,7 +8,11 @@ package Model;
 public class Flier extends Enemy {
 	
 	public Flier() {
-		
+		direction = 3;
+		currentHP = 1;
+		maxHP = 1;
+		damage = 1;
+		speed = 5;
 	}
 
 	/**

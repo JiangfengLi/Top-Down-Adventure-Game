@@ -34,4 +34,15 @@ public abstract class GameObject {
 		location[0] += xOffset;
 		location[1] += yOffset;
 	}
+	
+	/**
+	 * sets the object's anchor point to a specific location
+	 * 
+	 * @param x the object's x coordinate
+	 * @param y the object's y coordinate
+	 */
+	public void setLocation(int x, int y) {
+		location[0] = x;
+		location[1] = y;
+	}
 }

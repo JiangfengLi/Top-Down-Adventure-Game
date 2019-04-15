@@ -9,7 +9,7 @@ package Model;
  */
 public abstract class Obstacle extends GameObject {
 
-	private boolean destructible;
+	protected boolean destructible;
 	
 	/**
 	 * getter for the obstacle's destructible flag

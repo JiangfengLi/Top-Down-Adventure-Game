@@ -20,6 +20,8 @@ public class Player extends Character{
 		super();
 		this.currentHP = 3;
 		this.maxHP = 3;
+		direction = 3;
+		speed = 10;
 	}	
 	
 	/**

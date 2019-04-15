@@ -8,4 +8,7 @@ package Model;
  */
 public class Tree extends Obstacle{
 
+	public Tree() {
+		destructible = false;
+	}
 }
