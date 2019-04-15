@@ -30,7 +30,7 @@ public class gameView {
 	 * getter for the stage
 	 * @return
 	 */
-	public Stage getStage() {
+	public Stage getStage() { // GUI
 		return myStage;
 	}
 	
