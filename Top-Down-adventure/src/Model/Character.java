@@ -1,5 +1,10 @@
 package Model;
 
+/**
+ * Abstract class for characters that can move and do damage
+ * @author Wes Rodgers
+ *
+ */
 public abstract class Character {
 
 	protected int currentHP;
