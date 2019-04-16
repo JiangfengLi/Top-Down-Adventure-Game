@@ -18,6 +18,7 @@ public class GameMap {
 		map = new Area[3][3];
 		
 		ArrayList<Obstacle> areaOneObstacles = new ArrayList<Obstacle>();
+		areaOneObstacles.add(new Grass(300, 300));
 		ArrayList<Enemy> areaOneEnemies = new ArrayList<Enemy>();
 		
 		map[0][0] = new Area(areaOneEnemies, areaOneObstacles);

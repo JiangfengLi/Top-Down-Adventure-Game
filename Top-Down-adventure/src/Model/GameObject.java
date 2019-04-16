@@ -4,6 +4,24 @@ public abstract class GameObject {
 
 	protected String imageFile;
 	protected int[] location;
+	protected int height;
+	protected int width;
+	
+	/**
+	 * returns the object's height
+	 * @return the object's height
+	 */
+	public int getHeight() {
+		return height;
+	}
+	
+	/**
+	 * returns the objects width
+	 * @return the objects width
+	 */
+	public int getWidth() {
+		return width;
+	}
 	
 	/**
 	 * returns the filename / location of this

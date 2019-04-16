@@ -97,10 +97,10 @@ public class gameView implements Observer{
 		 * this is probably the easiest way to tell how
 		 * much to move during a given turn
 		 */
-		int xMovement = dPressed ? 5 : 0;
-		xMovement += aPressed ? -5 : 0;
-		int yMovement = wPressed ? -5 : 0;
-		yMovement += sPressed ? 5 : 0;
+		int xMovement = dPressed ? 3 : 0;
+		xMovement += aPressed ? -3 : 0;
+		int yMovement = wPressed ? -3 : 0;
+		yMovement += sPressed ? 3 : 0;
 		
 		controller.updatePlayerPosition(xMovement, yMovement);
 	}
@@ -203,7 +203,7 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		//background = area's background
 		for(Obstacle obstacle : obstacles) {
-			//put this obstacle on top of background
+			gc.fillRect(obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
 		}
 		for(Enemy enemy : enemies) {
 			//put this enemy on top of background

@@ -8,7 +8,13 @@ package Model;
  */
 public class Grass extends Obstacle{
 	
-	public Grass() {
+	public Grass(int x, int y) {
 		destructible = true;
+		width = 50;
+		height = 50;
+		location = new int[2];
+		location[0] = x;
+		location[1] = y;
+		
 	}
 }
