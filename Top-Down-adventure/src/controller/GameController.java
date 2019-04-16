@@ -162,7 +162,7 @@ public class GameController {
 	 */
 	public void updateEnemyPositions() {
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
-			enemy.moveTowardsPlayer();
+			enemy.moveTowardsPlayer(); 
 		}
 	}
 
