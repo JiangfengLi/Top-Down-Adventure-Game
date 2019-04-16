@@ -21,12 +21,38 @@ public class GameMap {
 		areaOneObstacles.add(new Grass(300, 300));
 		ArrayList<Enemy> areaOneEnemies = new ArrayList<Enemy>();
 		
-		map[0][0] = new Area(areaOneEnemies, areaOneObstacles);
 		/*******TODO**********
 		 * All of the Areas will be different
 		 * so they will have to be initialized
 		 * individually.
 		 */
+		for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				areaOneObstacles = new ArrayList<Obstacle>();
+				if(i == 0) {
+					for(int k = 0; k < 20; k++) {
+						areaOneObstacles.add(new Grass(0, k*50));
+					}
+				}
+				if(j == 0) {
+					for(int k = 0; k < 30; k++) {
+						areaOneObstacles.add(new Grass(k*50, 0));
+					}
+				}
+				if(i == 2) {
+					for(int k = 0; k < 20; k++) {
+						areaOneObstacles.add(new Grass(1450, k*50));
+					}
+				}
+				if(j == 2) {
+					for(int k = 0; k < 30; k++) {
+						areaOneObstacles.add(new Grass(k*50, 950));
+					}
+				}
+				areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
+				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
+			}
+		}
 	}
 
 	/**
@@ -38,4 +64,8 @@ public class GameMap {
 		return map[0][0];
 	}
 
+	public Area getArea(int i, int j) {
+		// TODO Auto-generated method stub
+		return map[i][j];
+	}
 }

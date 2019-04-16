@@ -46,12 +46,25 @@ public class GameModel extends Observable {
 		notifyObservers(currArea);
 	}
 	
+	public void setPlayerPosition(int x, int y) {
+		player.setLocation(x, y);
+		setChanged();
+		notifyObservers(currArea);
+	}
 	/**
 	 * returns the Area that the player is currently in
 	 * @return the Area that the player is currently in
 	 */
 	public Area getCurrentArea() {
 		return currArea;
+	}
+	
+	public void shiftCurrentArea(int[] area) {
+		int x = currArea.getCoords()[0];
+		int y = currArea.getCoords()[1];
+		currArea = map.getArea(x + area[0], y + area[1]);
+		setChanged();
+		notifyObservers(currArea);
 	}
 	
 }

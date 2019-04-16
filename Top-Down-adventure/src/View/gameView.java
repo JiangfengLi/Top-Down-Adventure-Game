@@ -97,10 +97,10 @@ public class gameView implements Observer{
 		 * this is probably the easiest way to tell how
 		 * much to move during a given turn
 		 */
-		int xMovement = dPressed ? 3 : 0;
-		xMovement += aPressed ? -3 : 0;
-		int yMovement = wPressed ? -3 : 0;
-		yMovement += sPressed ? 3 : 0;
+		int xMovement = dPressed ? 8 : 0;
+		xMovement += aPressed ? -8 : 0;
+		int yMovement = wPressed ? -8 : 0;
+		yMovement += sPressed ? 8 : 0;
 		
 		controller.updatePlayerPosition(xMovement, yMovement);
 	}

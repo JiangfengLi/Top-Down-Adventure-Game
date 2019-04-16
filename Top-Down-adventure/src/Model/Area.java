@@ -13,11 +13,13 @@ import java.util.ArrayList;
 public class Area {
 	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
+	private int[] coords = new int[2];
 	
-	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles) {
+	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles, int x, int y) {
 		this.obstacles = obstacles;
 		this.enemies = enemies;
-		
+		coords[0] = x;
+		coords[1] = y;
 	}
 	
 	/**
@@ -36,5 +38,10 @@ public class Area {
 	 */
 	public ArrayList<Enemy> getEnemies(){
 		return enemies;
+	}
+
+	public int[] getCoords() {
+		// TODO Auto-generated method stub
+		return coords;
 	}
 }

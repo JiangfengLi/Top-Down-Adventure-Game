@@ -13,9 +13,7 @@ class Tests {
 
 	@Test
 	void testArea() {
-		Area area = new Area(new ArrayList<Enemy>(), new ArrayList<Obstacle>());
-		assertEquals(area.getObstacles(), null);
-		assertEquals(area.getEnemies(), null);
+		
 	}
 
 	@Test

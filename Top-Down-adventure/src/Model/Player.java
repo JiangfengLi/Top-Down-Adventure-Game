@@ -22,8 +22,8 @@ public class Player extends Character{
 		direction = 3;
 		speed = 5;
 		location = new int[2];
-		location[0] = 0;
-		location[1] = 0;
+		location[0] = 60;
+		location[1] = 60;
 	}	
 	
 	/**

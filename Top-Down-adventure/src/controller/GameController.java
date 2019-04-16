@@ -52,7 +52,8 @@ public class GameController {
 		 * much to move during a given turn
 		 */		
 		
-		ArrayList<Obstacle> obstacles = getCurrentArea().getObstacles();
+		Area curr = getCurrentArea();
+		ArrayList<Obstacle> obstacles = curr.getObstacles();
 		for(Obstacle obstacle : obstacles) {
 			if(collision(getPlayerPosition(), obstacle)) {
 				int[] collisionCoords = collisionUpdate(getPlayerPosition(), obstacle);
@@ -61,9 +62,58 @@ public class GameController {
 			}
 		}
 		
+		if(offScreen()) {
+			int[] collisionCoords = offScreenCoords();
+			int[] area = new int[2];
+			if(collisionCoords[0] == getPlayerPosition()[0]) {
+				area[0] = 0;
+				area[1] = collisionCoords[1] == 1 ? 1 : -1;
+			}
+			else {
+				area[1] = 0;
+				area[0] = collisionCoords[0] == 1 ? 1 : -1;
+			}
+			model.shiftCurrentArea(area);
+			model.setPlayerPosition(collisionCoords[0], collisionCoords[1]);
+			return;
+		}
+		
 		model.updatePlayerPosition(xMovement, yMovement);		
 	}
 	
+	private int[] offScreenCoords() {
+		int[] temp = new int[2];
+		if(getPlayerPosition()[0] < 0) {
+			temp[1] = getPlayerPosition()[1];
+			temp[0] = 1449;
+			return temp;
+		}
+		if(getPlayerPosition()[0] > 1450){
+			temp[1] = getPlayerPosition()[1];
+			temp[0] = 1;
+			return temp;
+		}
+		if(getPlayerPosition()[1] > 0) {
+			temp[0] = getPlayerPosition()[0];
+			temp[1] = 1;
+			return temp;
+		}
+		if(getPlayerPosition()[1] < 0) {
+			temp[0] = getPlayerPosition()[0];
+			temp[1] = 899;
+			return temp;
+		}
+		return null;
+	}
+
+	private boolean offScreen() {
+		if(getPlayerPosition()[0] < 0 || getPlayerPosition()[0] + 50 > 1500 ||
+				getPlayerPosition()[1] < 0 || getPlayerPosition()[1]  > 900) {
+			return true;
+		}
+		return false;
+	}
+
 	private void setPlayerPosition(int i, int j) {
 		model.getPlayer().setLocation(i, j);
 		
