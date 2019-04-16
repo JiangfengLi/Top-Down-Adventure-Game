@@ -45,8 +45,6 @@ public class gameView implements Observer{
 		
 		myStage.minWidthProperty().bind(myScene.heightProperty().multiply(1.5));
 		myStage.minHeightProperty().bind(myScene.heightProperty().divide(1.5));
-		
-		setupMovementListeners();
 	}
 	
 	/**
@@ -96,13 +94,12 @@ public class gameView implements Observer{
 		 * this is probably the easiest way to tell how
 		 * much to move during a given turn
 		 */
-		int xMovement = dPressed ? 5 : 0;
-		xMovement += aPressed ? -5 : 0;
-		int yMovement = wPressed ? 5 : 0;
-		yMovement = sPressed ? -5 : 0;
+		int xMovement = dPressed ? 1 : 0;
+		xMovement += aPressed ? -1 : 0;
+		int yMovement = wPressed ? 1 : 0;
+		yMovement += sPressed ? -1 : 0;
 		
 		controller.updatePlayerPosition(xMovement, yMovement);
-		System.out.printf("Player X: %d -- Player Y: %d", controller.getPlayerPosition()[0], controller.getPlayerPosition()[1]);
 	}
 	
 	/**
@@ -181,11 +178,13 @@ public class gameView implements Observer{
 	}
 
 	public void startGame() {
+		gameStarted = true;
 		myScene = new Scene(new BorderPane(), WIDTH, HEIGHT);
 		myStage.setScene(myScene);
 		GameModel model= new GameModel();
 		controller = new GameController(model);
 		currentScreen = controller.getCurrentArea();
+		setupMovementListeners();
 		update(model, controller.getCurrentArea());		
 	}
 

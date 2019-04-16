@@ -1,5 +1,7 @@
 
 
+import java.util.ArrayList;
+
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -7,9 +9,7 @@ import javafx.stage.Stage;
 
 public class Window extends Application{
 	
-	private static final int TICKS_PER_FRAME = 1;
 	private gameView view;
-	private boolean gameStarted = false;
 	
 	
 	public static void main(String[] args) {
@@ -22,14 +22,11 @@ public class Window extends Application{
 		view = new gameView();
 		primaryStage = view.getStage();
 		primaryStage.setTitle("Adventure game");
-		primaryStage.show();			
-		
+		primaryStage.show();		
 		new AnimationTimer() {
 			@Override
-			public void handle(long now) {
-				for(int i=0; i< TICKS_PER_FRAME; i++) {
-					tick();
-				}
+			public void handle(long now) {				
+				tick();
 			}
 		}.start();
 	}

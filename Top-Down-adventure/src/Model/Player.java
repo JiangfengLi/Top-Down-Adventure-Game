@@ -17,11 +17,13 @@ public class Player extends Character{
 	 * to fit whatever we actually decide on.
 	 */
 	public Player() {
-		super();
 		this.currentHP = 3;
 		this.maxHP = 3;
 		direction = 3;
 		speed = 10;
+		location = new int[2];
+		location[0] = 0;
+		location[1] = 0;
 	}	
 	
 	/**
