@@ -12,12 +12,14 @@ import Model.Player;
 import Model.buttonMaker;
 import controller.GameController;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class gameView implements Observer{
@@ -28,6 +30,7 @@ public class gameView implements Observer{
 	private Scene myScene;
 	private Stage myStage;
 	private Area currentScreen;
+	private boolean gameStarted = false;
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;
@@ -99,6 +102,7 @@ public class gameView implements Observer{
 		yMovement = sPressed ? -5 : 0;
 		
 		controller.updatePlayerPosition(xMovement, yMovement);
+		System.out.printf("Player X: %d -- Player Y: %d", controller.getPlayerPosition()[0], controller.getPlayerPosition()[1]);
 	}
 	
 	/**
@@ -177,6 +181,8 @@ public class gameView implements Observer{
 	}
 
 	public void startGame() {
+		myScene = new Scene(new BorderPane(), WIDTH, HEIGHT);
+		myStage.setScene(myScene);
 		GameModel model= new GameModel();
 		controller = new GameController(model);
 		currentScreen = controller.getCurrentArea();
@@ -197,5 +203,10 @@ public class gameView implements Observer{
 			//put this enemy on top of background
 		}
 		//put the player on top of background
+	}
+
+	public boolean gameStarted() {
+		// TODO Auto-generated method stub
+		return gameStarted;
 	}
 }

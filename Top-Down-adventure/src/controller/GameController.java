@@ -31,6 +31,10 @@ public class GameController {
 		return model.getPlayer().isDead();
 	}
 
+	public int[] getPlayerPosition() {
+		return model.getPlayer().getLocation();
+	}
+	
 	/**
 	 * Updates the character model with the distance that the player
 	 * moved during that tick
