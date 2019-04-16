@@ -37,11 +37,11 @@ public class GameModel extends Observable {
 	/**
 	 * moves the player character
 	 * 
-	 * @param xMovement the amount to move along the x-axis
-	 * @param yMovement the amount to move along the y-axis
+	 * @param d the amount to move along the x-axis
+	 * @param e the amount to move along the y-axis
 	 */
-	public void updatePlayerPosition(int xMovement, int yMovement) {
-		player.updatePosition(xMovement, yMovement);
+	public void updatePlayerPosition(double d, double e) {
+		player.updatePosition(d, e);
 		setChanged();
 		notifyObservers(currArea);
 	}

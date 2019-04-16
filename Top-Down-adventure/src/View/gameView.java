@@ -11,11 +11,13 @@ import Model.Obstacle;
 import Model.Player;
 import Model.buttonMaker;
 import controller.GameController;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -203,7 +205,15 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		//background = area's background
 		for(Obstacle obstacle : obstacles) {
-			gc.fillRect(obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			ImageView iv = new ImageView();
+			Image image = new Image(obstacle.getImageFile()); 
+			iv.setImage(image);
+			iv.setViewport(new Rectangle2D(0,0,50,50));
+			if(obstacle.isDestructible()) {
+				iv.setFitWidth(50);
+			}
+			gc.drawImage(iv.getImage(), 0,0,50,50, obstacle.getLocation()[0], 
+					obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
 		}
 		for(Enemy enemy : enemies) {
 			//put this enemy on top of background
