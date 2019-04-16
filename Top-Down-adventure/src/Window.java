@@ -1,3 +1,5 @@
+
+
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -5,7 +7,7 @@ import javafx.stage.Stage;
 
 public class Window extends Application{
 	
-	private static final int ticksPerFrame = 5;
+	private static final int TICKS_PER_FRAME = 5;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -16,21 +18,20 @@ public class Window extends Application{
 		AnimationTimer at = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				for(int i=0; i< ticksPerFrame; i++) {
+				for(int i=0; i< TICKS_PER_FRAME; i++) {
 					tick();
 				}
 			}
-		};
+		};		
 		
 		try {
 			gameView view = new gameView();
 			primaryStage = view.getStage();
 			primaryStage.setTitle("Adventure game");
-			primaryStage.show();
+			primaryStage.show();			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
 		at.start();
 	}
 	

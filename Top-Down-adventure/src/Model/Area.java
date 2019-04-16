@@ -14,6 +14,12 @@ public class Area {
 	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
 	
+	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles) {
+		this.obstacles = obstacles;
+		this.enemies = enemies;
+		
+	}
+	
 	/**
 	 * getter for the obstacles in an area
 	 * 

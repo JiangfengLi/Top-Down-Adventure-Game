@@ -1,5 +1,14 @@
 package View;
 
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import Model.Area;
+import Model.Enemy;
+import Model.GameModel;
+import Model.Obstacle;
+import Model.Player;
 import Model.buttonMaker;
 import controller.GameController;
 import javafx.scene.Scene;
@@ -11,13 +20,14 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.stage.Stage;
 
-public class gameView {
+public class gameView implements Observer{
 	private final String BACK_GROUND = "/style/back_cave.png";
 	private static final int HEIGHT = 400;
 	private static final int WIDTH = 600;
 	private AnchorPane myPane;
 	private Scene myScene;
 	private Stage myStage;
+	private Area currentScreen;
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;
@@ -29,6 +39,11 @@ public class gameView {
 		myStage.setScene(myScene);
 		makeButton("PLAY NOW!",200,300);
 		setBackground(BACK_GROUND);
+		
+		myStage.minWidthProperty().bind(myScene.heightProperty().multiply(1.5));
+		myStage.minHeightProperty().bind(myScene.heightProperty().divide(1.5));
+		
+		setupMovementListeners();
 	}
 	
 	/**
@@ -48,8 +63,15 @@ public class gameView {
 	private void makeButton(String text, int x, int y) {
 		buttonMaker button = new buttonMaker(text);
 		myPane.getChildren().add(button);
+		setClicked(button);
 		button.setLayoutX(x);
 		button.setLayoutY(y);
+	}
+	
+	public void setClicked(buttonMaker button) {
+		button.setOnMouseReleased((e)->{
+			startGame();
+		});
 	}
 	
 	/**
@@ -74,7 +96,7 @@ public class gameView {
 		int xMovement = dPressed ? 5 : 0;
 		xMovement += aPressed ? -5 : 0;
 		int yMovement = wPressed ? 5 : 0;
-		yMovement = sPressed ? 5 : 0;
+		yMovement = sPressed ? -5 : 0;
 		
 		controller.updatePlayerPosition(xMovement, yMovement);
 	}
@@ -152,5 +174,28 @@ public class gameView {
 				dPressed = false;
 			}
 		});
+	}
+
+	public void startGame() {
+		GameModel model= new GameModel();
+		controller = new GameController(model);
+		currentScreen = controller.getCurrentArea();
+		update(model, controller.getCurrentArea());		
+	}
+
+	@Override
+	public void update(Observable model, Object area) {
+		currentScreen = (Area) area;
+		ArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
+		ArrayList<Enemy> enemies = ((Area) area).getEnemies();
+		Player player = ((GameModel) model).getPlayer();
+		//background = area's background
+		for(Obstacle obstacle : obstacles) {
+			//put this obstacle on top of background
+		}
+		for(Enemy enemy : enemies) {
+			//put this enemy on top of background
+		}
+		//put the player on top of background
 	}
 }

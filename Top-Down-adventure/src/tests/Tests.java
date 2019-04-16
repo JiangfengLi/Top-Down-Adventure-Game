@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import Model.*;
@@ -11,7 +13,7 @@ class Tests {
 
 	@Test
 	void testArea() {
-		Area area = new Area();
+		Area area = new Area(new ArrayList<Enemy>(), new ArrayList<Obstacle>());
 		assertEquals(area.getObstacles(), null);
 		assertEquals(area.getEnemies(), null);
 	}
@@ -30,11 +32,6 @@ class Tests {
 	@Test
 	void testTank() {
 		Enemy tank = new Tank();
-	}
-	
-	@Test
-	void testGameState() {
-		GameState gameState = new GameState();
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Observable;
+
 /**
  * The main model class for the game,
  * has fields and methods to access and update
@@ -9,18 +11,18 @@ package Model;
  * @author Wes Rodgers
  */
 
-public class GameModel {
+public class GameModel extends Observable {
 	
 	private Player player;
 	private Area currArea;
 	private GameMap map;
 	
-	private GameState gameState;
-	
 	public GameModel() {
 		player = new Player();
 		map = new GameMap();
 		currArea = map.getStartArea();
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -39,7 +41,9 @@ public class GameModel {
 	 * @param yMovement the amount to move along the y-axis
 	 */
 	public void updatePlayerPosition(int xMovement, int yMovement) {
-		player.updatePosition(xMovement, yMovement);	
+		player.updatePosition(xMovement, yMovement);
+		setChanged();
+		notifyObservers(currArea);
 	}
 	
 	/**

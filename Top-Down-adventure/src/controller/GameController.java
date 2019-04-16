@@ -1,5 +1,6 @@
 package controller;
 
+import Model.Area;
 import Model.Enemy;
 import Model.GameModel;
 
@@ -12,6 +13,10 @@ import Model.GameModel;
 public class GameController {
 
 	private GameModel model;
+	
+	public GameController() {
+		this.model = new GameModel();
+	}
 	
 	public GameController(GameModel model) {
 		this.model = model;
@@ -45,6 +50,11 @@ public class GameController {
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 			enemy.moveTowardsPlayer();
 		}
+	}
+
+	public Area getCurrentArea() {
+		// TODO Auto-generated method stub
+		return model.getCurrentArea();
 	}
 
 
