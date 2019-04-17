@@ -9,6 +9,7 @@ package Model;
 public class Tree extends Obstacle{
 
 	public Tree() {
+		imageFile = "/style/].png";
 		destructible = false;
 	}
 }

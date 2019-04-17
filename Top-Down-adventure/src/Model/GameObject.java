@@ -46,16 +46,13 @@ public abstract class GameObject {
 	
 	/**
 	 * updates the object's position on the board
-	 * @param xOffset the amount to increment/decrement x coordinate by
-	 * @param yOffset the amount to increment/decrement y coordinate by
+	 * @param d the amount to increment/decrement x coordinate by
+	 * @param e the amount to increment/decrement y coordinate by
 	 */
-	public void updatePosition(int xOffset, int yOffset) {
-		
-		oldLocation[0] = location[0];
-		oldLocation[1] = location[1];
-		
-		location[0] += xOffset;
-		location[1] += yOffset;
+	public void updatePosition(double d, double e) {
+		location[0] += d;
+		location[1] += e;
+
 	}
 	
 	/**
