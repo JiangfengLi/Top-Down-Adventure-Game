@@ -233,7 +233,7 @@ public class GameController {
 			if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
 					playerPosition[0] + 52 > obstacle.getLocation()[0] &&
 					playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
-					playerPosition[1] + 102 > obstacle.getLocation()[1]) {
+					playerPosition[1] + 102 > obstacle.getLocation()[1]) { 
 				return true;
 			}
 		}
