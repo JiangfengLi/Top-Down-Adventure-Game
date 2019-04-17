@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.Scene;
+
 /**
  * Abstract class for Obstacles, which are impassable object on
  * the map
@@ -17,5 +19,9 @@ public abstract class Obstacle extends GameObject {
 	 */
 	public boolean isDestructible() {
 		return destructible;
+	}
+
+	public void playDestruction(Scene scene) {
+		
 	}
 }

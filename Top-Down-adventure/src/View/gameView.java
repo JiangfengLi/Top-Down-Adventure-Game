@@ -11,12 +11,15 @@ import Model.Obstacle;
 import Model.Player;
 import Model.buttonMaker;
 import controller.GameController;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -149,16 +152,20 @@ public class gameView implements Observer{
 	public void setupMovementListeners() {
 		myScene.setOnKeyPressed((e)->{
 			if(e.getCode() == KeyCode.W) {
+				controller.setPlayerDirection(1);
 				wPressed = true;
 			}
 			if(e.getCode() == KeyCode.S) {
+				controller.setPlayerDirection(3);
 				sPressed = true;
 			}
 			
 			if(e.getCode() == KeyCode.A) {
+				controller.setPlayerDirection(2);
 				aPressed = true;
 			}
 			if(e.getCode() == KeyCode.D) {
+				controller.setPlayerDirection(4);
 				dPressed = true;
 			}
 		});
@@ -179,6 +186,17 @@ public class gameView implements Observer{
 			}
 		});
 	}
+	
+	public void setupMouseClickListeners() {
+		myScene.setOnMouseClicked((e)->{
+			if(e.getButton() == MouseButton.PRIMARY) {
+				controller.swordAttack(myScene);
+			}
+			else if(e.getButton() == MouseButton.SECONDARY) {
+				controller.swordAttack(myScene);
+			}
+		});
+	}
 
 	public void startGame() {
 		gameStarted = true;
@@ -189,26 +207,36 @@ public class gameView implements Observer{
 		controller = new GameController(model);
 		currentScreen = controller.getCurrentArea();
 		setupMovementListeners();
+		setupMouseClickListeners();
 		model.addObserver(this);
-		update(model, controller.getCurrentArea());		
+		update(model, controller.getCurrentArea());
 	}
 
 	@Override
 	public void update(Observable model, Object area) {
+		
+		Player player = ((GameModel) model).getPlayer();
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 		currentScreen = (Area) area;
 		ArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
 		ArrayList<Enemy> enemies = ((Area) area).getEnemies();
-		Player player = ((GameModel) model).getPlayer();
-		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		//background = area's background
 		for(Obstacle obstacle : obstacles) {
-			gc.fillRect(obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			ImageView iv = new ImageView();
+			Image image = new Image(obstacle.getImageFile()); 
+			iv.setImage(image);
+			iv.setViewport(new Rectangle2D(0,0,50,50));
+			if(obstacle.isDestructible()) {
+				iv.setFitWidth(50);
+			}
+			gc.drawImage(iv.getImage(), 0,0,50,50, obstacle.getLocation()[0], 
+					obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
 		}
 		for(Enemy enemy : enemies) {
 			//put this enemy on top of background
 		}
-		gc.fillRect(player.getLocation()[0], player.getLocation()[1], 50, 100);
+		gc.fillRect(player.getLocation()[0], player.getLocation()[1], 50, 100);		
 	}
 
 	public boolean gameStarted() {

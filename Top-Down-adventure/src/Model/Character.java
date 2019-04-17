@@ -14,7 +14,7 @@ public abstract class Character extends GameObject{
 	
 	//direction is as follows: 1 is up, 2 is left, 3 is down, 4 is right.
 	protected int direction;
-
+	
 	/**
 	 * Getter for current HP
 	 * 

@@ -24,6 +24,9 @@ public class Player extends Character{
 		location = new int[2];
 		location[0] = 60;
 		location[1] = 60;
+		oldLocation = new int[2];
+		oldLocation[0] = 60;
+		oldLocation[1] = 60;
 	}	
 	
 	/**

@@ -6,6 +6,7 @@ public abstract class GameObject {
 	protected int[] location;
 	protected int height;
 	protected int width;
+	protected int[] oldLocation;
 	
 	/**
 	 * returns the object's height
@@ -49,8 +50,21 @@ public abstract class GameObject {
 	 * @param yOffset the amount to increment/decrement y coordinate by
 	 */
 	public void updatePosition(int xOffset, int yOffset) {
+		
+		oldLocation[0] = location[0];
+		oldLocation[1] = location[1];
+		
 		location[0] += xOffset;
 		location[1] += yOffset;
+	}
+	
+	/**
+	 * gets last known location
+	 * 
+	 * @return the coords of the players last location before update
+	 */
+	public int[] getOldLocation() {
+		return oldLocation;
 	}
 	
 	/**
@@ -60,6 +74,9 @@ public abstract class GameObject {
 	 * @param y the object's y coordinate
 	 */
 	public void setLocation(int x, int y) {
+		oldLocation[0] = location[0];
+		oldLocation[1] = location[1];
+		
 		location[0] = x;
 		location[1] = y;
 	}

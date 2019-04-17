@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import Model.Area;
 import Model.Enemy;
 import Model.GameModel;
+import Model.GameObject;
 import Model.Obstacle;
+import Model.Player;
+import javafx.scene.Scene;
 
 /**
  * The controller part of the MVC paradigm for the game.
@@ -171,6 +174,76 @@ public class GameController {
 		return model.getCurrentArea();
 	}
 
+	public void swordAttack(Scene scene) {
+		for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
+			if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
+				obstacle.playDestruction(scene);
+				getCurrentArea().getObstacles().remove(obstacle);
+			}
+		}
+		
+		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+			if(weaponCollision(model.getPlayer(), enemy)) {
+				enemy.loseHP(model.getPlayer().getDamage());
+			}
+		}
+		
+	}
+
+	private boolean weaponCollision(Player player, GameObject obstacle) {
+		
+		int[] playerPosition = new int[2];
+		
+		//if player is facing north, weapon affect 50x50 pixel square north of him
+		if(player.getDirection() == 1) {
+			playerPosition[0] = player.getLocation()[0];
+			playerPosition[1] = player.getLocation()[1] - 100;
+		}
+		//if west, square is west
+		else if(player.getDirection() == 2) {
+			playerPosition[0] = player.getLocation()[0] - 50;
+			playerPosition[1] = player.getLocation()[1];
+		}
+		//if south, square is south
+		else if(player.getDirection() == 3) {
+			playerPosition[0] = player.getLocation()[0];
+			playerPosition[1] = player.getLocation()[1] + 100;			
+		}
+		//else east, then square is east
+		else {
+			playerPosition[0] = player.getLocation()[0] + 50;
+			playerPosition[1] = player.getLocation()[1];
+		}
+		
+		if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+				playerPosition[0] + 52 > obstacle.getLocation()[0] &&
+				playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
+				playerPosition[1] + 52 > obstacle.getLocation()[1]) {
+			return true;
+		}
+		if(player.getDirection() == 1) {
+			if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+					playerPosition[0] + 52 > obstacle.getLocation()[0] &&
+					playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
+					playerPosition[1] + 102 > obstacle.getLocation()[1]) {
+				return true;
+			}
+		}
+		if(player.getDirection() == 2 || player.getDirection() == 4) {
+			if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+					playerPosition[0] + 52 > obstacle.getLocation()[0] &&
+					playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
+					playerPosition[1] + 102 > obstacle.getLocation()[1]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void setPlayerDirection(int i) {
+		model.getPlayer().setDirection(i);
+		
+	}
 
 	
 }
