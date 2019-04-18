@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -16,6 +17,8 @@ public class GameModel extends Observable {
 	private Player player;
 	private Area currArea;
 	private GameMap map;
+	private int gameClock = 0;
+	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	
 	public GameModel() {
 		player = new Player();
@@ -65,6 +68,24 @@ public class GameModel extends Observable {
 		currArea = map.getArea(x + area[0], y + area[1]);
 		setChanged();
 		notifyObservers(currArea);
+	}
+
+	public void addAnimation(GameObject obstacle) {
+		animations.add(obstacle);
+		
+	}
+
+	public void incrementGameClock() {
+		gameClock++;
+		
+	}
+
+	public int getGameClock() {
+		return gameClock;
+	}
+
+	public ArrayList<GameObject> getAnimations() {
+		return animations;
 	}
 	
 }

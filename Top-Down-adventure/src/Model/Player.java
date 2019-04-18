@@ -11,6 +11,7 @@ public class Player extends Character{
 	private int arrowQuantity = 3;
 	private boolean smallKey = false;
 	private boolean bossKey = false;
+	private String imageArray[] = new String[4]; 
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -21,12 +22,19 @@ public class Player extends Character{
 		this.maxHP = 3;
 		direction = 3;
 		speed = 5;
+		width = 50;
+		height = 50;
 		location = new int[2];
-		location[0] = 60;
-		location[1] = 60;
-		oldLocation = new int[2];
-		oldLocation[0] = 60;
-		oldLocation[1] = 60;
+		location[0] = 100;
+		location[1] = 100;
+		imageArray[0] = "/style/playerSprites/link north.png";
+		imageArray[1] = "/style/playerSprites/link left.png";
+		imageArray[2] = "/style/playerSprites/Link south.png";
+		imageArray[3] = "/style/playerSprites/link right.png";
+		hitbox = new int[3];
+		hitbox[0] = 25;
+		hitbox[1] = 30;
+		hitbox[2] = 25;		
 	}	
 	
 	/**
@@ -62,5 +70,10 @@ public class Player extends Character{
 	 */
 	public boolean hasBossKey() {
 		return bossKey;
+	}
+
+	public String[] getImageArray() {
+		// TODO Auto-generated method stub
+		return imageArray;
 	}
 }

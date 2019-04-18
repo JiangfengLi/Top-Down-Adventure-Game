@@ -11,9 +11,19 @@ public abstract class Character extends GameObject{
 	protected int maxHP;
 	protected int damage;
 	protected int speed;
+	protected int[] hitbox;
 	
 	//direction is as follows: 1 is up, 2 is left, 3 is down, 4 is right.
 	protected int direction;
+	
+	/**
+	 * getter for hitbox array
+	 * 
+	 * @return the hitbox for the character as {y_offset, width, height}
+	 */
+	public int[] getHitbox() {
+		return hitbox;
+	}
 	
 	/**
 	 * Getter for current HP

@@ -7,6 +7,7 @@ import java.util.Observer;
 import Model.Area;
 import Model.Enemy;
 import Model.GameModel;
+import Model.GameObject;
 import Model.Obstacle;
 import Model.Player;
 import Model.buttonMaker;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class gameView implements Observer{
@@ -184,16 +186,29 @@ public class gameView implements Observer{
 			if(e.getCode() == KeyCode.D) {
 				dPressed = false;
 			}
+			
+			if(wPressed) {
+				controller.setPlayerDirection(1);
+			}
+			if(aPressed) {
+				controller.setPlayerDirection(2);
+			}
+			if(sPressed) {
+				controller.setPlayerDirection(3);
+			}
+			if(dPressed) {
+				controller.setPlayerDirection(4);
+			}
 		});
 	}
 	
 	public void setupMouseClickListeners() {
 		myScene.setOnMouseClicked((e)->{
 			if(e.getButton() == MouseButton.PRIMARY) {
-				controller.swordAttack(myScene);
+				controller.swordAttack(canvas);
 			}
 			else if(e.getButton() == MouseButton.SECONDARY) {
-				controller.swordAttack(myScene);
+				controller.bowAttack(canvas);
 			}
 		});
 	}
@@ -221,26 +236,57 @@ public class gameView implements Observer{
 		ArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
 		ArrayList<Enemy> enemies = ((Area) area).getEnemies();
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
-		//background = area's background
+		Image bg = new Image("/style/background.png");
+		gc.drawImage(bg, 0, 0, WIDTH, HEIGHT);		
+		
 		for(Obstacle obstacle : obstacles) {
-			ImageView iv = new ImageView();
 			Image image = new Image(obstacle.getImageFile()); 
-			iv.setImage(image);
-			iv.setViewport(new Rectangle2D(0,0,50,50));
-			if(obstacle.isDestructible()) {
-				iv.setFitWidth(50);
+			if(!obstacle.destroyed()) {
+				gc.drawImage(image, 0,0,obstacle.getWidth(), obstacle.getHeight(), obstacle.getLocation()[0], 
+						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
 			}
-			gc.drawImage(iv.getImage(), 0,0,50,50, obstacle.getLocation()[0], 
-					obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			if(obstacle.destroyed()) {
+				gc.drawImage(image, obstacle.getWidth()*obstacle.lastFrame(),0, obstacle.getWidth(), obstacle.getHeight(),
+						obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			}
 		}
 		for(Enemy enemy : enemies) {
 			//put this enemy on top of background
 		}
-		gc.fillRect(player.getLocation()[0], player.getLocation()[1], 50, 100);		
+		gc.setFill(Paint.valueOf("BLACK"));
+		
+		//draw Player
+		Image playerImage = new Image(player.getImageArray()[player.getDirection()-1]);
+		if(wPressed || aPressed || sPressed || dPressed) {
+			gc.drawImage(playerImage, 30*((getGameClock()%16)/4), 0, 29, 24, player.getLocation()[0], player.getLocation()[1], 58, 48);
+		}
+		else {
+			gc.drawImage(playerImage, 0, 0, 29, 24, player.getLocation()[0], player.getLocation()[1], 58, 48);
+		}
+		
+		//animations
+		ArrayList<GameObject> finished = new ArrayList<GameObject>();
+		for(GameObject obj : ((GameModel) model).getAnimations()) {
+			int currFrame = ((Obstacle) obj).destroyedFrame()/2;
+			Image image = new Image(obj.getImageFile());
+			gc.drawImage(image, 50*currFrame, 0, 50, 50, obj.getLocation()[0], obj.getLocation()[1], 50, 50);
+			if(currFrame >= 9) {
+				finished.add(obj);
+			}
+		}
+		((GameModel) model).getAnimations().removeAll(finished);
+	}
+
+	private int getGameClock() {
+		return controller.getGameClock();
 	}
 
 	public boolean gameStarted() {
 		// TODO Auto-generated method stub
 		return gameStarted;
+	}
+
+	public void incrementGameClock() {
+		controller.incrementGameClock();		
 	}
 }

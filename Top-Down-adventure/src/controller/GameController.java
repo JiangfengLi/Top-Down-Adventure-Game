@@ -9,6 +9,8 @@ import Model.GameObject;
 import Model.Obstacle;
 import Model.Player;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * The controller part of the MVC paradigm for the game.
@@ -125,9 +127,10 @@ public class GameController {
 	private int[] collisionUpdate(int[] playerPosition, Obstacle obstacle) {
 		int[] newCoords = new int[2];
 		
-		if(Math.abs(obstacle.getLocation()[0] - playerPosition[0]) > Math.abs(obstacle.getLocation()[1] - (playerPosition[1] + 50))) {		
+		if(Math.abs(obstacle.getLocation()[0] - playerPosition[0]) > 
+		Math.abs(obstacle.getLocation()[1] - (playerPosition[1] + model.getPlayer().getHitbox()[0]) + 20)) {		
 			if(playerPosition[0] < obstacle.getLocation()[0]) {
-				newCoords[0] = obstacle.getLocation()[0] - 50;
+				newCoords[0] = obstacle.getLocation()[0] - model.getPlayer().getHitbox()[1];
 				newCoords[1] = playerPosition[1];
 			}
 			else {
@@ -136,13 +139,13 @@ public class GameController {
 			}
 		}
 		else {
-			if(playerPosition[1] + 50 < obstacle.getLocation()[1]) {
+			if(playerPosition[1] + model.getPlayer().getHitbox()[0] < obstacle.getLocation()[1]) {
 				newCoords[0] = playerPosition[0];
-				newCoords[1] = obstacle.getLocation()[1] - 100;
+				newCoords[1] = obstacle.getLocation()[1] - model.getPlayer().getHeight();
 			}
-			else {
+			else{
 				newCoords[0] = playerPosition[0];
-				newCoords[1] = obstacle.getLocation()[1] + obstacle.getHeight() - 50;
+				newCoords[1] = obstacle.getLocation()[1] + obstacle.getHeight() - model.getPlayer().getHitbox()[0];
 			}
 		}
 		
@@ -150,10 +153,13 @@ public class GameController {
 	}
 
 	private boolean collision(int[] playerPosition, Obstacle obstacle) {
+		if(obstacle.destroyed()) {
+			return false;
+		}
 		if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-				playerPosition[0] + 50 > obstacle.getLocation()[0] &&
-				playerPosition[1] + 50 < obstacle.getLocation()[1] + obstacle.getHeight() && 
-				playerPosition[1] + 100 > obstacle.getLocation()[1]) {
+				playerPosition[0] + model.getPlayer().getHitbox()[2] > obstacle.getLocation()[0] &&
+				playerPosition[1] + model.getPlayer().getHitbox()[0] < obstacle.getLocation()[1] + obstacle.getHeight() && 
+				playerPosition[1] + model.getPlayer().getHeight() > obstacle.getLocation()[1]) {
 			return true;
 		}
 		return false;
@@ -174,14 +180,13 @@ public class GameController {
 		return model.getCurrentArea();
 	}
 
-	public void swordAttack(Scene scene) {
+	public void swordAttack(Canvas canvas) {
 		for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
 			if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
-				obstacle.playDestruction(scene);
-				getCurrentArea().getObstacles().remove(obstacle);
+				obstacle.toggleDestroyed();
+				model.addAnimation(obstacle);
 			}
 		}
-		
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 			if(weaponCollision(model.getPlayer(), enemy)) {
 				enemy.loseHP(model.getPlayer().getDamage());
@@ -191,13 +196,15 @@ public class GameController {
 	}
 
 	private boolean weaponCollision(Player player, GameObject obstacle) {
-		
+		if(((Obstacle) obstacle).destroyed()) {
+			return false;
+		}
 		int[] playerPosition = new int[2];
 		
 		//if player is facing north, weapon affect 50x50 pixel square north of him
 		if(player.getDirection() == 1) {
 			playerPosition[0] = player.getLocation()[0];
-			playerPosition[1] = player.getLocation()[1] - 100;
+			playerPosition[1] = player.getLocation()[1] - 50;
 		}
 		//if west, square is west
 		else if(player.getDirection() == 2) {
@@ -207,41 +214,38 @@ public class GameController {
 		//if south, square is south
 		else if(player.getDirection() == 3) {
 			playerPosition[0] = player.getLocation()[0];
-			playerPosition[1] = player.getLocation()[1] + 100;			
+			playerPosition[1] = player.getLocation()[1] + player.getHeight();			
 		}
 		//else east, then square is east
 		else {
-			playerPosition[0] = player.getLocation()[0] + 50;
+			playerPosition[0] = player.getLocation()[0] + player.getWidth();
 			playerPosition[1] = player.getLocation()[1];
 		}
 		
-		if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-				playerPosition[0] + 52 > obstacle.getLocation()[0] &&
-				playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
-				playerPosition[1] + 52 > obstacle.getLocation()[1]) {
-			return true;
-		}
-		if(player.getDirection() == 1) {
-			if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-					playerPosition[0] + 52 > obstacle.getLocation()[0] &&
-					playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
-					playerPosition[1] + 102 > obstacle.getLocation()[1]) {
-				return true;
-			}
-		}
-		if(player.getDirection() == 2 || player.getDirection() == 4) {
-			if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-					playerPosition[0] + 52 > obstacle.getLocation()[0] &&
-					playerPosition[1] + 49 < obstacle.getLocation()[1] + obstacle.getHeight() && 
-					playerPosition[1] + 102 > obstacle.getLocation()[1]) { 
-				return true;
-			}
-		}
-		return false;
+		return collision(playerPosition, (Obstacle) obstacle);
 	}
 
 	public void setPlayerDirection(int i) {
 		model.getPlayer().setDirection(i);
+		
+	}
+
+	public void incrementGameClock() {
+		model.incrementGameClock();
+		
+	}
+
+	public int getGameClock() {
+		return model.getGameClock();
+		
+	}
+
+	public Object getAnimations() {
+		 return model.getAnimations();
+	}
+
+	public void bowAttack(Canvas canvas) {
+		// TODO Auto-generated method stub
 		
 	}
 

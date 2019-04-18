@@ -71,8 +71,6 @@ public abstract class GameObject {
 	 * @param y the object's y coordinate
 	 */
 	public void setLocation(int x, int y) {
-		oldLocation[0] = location[0];
-		oldLocation[1] = location[1];
 		
 		location[0] = x;
 		location[1] = y;

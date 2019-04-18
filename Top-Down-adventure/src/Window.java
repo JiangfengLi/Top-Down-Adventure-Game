@@ -33,6 +33,7 @@ public class Window extends Application{
 	
 	public void tick() {
 		if(view.gameStarted()) {
+			view.incrementGameClock();
 			view.updateCharacterPosition();
 			/*/////TO-DO//////
 			Write methods to update everything that needs updated

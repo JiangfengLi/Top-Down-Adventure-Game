@@ -15,7 +15,8 @@ public class Grass extends Obstacle{
 		location = new int[2];
 		location[0] = x;
 		location[1] = y;
-		imageFile = "/style/Grass and Cut (2).png";
+		imageFile = "/style/Grass and Cut.png";
+		lastFrame = 9;
 		
 	}
 }
