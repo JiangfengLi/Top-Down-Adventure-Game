@@ -286,7 +286,7 @@ public class gameView implements Observer{
 		//draw Player to screen
 		Image playerImage = new Image(player.getImageArray()[player.getDirection()-1]);
 		
-		if(!controller.playerStalled()) {
+		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters
 			if(wPressed || aPressed || sPressed || dPressed) {
 				gc.drawImage(playerImage, 30*((getGameClock()%16)/4), 0, 29, 24, player.getLocation()[0], player.getLocation()[1], 58, 48);
@@ -314,7 +314,6 @@ public class gameView implements Observer{
 				Image image = new Image(((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1]);
 				gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
 						controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], obj.getWidth()*0.8, obj.getHeight()*0.8);
-				player.decrementStall();
 				if(!player.stalled()) {
 					finished.add(obj);
 				}

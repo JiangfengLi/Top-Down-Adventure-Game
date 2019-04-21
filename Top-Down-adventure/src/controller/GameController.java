@@ -55,17 +55,47 @@ public class GameController {
 	 * @param yMovement the amount and direction to move along the y-axis
 	 */
 	public void updatePlayerPosition(int xMovement, int yMovement) {	
-		
-		if(!model.getPlayer().stalled()) {
+		if(model.getPlayer().stalled()) model.getPlayer().decrementStall();
+		if(model.getPlayer().damaged()) {
+			if(model.getPlayer().stalled()) {
+				Enemy attacker = model.getPlayer().lastEnemy();
+				xMovement = attacker.getLocation()[0] > model.getPlayer().getLocation()[0] ? -model.getPlayer().getSpeed()*4 : 0;
+				xMovement += attacker.getLocation()[0] < model.getPlayer().getLocation()[0] ? model.getPlayer().getSpeed()*4 : 0;
+				yMovement = attacker.getLocation()[1] > model.getPlayer().getLocation()[1] ? -model.getPlayer().getSpeed()*4 : 0;
+				yMovement += attacker.getLocation()[1] < model.getPlayer().getLocation()[1] ? model.getPlayer().getSpeed()*4 : 0;				
+			}
+			else model.getPlayer().toggleDamaged();
+		}
+		if(model.getPlayer().stalled() && !model.getPlayer().damaged()) {
+			xMovement = 0;
+			yMovement = 0;
+		}
+		if(!model.getPlayer().stalled() || model.getPlayer().damaged()) {
 		
 			Area curr = getCurrentArea();
 			ArrayList<Obstacle> obstacles = curr.getObstacles();
 			
 			//checks if the player collides with any obstacles on screen. if so, set him back to his previous location and return
+			
 			for(Obstacle obstacle : obstacles) {
-				if(collision(getPlayerPosition(), obstacle)) {
-					setPlayerPosition(model.getPlayer().getOldLocation()[0], model.getPlayer().getOldLocation()[1]);
-					return;
+				int[] futurePosition = new int[2];
+				futurePosition[0] = getPlayerPosition()[0] + xMovement;
+				futurePosition[1] = getPlayerPosition()[1] + yMovement;
+				if(collision(futurePosition, obstacle)) {
+					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+							futurePosition[0] + model.getPlayer().getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
+						xMovement = 0;
+					}
+					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + model.getPlayer().getWidth() > obstacle.getLocation()[0]) {
+						xMovement = 0;
+					}
+					if(futurePosition[1] < obstacle.getLocation()[1] + obstacle.getTopHeight() && 
+							futurePosition[1] + model.getPlayer().getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+						yMovement = 0;
+					}
+					else {
+						yMovement = 0;
+					}
 				}
 			}
 			
@@ -95,14 +125,34 @@ public class GameController {
 			}
 			
 			//if there were no collisions and no area changes, just move the player by the passed in amount
-			model.updatePlayerPosition(xMovement, yMovement);
 		}
-		else {
-			model.updatePlayerPosition(0, 0);
-		}
+		model.updatePlayerPosition(xMovement, yMovement);
 	}
 	
 	
+	private int[] collisionCoords(int[] location, GameObject obstacle) {
+		int[] retVal = new int[2];
+		Player player = model.getPlayer();
+		
+		if(model.getPlayer().getOldLocation()[1] > location[1]) {
+			retVal[0] = location[0];
+			retVal[1] = obstacle.getLocation()[1] + obstacle.getHeight() - model.getPlayer().getHitboxHeight();
+		}
+		if(model.getPlayer().getOldLocation()[0] > location[0]) {
+			retVal[0] = obstacle.getLocation()[0] + obstacle.getWidth();
+			retVal[1] = location[1];
+		}
+		if(model.getPlayer().getOldLocation()[1] < location[1]) {
+			retVal[0] = location[0];
+			retVal[1] = obstacle.getLocation()[1] - model.getPlayer().getHeight() + obstacle.getTopHeight();
+		}
+		if(model.getPlayer().getOldLocation()[0] < location[0]){
+			retVal[0] = obstacle.getLocation()[0] - model.getPlayer().getWidth();
+			retVal[1] = location[1];
+		}
+		return retVal;
+	}
+
 	/**
 	 * determines where to place the character on a new screen
 	 * @return the x,y coordinates of the players new position in int[2] form
@@ -216,10 +266,10 @@ public class GameController {
 					
 					//finds the point the enemy needs to move to and increments his position towards it based on his speed
 					int[] referencePoint = getPathingTarget(enemy, model.getPlayer());
-					int x = enemy.getLocation()[0] - referencePoint[0] > 0 ? -enemy.getSpeed() : 0;
-					x += enemy.getLocation()[0] - referencePoint[0] < 0 ? enemy.getSpeed() : 0;
-					int y = enemy.getLocation()[1] - referencePoint[1] > 0 ? -enemy.getSpeed() : 0;
-					y += enemy.getLocation()[1] - referencePoint[1] < 0 ? enemy.getSpeed() : 0;
+					int x = enemy.getLocation()[0] > referencePoint[0] ? -enemy.getSpeed() : 0;
+					x += enemy.getLocation()[0] < referencePoint[0] ? enemy.getSpeed() : 0;
+					int y = enemy.getLocation()[1] > referencePoint[1] ? -enemy.getSpeed() : 0;
+					y += enemy.getLocation()[1] < referencePoint[1] ? enemy.getSpeed() : 0;
 					
 					//smooths out enemy movement if their speed is greater than the distance to the player's coordinate
 					if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) < Math.abs(x)) x = x > 0 ? 
@@ -464,16 +514,14 @@ public class GameController {
 	public void enemyAttack() {
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 			if(collision(model.getPlayer().getLocation(), enemy)) {
-				//add player stall
-				//toggle damage flag
-				//player knockback code
-				//if(playerdamageflag){
-				//	model.getPlayer().loseHP(enemy.getDamage());
-				//}
+				if(!model.getPlayer().damaged()){
+					model.getPlayer().addStall(4);
+					model.getPlayer().toggleDamaged();
+					model.getPlayer().loseHP(enemy.getDamage());
+					model.getPlayer().setLastEnemy(enemy);
+					System.out.println(model.getPlayer().getHP());
+				}
 			}
-		}
-		
+		}	
 	}
-
-	
 }
