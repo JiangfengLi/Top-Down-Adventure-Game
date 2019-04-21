@@ -11,7 +11,6 @@ public class Player extends Character{
 	private int arrowQuantity = 3;
 	private boolean smallKey = false;
 	private boolean bossKey = false;
-	private String imageArray[] = new String[4]; 
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -20,8 +19,9 @@ public class Player extends Character{
 	public Player() {
 		this.currentHP = 3;
 		this.maxHP = 3;
+		damage = 1;
 		direction = 3;
-		speed = 5;
+		speed = 8;
 		width = 50;
 		height = 50;
 		location = new int[2];
@@ -31,10 +31,11 @@ public class Player extends Character{
 		imageArray[1] = "/style/playerSprites/link left.png";
 		imageArray[2] = "/style/playerSprites/Link south.png";
 		imageArray[3] = "/style/playerSprites/link right.png";
-		hitbox = new int[3];
-		hitbox[0] = 25;
-		hitbox[1] = 30;
-		hitbox[2] = 25;		
+		hitbox = new int[2];
+		hitbox[0] = 100;
+		hitbox[1] = 125;
+		hitboxWidth = 30;
+		hitboxHeight = 25;		
 	}	
 	
 	/**
@@ -44,6 +45,22 @@ public class Player extends Character{
 	 */
 	public int getArrowQuantity() {
 		return arrowQuantity;
+	}
+	
+	/**
+	 * getter for hitbox width
+	 * @return hitbox width
+	 */
+	public int getHitboxWidth() {
+		return hitboxWidth;
+	}
+	
+	/**
+	 * getter for hitbox height
+	 * @return hitbox height
+	 */
+	public int getHitboxHeight() {
+		return hitboxHeight;
 	}
 	
 	/**
@@ -70,10 +87,5 @@ public class Player extends Character{
 	 */
 	public boolean hasBossKey() {
 		return bossKey;
-	}
-
-	public String[] getImageArray() {
-		// TODO Auto-generated method stub
-		return imageArray;
 	}
 }

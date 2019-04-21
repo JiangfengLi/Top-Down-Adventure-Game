@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 
+import Model.GameModel;
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -31,22 +32,29 @@ public class Window extends Application{
 		}.start();
 	}
 	
+	/**
+	 * heart of the game engine, calls various methods that do all of the things
+	 * that need to be done each tick of the game clock
+	 */
 	public void tick() {
 		if(view.gameStarted()) {
 			view.incrementGameClock();
-			view.updateCharacterPosition();
-			/*/////TO-DO//////
-			Write methods to update everything that needs updated
-			during a tick
-			something like
-			updateCharacterPosition
-			updateEnemyPosition
-			checkWeaponCollision
-			checkDeath
-			checkWin
-			setChanged()
-			notifyObservers()
-			*/
+			//if(view.getGameClock()%2 > 0) {
+				view.updateCharacterPosition();
+				view.updateEnemyPosition();
+				view.updateEnemyCollision();
+				view.checkDeath();
+				/*/////TO-DO//////
+				Write methods to update everything that needs updated
+				during a tick
+				something like
+				updateBoss (since it will have a different movement pattern than a standard enemy.
+				checkDeath
+				checkWin
+				setChanged()
+				notifyObservers()
+				*/
+			//}
 		}
 	}
 }

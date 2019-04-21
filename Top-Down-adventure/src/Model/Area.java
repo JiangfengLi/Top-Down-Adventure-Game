@@ -40,6 +40,10 @@ public class Area {
 		return enemies;
 	}
 
+	/**
+	 * returns where on the GameMap this area is located
+	 * @return (x,y) coordinates for this area's location on the GameMap
+	 */
 	public int[] getCoords() {
 		// TODO Auto-generated method stub
 		return coords;

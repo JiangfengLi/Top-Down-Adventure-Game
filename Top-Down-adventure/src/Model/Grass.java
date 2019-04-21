@@ -17,6 +17,7 @@ public class Grass extends Obstacle{
 		location[1] = y;
 		imageFile = "/style/Grass and Cut.png";
 		lastFrame = 9;
-		
+		topImage = false;
+		topHeight = 0;	
 	}
 }

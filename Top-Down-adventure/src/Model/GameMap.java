@@ -19,7 +19,6 @@ public class GameMap {
 		
 		ArrayList<Obstacle> areaOneObstacles = new ArrayList<Obstacle>();
 		areaOneObstacles.add(new Grass(300, 300));
-		ArrayList<Enemy> areaOneEnemies = new ArrayList<Enemy>();
 		
 		/*******TODO**********
 		 * All of the Areas will be different
@@ -28,28 +27,31 @@ public class GameMap {
 		 */
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
+				ArrayList<Enemy> areaOneEnemies = new ArrayList<Enemy>();
 				areaOneObstacles = new ArrayList<Obstacle>();
-				if(i == 0) {
-					for(int k = 0; k < 20; k++) {
-						areaOneObstacles.add(new Grass(0, k*50));
+				if(j == 0) {
+					for(int k = 0; k < 15; k++) {
+						areaOneObstacles.add(new Tree(k*100, 0));
 					}
 				}
-				if(j == 0) {
-					for(int k = 0; k < 30; k++) {
-						areaOneObstacles.add(new Grass(k*50, 0));
+				if(i == 0) {
+					for(int k = 0; k < 20; k++) {
+						areaOneObstacles.add(new Tree(-50, k*50));
 					}
 				}
 				if(i == 2) {
 					for(int k = 0; k < 20; k++) {
-						areaOneObstacles.add(new Grass(1450, k*50));
+						areaOneObstacles.add(new Tree(1150, k*50));
 					}
 				}
 				if(j == 2) {
-					for(int k = 0; k < 30; k++) {
-						areaOneObstacles.add(new Grass(k*50, 950));
+					for(int k = 0; k < 15; k++) {
+						areaOneObstacles.add(new Tree(k*100, 750));
 					}
 				}
+				areaOneEnemies.add(new Tank(700, 700));
 				areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
+				areaOneObstacles.add(new Tree(450 + i*50, 300 + j*50));
 				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
 			}
 		}
@@ -64,6 +66,12 @@ public class GameMap {
 		return map[0][0];
 	}
 
+	/**
+	 * returns the current area the game is in
+	 * @param i x coordinate of the game area on the map
+	 * @param j y coordinate of the game area on the map
+	 * @return the area at [i][j];
+	 */
 	public Area getArea(int i, int j) {
 		// TODO Auto-generated method stub
 		return map[i][j];

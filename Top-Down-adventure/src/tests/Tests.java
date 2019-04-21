@@ -29,7 +29,6 @@ class Tests {
 	
 	@Test
 	void testTank() {
-		Enemy tank = new Tank();
 	}
 	
 	@Test
