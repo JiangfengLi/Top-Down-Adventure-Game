@@ -238,6 +238,23 @@ public class GameController {
 		//return false if the player rectangle doesn't overlap the obstacle rectangle
 		return false;
 	}
+	
+	private boolean collision(Enemy en, GameObject obstacle) {
+		if(obstacle instanceof Obstacle && ((Obstacle) obstacle).destroyed()) {
+			return false;
+		}
+		
+		//return true if the player rectangle overlaps the obstacle rectangle.
+		if(en.getLocation()[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+				en.getLocation()[0] + en.getWidth() > obstacle.getLocation()[0] &&
+				en.getLocation()[1] + en.getHeight() < obstacle.getLocation()[1] + obstacle.getHeight() && 
+				en.getLocation()[1] + en.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+			return true;
+		}
+		
+		//return false if the player rectangle doesn't overlap the obstacle rectangle
+		return false;
+	}
 
 	/**
 	 * Calculates pathing for enemies, moves them appropriately.
@@ -290,7 +307,15 @@ public class GameController {
 						}
 						
 						
-						//update the enemy's position
+						//update the enemy's direction
+						
+						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+							if(collision(enemy, obs)) {
+								enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
+								return;
+							}
+						}
+						
 						enemy.updatePosition(x, y);
 						if(x > 0) {
 							enemy.setDirection(4);

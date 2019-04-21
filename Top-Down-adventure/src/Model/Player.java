@@ -19,8 +19,8 @@ public class Player extends Character{
 	 * to fit whatever we actually decide on.
 	 */
 	public Player() {
-		this.currentHP = 3;
-		this.maxHP = 3;
+		this.currentHP = 6;
+		this.maxHP = 6;
 		damage = 1;
 		direction = 3;
 		speed = 8;
