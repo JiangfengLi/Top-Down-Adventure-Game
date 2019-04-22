@@ -37,7 +37,7 @@ public class Window extends Application{
 	public void tick() {
 		if(view.gameStarted()) {
 			view.incrementGameClock();
-			//if(view.getGameClock()%2 > 0) {
+			if(view.getGameClock()%2 > 0) {
 				view.updateCharacterPosition();
 				view.updateEnemyPosition();
 				view.updateEnemyCollision();
@@ -53,7 +53,7 @@ public class Window extends Application{
 				setChanged()
 				notifyObservers()
 				*/
-			//}
+			}
 		}
 	}
 }

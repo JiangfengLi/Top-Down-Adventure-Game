@@ -228,6 +228,8 @@ public class gameView implements Observer{
 
 	/**
 	 * redraws things on screen when the model updates and notifies us
+	 * this is basically our animation engine, runs once a tick on the fact that
+	 * the player position gets updated once per tick even if they didn't move or attack
 	 */
 	@Override
 	public void update(Observable model, Object area) {
@@ -282,6 +284,7 @@ public class gameView implements Observer{
 			}
 		}
 		
+		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
 			Image projectileImage = new Image(projectile.getImageArray()[projectile.getDirection()-1]);
 			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
@@ -301,6 +304,7 @@ public class gameView implements Observer{
 				}
 			}
 			
+			//draws the animation frame of the player swinging his sword in the appropriate direction
 			if(obj instanceof PlayerSwing) {
 				Image image = new Image(((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1]);
 				gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
@@ -315,12 +319,13 @@ public class gameView implements Observer{
 				Image image = new Image(((Enemy) obj).getIdleImage());
 				gc.drawImage(image, 40*((getGameClock()%64)/4), 0, 40, 74, obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
 			}
+			
 			//plays the enemy's death animation when they die
 			else if(obj instanceof Enemy && ((Enemy) obj).isDead()) {
 				// play death animation
 			}
 			
-			//play bow attack if appropriate
+			//play bow attack animation frame
 			else if(obj instanceof BowShot) {
 				Image image = new Image(((BowShot) obj).getImageArray()[((BowShot) obj).getDirection() - 1]);
 				gc.drawImage(image, 54*(5 - player.getStallTime()), 0, 54, 73, controller.getPlayerPosition()[0], 
@@ -331,6 +336,7 @@ public class gameView implements Observer{
 			}
 		}
 		((GameModel) model).getAnimations().removeAll(finished);
+		
 		//draw top part of large objects to help force perspective
 		for(Obstacle obstacle : obstacles) {
 			if(obstacle.hasTopImage()) {
@@ -354,7 +360,6 @@ public class gameView implements Observer{
 	 * @return
 	 */
 	public boolean gameStarted() {
-		// TODO Auto-generated method stub
 		return gameStarted;
 	}
 
@@ -373,6 +378,9 @@ public class gameView implements Observer{
 		
 	}
 
+	/**
+	 * updates the location of and collision of projectiles on the map
+	 */
 	public void updateProjectiles() {
 		controller.updateProjectilePosition();
 	}

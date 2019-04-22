@@ -48,9 +48,15 @@ public class GameController {
 	 * @param xMovement the amount and direction to move along the x-axis
 	 * @param yMovement the amount and direction to move along the y-axis
 	 */
-	public void updatePlayerPosition(int xMovement, int yMovement) {	
+	public void updatePlayerPosition(int xMovement, int yMovement) {
+		
+		//if the player is stalled, decrement his stall
 		if(model.getPlayer().stalled()) model.getPlayer().decrementStall();
+		
+		//check to see if the player has been damaged recently
 		if(model.getPlayer().damaged()) {
+		
+			//if he is still in the stall that caused the damaged flag, he is experiencing knockback.
 			if(model.getPlayer().stalled()) {
 				Enemy attacker = model.getPlayer().lastEnemy();
 				xMovement = attacker.getLocation()[0] > model.getPlayer().getLocation()[0] ? -model.getPlayer().getSpeed()*4 : 0;
@@ -58,24 +64,30 @@ public class GameController {
 				yMovement = attacker.getLocation()[1] > model.getPlayer().getLocation()[1] ? -model.getPlayer().getSpeed()*4 : 0;
 				yMovement += attacker.getLocation()[1] < model.getPlayer().getLocation()[1] ? model.getPlayer().getSpeed()*4 : 0;
 				
+				//if the knockback would knock him off screen, remove that directions movement.
 				if(model.getPlayer().getLocation()[0] + xMovement < 0) xMovement = 0;
 				if(model.getPlayer().getLocation()[0] + xMovement > 1200 - model.getPlayer().getWidth()) xMovement = 0;
 				if(model.getPlayer().getLocation()[1] + yMovement < 0) yMovement = 0;
 				if(model.getPlayer().getLocation()[1] + yMovement > 800 - model.getPlayer().getHeight()) yMovement = 0;
 			}
+			
+			//otherwise, the damage is no longer recent and needs to have its flag changed
 			else model.getPlayer().toggleDamaged();
 		}
+		
+		//if the player is stalled and it wasn't because he took damage, then he has no movement.
 		if(model.getPlayer().stalled() && !model.getPlayer().damaged()) {
 			xMovement = 0;
 			yMovement = 0;
 		}
+		
+		//if the player isn't stalled, or if he is stalled but he took damage
 		if(!model.getPlayer().stalled() || model.getPlayer().damaged()) {
 		
 			Area curr = getCurrentArea();
 			ArrayList<Obstacle> obstacles = curr.getObstacles();
 			
-			//checks if the player collides with any obstacles on screen. if so, set him back to his previous location and return
-			
+			//checks if the player collides with any obstacles on screen. if so, remove that direction's movement
 			for(Obstacle obstacle : obstacles) {
 				int[] futurePosition = new int[2];
 				futurePosition[0] = getPlayerPosition()[0] + xMovement;
@@ -259,6 +271,8 @@ public class GameController {
 						}						
 						enemy.updatePosition(x, y);
 					}
+					
+					//if they aren't stalled
 					else {
 						//if the enemy is a scaredy cat, make him run away when his health is under 1/2
 						if(enemy.getHP() < enemy.getMaxHP()/2 && enemy.willFlee()) {
@@ -266,6 +280,7 @@ public class GameController {
 							y = -y;
 						}
 						
+						//sets the enemy's direction based on which way they are moving
 						if(x > 0) {
 							enemy.setDirection(4);
 						}
@@ -278,6 +293,8 @@ public class GameController {
 						if(y < 0) {
 							enemy.setDirection(1);
 						}
+						
+						//smooths out enemy directional setting
 						if(y != 0 && x != 0) {
 							if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) > Math.abs(enemy.getLocation()[1] - referencePoint[1])) {
 								enemy.setDirection(x > 0 ? 4 : 2);
@@ -287,11 +304,15 @@ public class GameController {
 							}
 						}
 						
-						//update the enemy's direction
+						//checks to see where the movement will take the enemy
 						int[] futurePosition = new int[2];
 						futurePosition[0] = enemy.getLocation()[0] + x;
 						futurePosition[1] = enemy.getLocation()[1] + y;
+						
+						//iterate through the obstacles to see if the enemy will run into them
 						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+							
+							//if so, make it so he walks around it in the quickest direction.
 							if(collision(futurePosition, obs)) {
 								switch(enemy.getDirection()){
 									case 1:
@@ -354,9 +375,13 @@ public class GameController {
 	 * @param canvas
 	 */
 	public void swordAttack() {
+		//doesn't let us swing if we have attacked or been damaged recently
 		if(!model.getPlayer().stalled()) {
-			model.getPlayer().addStall(5);
+			
+			//add a stall and create the sword swing animation
+			model.getPlayer().addStall(6);
 			model.addAnimation(new PlayerSwing(model.getPlayer().getDirection()));
+			
 			//checks for collision with obstacles
 			for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
 				if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
@@ -364,6 +389,7 @@ public class GameController {
 					model.addAnimation(obstacle);
 				}
 			}
+			
 			//checks for collision with enemies
 			for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 				if(weaponCollision(model.getPlayer(), enemy)) {
@@ -451,9 +477,14 @@ public class GameController {
 	 * @param canvas
 	 */
 	public void bowAttack() {
+		//doesn't let us attack if we have attacked or been damaged recently
 		if(!model.getPlayer().stalled()) {
+			
+			//add in the stall and the new bow shot animation
 			model.getPlayer().addStall(5);
 			model.addAnimation(new BowShot(model.getPlayer().getDirection()));
+			
+			//if we have arrows in inventory, add an arrow projectile to the screen and decrement the player's inventory of arrows
 			if(model.getPlayer().getArrowQuantity() > 0) {
 				model.getCurrentArea().addProjectile(new ArrowShot(model.getPlayer().getDirection(), model.getPlayer().getLocation()));
 				model.getPlayer().decrementArrows();
@@ -485,18 +516,35 @@ public class GameController {
 		
 	}
 
-	//returns the player's speed.
+	/**
+	 * returns the player's speed
+	 * @return player's speed in pixels/tick as an integer
+	 */
 	public int getPlayerSpeed() {
 		return model.getPlayer().getSpeed();
 	}
 
+	/**
+	 * returns whether the player is stalled or not
+	 * @return true if the player is stalled, false otherwise
+	 */
 	public boolean playerStalled() {
 		return model.getPlayer().stalled();
 	}
 
+	/**
+	 * checks for enemy collision with player character
+	 */
 	public void enemyAttack() {
+		
+		//for every enemy
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+			
+			//if the enemy collides with the player
 			if(collision(model.getPlayer().getLocation(), enemy)) {
+				
+				//if the player hasn't been damaged recently, stall him, decrement his hp, 
+				//and set a field to store which the last enemy to hit him was to help with simpler knockback calculations
 				if(!model.getPlayer().damaged()){
 					model.getPlayer().addStall(4);
 					model.getPlayer().toggleDamaged();
@@ -508,12 +556,19 @@ public class GameController {
 		}	
 	}
 
+	/**
+	 * updates the projectiles' position on the screen based on their speed
+	 */
 	public void updateProjectilePosition() {
+		
+		//iterate through the projectiles
 		Iterator<Character> projectiles = model.getCurrentArea().getProjectiles().iterator();
 		while(projectiles.hasNext()) {
 			Character projectile = projectiles.next();
 			int x;
 			int y;
+			
+			//switch tells us which way to move the arrow
 			switch(projectile.getDirection()) {
 				case 1:
 					x = 0;
@@ -537,18 +592,28 @@ public class GameController {
 			}
 			projectile.updatePosition(x, y);
 			ArrayList<GameObject> things = new ArrayList<GameObject>();
+			
+			//grab all of the things an arrow can collide with and iterate through them
 			things.addAll(model.getCurrentArea().getEnemies());
 			things.addAll(model.getCurrentArea().getObstacles());
 			for(GameObject obj : things) {
+				
+				//destroyed obstacles are pathable.
 				if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
+				
+				//if we collide with an object, the projectile disappears
 				if(projectileCollision(projectile, obj)) {
 					projectiles.remove();
+					
+					//if it was an enemy, they lose health and suffer a minor knockback.
 					if(obj instanceof Enemy) {
 						((Enemy) obj).addStall(1);
 						((Enemy) obj).loseHP(1); 
 					}
 					break;
 				}
+				
+				//if the projectile goes off screen, remove it
 				else if(projectile.getLocation()[0] > 1150 || projectile.getLocation()[0] < 50 ||
 						projectile.getLocation()[1] > 750 || projectile.getLocation()[1] < 50) {
 					projectiles.remove();
@@ -558,6 +623,12 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * checks projectile collision
+	 * @param projectile the projectile we are checking
+	 * @param obj the object against which we are checking for collision
+	 * @return true if the projectile and the object collide, false otherwise.
+	 */
 	private boolean projectileCollision(Character projectile, GameObject obj) {
 		//return true if the player rectangle overlaps the obstacle rectangle.
 		
