@@ -403,6 +403,7 @@ public class GameController {
 			//checks for collision with obstacles
 			for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
 				if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
+					if(obstacle.didLootDrop()) model.getCurrentArea().addLoot(obstacle.lootDrop());
 					obstacle.toggleDestroyed();
 					model.addAnimation(obstacle);
 				}

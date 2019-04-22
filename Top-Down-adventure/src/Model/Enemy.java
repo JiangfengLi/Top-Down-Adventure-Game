@@ -97,10 +97,6 @@ public abstract class Enemy extends Character{
 	public void updateLocation(int x, int y) {
 		location[0] += x;
 		location[1] += y;
-		
-		for(Item item : drops.values()) {
-			item.setLocation(location[0], location[1]);
-		}
 	}
 	
 	/**
@@ -111,9 +107,5 @@ public abstract class Enemy extends Character{
 	public void setLocation(int x, int y) {
 		location[0] = x;
 		location[1] = y;
-		
-		for(Item item : drops.values()) {
-			item.setLocation(location[0], location[1]);
-		}
 	}
 }

@@ -18,6 +18,8 @@ public class Grass extends Obstacle{
 		imageFile = "/style/Grass and Cut.png";
 		lastFrame = 9;
 		topImage = false;
-		topHeight = 0;	
+		topHeight = 0;
+		drops.put(0, new Arrow(new int[] {location[0], location[1]}));
+		lootChance = 100;
 	}
 }

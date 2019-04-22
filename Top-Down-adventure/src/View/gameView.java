@@ -270,9 +270,26 @@ public class gameView implements Observer{
 			}
 		}
 		
-		//draw Player to screen
-		Image playerImage = new Image(player.getImageArray()[player.getDirection()-1]);
 		
+		//draws loot items to screen
+		for(Item loot : ((GameModel) model).getCurrentArea().getLoot()) {
+			if(loot instanceof Arrow) {
+				Image image = new Image(loot.getImageFile());
+				gc.drawImage(image, 15*(((Arrow) loot).getQuantity() == 5 ? 0 : 1), 0, loot.getWidth()/2, 
+						loot.getHeight()/2, loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
+			}
+				
+			if(loot instanceof Heart) {
+					
+			}
+				
+			if(loot instanceof SpeedBuff) {
+					
+			}
+		}
+		
+		//draw Player to screen
+		Image playerImage = new Image(player.getImageArray()[player.getDirection()-1]);		
 		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters
 			if(wPressed || aPressed || sPressed || dPressed) {
@@ -284,27 +301,13 @@ public class gameView implements Observer{
 			}
 		}
 		
+		
+		
 		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
 			Image projectileImage = new Image(projectile.getImageArray()[projectile.getDirection()-1]);
 			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
 					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
-		}
-		
-		for(Item loot : ((GameModel) model).getCurrentArea().getLoot()) {
-			if(loot instanceof Arrow) {
-				Image image = new Image(loot.getImageFile());
-				gc.drawImage(image, 15*(((Arrow) loot).getQuantity() == 5 ? 0 : 1), 0, loot.getWidth()/2, 
-						loot.getHeight()/2, loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
-			}
-			
-			if(loot instanceof Heart) {
-				
-			}
-			
-			if(loot instanceof SpeedBuff) {
-				
-			}
 		}
 		
 		//draw animations currently in progress
