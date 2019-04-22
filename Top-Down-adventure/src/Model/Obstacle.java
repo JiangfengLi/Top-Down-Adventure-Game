@@ -7,29 +7,75 @@ package Model;
  * @author Wes Rodgers
  *
  */
-public abstract class Obstacle {
+public abstract class Obstacle extends GameObject {
 
-	private int[] corners;
-	private String imageFile;
+	protected boolean destructible;
+	protected boolean destroyed = false;
+	protected boolean animationDone = false;
+	protected int destroyedFrame = 0;
+	protected int lastFrame;
+	protected boolean topImage;
 	
 	/**
-	 * Getter for the location of the obstacles corners,
-	 * in order as left x value, bottom y value, right x value,
-	 * top y value
-	 * 
-	 * @return an array of the corners of an obstacle
+	 * returns topImage field
+	 * @return true if the obstacle has a top image, false otherwise
 	 */
-	public int[] getCorners() {
-		return corners;
+	public boolean hasTopImage() {
+		return topImage;
 	}
 	
 	/**
-	 * Getter for the filename of the obstacle's
-	 * image file
-	 * 
-	 * @return A String of the filename of the obstacle's image
+	 * getter for the obstacle's destructible flag
+	 * @return true if the obstacle is destructible, false otherwise
 	 */
-	public String getImageName() {
-		return imageFile;
+	public boolean isDestructible() {
+		return destructible;
+	}
+
+	/**
+	 * returns true once the object has been destroyed
+	 * @return true if the object has been destroyed, false otherwise.
+	 */
+	public boolean destroyed() {
+		return destroyed;
+	}
+
+	/**
+	 * sets the destroyed variable to true
+	 */
+	public void toggleDestroyed() {
+		destroyed = true;
+	}
+	
+	/**
+	 * tells the obstacle to stop playing its destruction animation
+	 */
+	public void endAnimation() {
+		animationDone = true;
+	}
+	
+	/**
+	 * returns whether the destruction animation is done yet or not
+	 * @return true if the destruction animation is over, false otherwise
+	 */
+	public boolean animationDone() {
+		return animationDone;
+	}
+	
+	/**
+	 * increments the current frame of the destroyed animation, returns that frame
+	 * @return
+	 */
+	public int destroyedFrame() {
+		destroyedFrame++;
+		return destroyedFrame;
+	}
+
+	/**
+	 * returns the last frame as that is the post destruction image
+	 * @return the frame of the post-destruction image
+	 */
+	public int lastFrame() {
+		return lastFrame;
 	}
 }
