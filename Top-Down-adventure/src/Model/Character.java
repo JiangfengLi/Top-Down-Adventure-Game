@@ -203,4 +203,20 @@ public abstract class Character extends GameObject{
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
+	
+	/**
+	 * getter for hitbox width
+	 * @return hitbox width
+	 */
+	public int getHitboxWidth() {
+		return hitboxWidth;
+	}
+	
+	/**
+	 * getter for hitbox height
+	 * @return hitbox height
+	 */
+	public int getHitboxHeight() {
+		return hitboxHeight;
+	}
 }

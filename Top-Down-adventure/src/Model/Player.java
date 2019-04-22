@@ -50,22 +50,6 @@ public class Player extends Character{
 	}
 	
 	/**
-	 * getter for hitbox width
-	 * @return hitbox width
-	 */
-	public int getHitboxWidth() {
-		return hitboxWidth;
-	}
-	
-	/**
-	 * getter for hitbox height
-	 * @return hitbox height
-	 */
-	public int getHitboxHeight() {
-		return hitboxHeight;
-	}
-	
-	/**
 	 * increases the player's arrowQuantity, max of 30 at one time.
 	 * 
 	 * @param quantity number of arrows to add to the inventory
