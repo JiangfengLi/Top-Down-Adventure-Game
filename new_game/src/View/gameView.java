@@ -448,6 +448,7 @@ public class gameView implements Observer{
 		resume.setOnMouseReleased((e)->{
 			myStage.setScene(myScene);
 			pause = false;
+			timer.start();
 		});
 		buttonMaker bgm = new buttonMaker("Enable/Disable Background Music");
 		layout.getChildren().add(bgm);
@@ -469,6 +470,7 @@ public class gameView implements Observer{
 		restart.setLayoutY(500);
 		restart.setOnAction((e)->{
 			pause = false;
+			timer.start();
 			startGame();
 		});
 		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
