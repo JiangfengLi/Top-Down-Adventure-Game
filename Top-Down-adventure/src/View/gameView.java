@@ -214,12 +214,12 @@ public class gameView implements Observer{
 	 * every tick
 	 */
 	public void startGame() {
+		GameModel model= new GameModel();
+		controller = new GameController(model);
 		gameStarted = true;
 		canvas = new Canvas(WIDTH, HEIGHT);
 		myScene = new Scene(new Group(canvas));
-		myStage.setScene(myScene);
-		GameModel model= new GameModel();
-		controller = new GameController(model);
+		myStage.setScene(myScene);		
 		setupMovementListeners();
 		setupMouseClickListeners();
 		model.addObserver(this);
@@ -289,6 +289,22 @@ public class gameView implements Observer{
 			Image projectileImage = new Image(projectile.getImageArray()[projectile.getDirection()-1]);
 			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
 					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+		}
+		
+		for(Item loot : ((GameModel) model).getCurrentArea().getLoot()) {
+			if(loot instanceof Arrow) {
+				Image image = new Image(loot.getImageFile());
+				gc.drawImage(image, 15*(((Arrow) loot).getQuantity() == 5 ? 0 : 1), 0, loot.getWidth()/2, 
+						loot.getHeight()/2, loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
+			}
+			
+			if(loot instanceof Heart) {
+				
+			}
+			
+			if(loot instanceof SpeedBuff) {
+				
+			}
 		}
 		
 		//draw animations currently in progress

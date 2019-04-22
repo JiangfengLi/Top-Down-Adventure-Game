@@ -23,6 +23,8 @@ public class Tank extends Enemy{
 		idleImage = "/style/tank idle.png";
 		active = false;
 		scaredyCat = false;
+		drops.put(0, new Arrow(new int[] {location[0], location[1]}));
+		lootChance = 100;
 	}
 
 	/**
@@ -33,5 +35,4 @@ public class Tank extends Enemy{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

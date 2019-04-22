@@ -15,13 +15,39 @@ public class Area {
 	private ArrayList<Enemy> enemies;
 	private int[] coords = new int[2];
 	private ArrayList<Character> projectiles;
+	private ArrayList<Item> loot;
 	
 	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles, int x, int y) {
 		this.obstacles = obstacles;
 		this.enemies = enemies;
 		this.projectiles = new ArrayList<Character>();
+		this.loot = new ArrayList<Item>();
 		coords[0] = x;
 		coords[1] = y;
+	}
+	
+	/**
+	 * adds the passed in Item to the Area's loot list
+	 * @param loot the Item that we want to add to the Area's loot list
+	 */
+	public void addLoot(Item loot) {
+		this.loot.add(loot);
+	}
+	
+	/**
+	 * getter for the area's loot list
+	 * @return an ArrayList<Item> of the Area's loot items
+	 */
+	public ArrayList<Item> getLoot(){
+		return loot;
+	}
+	
+	/**
+	 * removes a loot item from the area's loot list
+	 * @param loot the item to be removed from this Area's loot list.
+	 */
+	public void removeLoot(Item loot) {
+		if(this.loot.contains(loot)) this.loot.remove(loot);
 	}
 	
 	/**

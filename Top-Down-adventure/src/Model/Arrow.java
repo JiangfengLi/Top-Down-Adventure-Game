@@ -11,9 +11,11 @@ public class Arrow extends Item {
 	public int quantity;
 	
 	public Arrow(int[] location) {
-		this.imageFile = "";
+		this.imageFile = "/style/arrow drop.png";
 		this.quantity = System.nanoTime()%3 == 0 || System.nanoTime()%3 == 1 ? 5 : 10;		
 		this.location = location;
+		this.height = 32;
+		this.width = 30;
 	}
 	
 	/**

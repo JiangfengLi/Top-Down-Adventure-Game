@@ -11,7 +11,8 @@ import java.util.HashMap;
  */
 public abstract class Enemy extends Character{
 
-	protected HashMap<Item, Float> drops;
+	protected HashMap<Integer, Item> drops = new HashMap<Integer, Item>();
+	protected int lootChance;
 	protected String idleImage;
 	protected boolean active;
 	protected boolean scaredyCat;
@@ -21,7 +22,7 @@ public abstract class Enemy extends Character{
 	 * 
 	 * @return a HashMap mapping the item as a key and a float representing drop chance as the value
 	 */
-	public HashMap<Item, Float> getDrops() {
+	public HashMap<Integer, Item> getDrops() {
 		return this.drops;
 	}
 
@@ -70,5 +71,49 @@ public abstract class Enemy extends Character{
 	 */
 	public boolean willFlee() {
 		return scaredyCat;
+	}
+	
+	/**
+	 * returns whether the enemy dropped loot
+	 * @return true if the enemy drops loot, false otherwise
+	 */
+	public boolean didLootDrop() {
+		return System.nanoTime()%100 < lootChance;
+	}
+	
+	/**
+	 * returns the item the enemy dropped
+	 * @return the Item that the enemy dropped
+	 */
+	public Item lootDrop() {
+		return drops.get(new Integer((int) (System.nanoTime()%drops.size())));
+	}
+	
+	/**
+	 * moves the player and their loot by the passed in values
+	 * @param x the x distance
+	 * @param y the y distance
+	 */
+	public void updateLocation(int x, int y) {
+		location[0] += x;
+		location[1] += y;
+		
+		for(Item item : drops.values()) {
+			item.setLocation(location[0], location[1]);
+		}
+	}
+	
+	/**
+	 * sets the location of the enemy and their loot
+	 * @param x the x coordinate to set
+	 * @param y the y coordinate to set
+	 */
+	public void setLocation(int x, int y) {
+		location[0] = x;
+		location[1] = y;
+		
+		for(Item item : drops.values()) {
+			item.setLocation(location[0], location[1]);
+		}
 	}
 }

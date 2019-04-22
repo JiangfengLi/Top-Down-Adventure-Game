@@ -53,6 +53,8 @@ public class GameController {
 		//if the player is stalled, decrement his stall
 		if(model.getPlayer().stalled()) model.getPlayer().decrementStall();
 		
+		if(model.getPlayer().buffed()) model.getPlayer().decrementBuff();
+		
 		//check to see if the player has been damaged recently
 		if(model.getPlayer().damaged()) {
 		
@@ -138,6 +140,22 @@ public class GameController {
 			//if there were no collisions and no area changes, just move the player by the passed in amount
 		}
 		model.updatePlayerPosition(xMovement, yMovement);
+		Iterator<Item> drops = model.getCurrentArea().getLoot().iterator();
+		while(drops.hasNext()) {
+			Item loot = drops.next();
+			if(collision(model.getPlayer().getLocation(), loot)) {
+				if(loot instanceof Arrow) {
+					model.getPlayer().addArrows(((Arrow) loot).getQuantity());
+				}
+				if(loot instanceof Heart) {
+					model.getPlayer().addHP(((Heart) loot).getHP());
+				}
+				if(loot instanceof SpeedBuff) {
+					model.getPlayer().addBuff(200);
+				}
+				drops.remove();
+			}
+		}
 	}
 
 	/**
@@ -502,6 +520,7 @@ public class GameController {
 		//gathers up all dead enemies
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 			if(enemy.isDead()) {
+				if(enemy.didLootDrop()) model.getCurrentArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
 			}
 		}

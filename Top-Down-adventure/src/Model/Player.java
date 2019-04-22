@@ -13,6 +13,8 @@ public class Player extends Character{
 	private boolean bossKey = false;
 	private boolean damaged = false;
 	private Enemy lastEnemy;
+	private int buffTimer;
+	private boolean buffed = false;
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -75,24 +77,73 @@ public class Player extends Character{
 		return bossKey;
 	}
 
+	/**
+	 * returns true if the player has been recently damaged, false otherwise
+	 * @return true if the player has been recently damaged, false otherwise
+	 */
 	public boolean damaged() {
 		return damaged;
 	}
 	
+	/**
+	 * toggles the player's damaged boolean
+	 */
 	public void toggleDamaged() {
 		damaged = !damaged;
 	}
 	
+	/**
+	 * returns the last enemy to hit the player
+	 * @return the last enemy that damaged the player
+	 */
 	public Enemy lastEnemy() {
 		return lastEnemy;
 	}
 	
+	/**
+	 * sets the last enemy to hit the player
+	 * @param enemy the last enemy to damage the player
+	 */
 	public void setLastEnemy(Enemy enemy) {
 		lastEnemy = enemy;
 	}
 
+	/**
+	 * reduces the player's arrow quantity by 1
+	 */
 	public void decrementArrows() {
 		arrowQuantity--;
 		
+	}
+	
+	/**
+	 * adds time to the player's speed buff
+	 * @param i the number of ticks to add to the buff timer
+	 */
+	public void addBuff(int i) {
+		if(!buffed) {
+			buffed = true;
+			speed = speed*2;
+		}
+		buffTimer += i;		
+	}
+	
+	/**
+	 * decrements the buffTimer by one.
+	 */
+	public void decrementBuff() {
+		buffTimer--;
+		if(buffTimer == 0) {
+			speed = 8;
+			buffed  = false;
+		}
+	}
+
+	/**
+	 * returns true when the player is buffed, false otherwise.
+	 * @return true when the player is buffed, false otherwise.
+	 */
+	public boolean buffed() {
+		return buffed;
 	}
 }
