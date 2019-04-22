@@ -1,3 +1,8 @@
+
+
+import java.util.ArrayList;
+
+import Model.GameModel;
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -5,7 +10,8 @@ import javafx.stage.Stage;
 
 public class Window extends Application{
 	
-	private static final int ticksPerFrame = 5;
+	private gameView view;
+	
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -13,39 +19,44 @@ public class Window extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		AnimationTimer at = new AnimationTimer() {
+			
+		view = new gameView();
+		primaryStage = view.getStage();
+		primaryStage.setTitle("Adventure game");
+		primaryStage.show();
+        AnimationTimer animationTimer = new AnimationTimer() {
 			@Override
-			public void handle(long now) {
-				for(int i=0; i< ticksPerFrame; i++) {
-					tick();
-				}
+			public void handle(long now) {				
+				tick();
 			}
 		};
-		
-		try {
-			gameView view = new gameView();
-			primaryStage = view.getStage();
-			primaryStage.setTitle("Adventure game");
-			primaryStage.show();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		at.start();
+        animationTimer.start();
+        view.setAnimationTimer(animationTimer);
 	}
 	
+	/**
+	 * heart of the game engine, calls various methods that do all of the things
+	 * that need to be done each tick of the game clock
+	 */
 	public void tick() {
-		/*/////TO-DO//////
-		Write methods to update everything that needs updated
-		during a tick
-		something like
-		updateCharacterPosition
-		updateEnemyPosition
-		checkWeaponCollision
-		checkDeath
-		checkWin
-		setChanged()
-		notifyObservers()
-		*/
+		if(view.gameStarted()) {
+			view.incrementGameClock();
+			//if(view.getGameClock()%2 > 0) {
+				view.updateCharacterPosition();
+				view.updateEnemyPosition();
+				view.updateEnemyCollision();
+				view.checkDeath();
+				/*/////TO-DO//////
+				Write methods to update everything that needs updated
+				during a tick
+				something like
+				updateBoss (since it will have a different movement pattern than a standard enemy.
+				checkDeath
+				checkWin
+				setChanged()
+				notifyObservers()
+				*/
+			//}
+		}
 	}
 }
