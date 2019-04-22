@@ -18,8 +18,7 @@ public class Window extends Application{
 	}
 	
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-			
+	public void start(Stage primaryStage) throws Exception {			
 		view = new gameView();
 		primaryStage = view.getStage();
 		primaryStage.setTitle("Adventure game");
