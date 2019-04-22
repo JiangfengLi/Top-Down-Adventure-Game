@@ -614,8 +614,8 @@ public class GameController {
 				}
 				
 				//if the projectile goes off screen, remove it
-				else if(projectile.getLocation()[0] > 1150 || projectile.getLocation()[0] < 50 ||
-						projectile.getLocation()[1] > 750 || projectile.getLocation()[1] < 50) {
+				else if(projectile.getLocation()[0] > 1200 || projectile.getLocation()[0] < 0 ||
+						projectile.getLocation()[1] > 800 || projectile.getLocation()[1] < 0) {
 					projectiles.remove();
 					break;
 				}
