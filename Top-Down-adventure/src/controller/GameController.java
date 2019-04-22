@@ -181,12 +181,14 @@ public class GameController {
 	}
 
 	public void swordAttack(Canvas canvas) {
+		// obstacle attack
 		for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
 			if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
 				obstacle.toggleDestroyed();
 				model.addAnimation(obstacle);
 			}
 		}
+		// Enemy attack
 		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
 			if(weaponCollision(model.getPlayer(), enemy)) {
 				enemy.loseHP(model.getPlayer().getDamage());
@@ -226,8 +228,7 @@ public class GameController {
 	}
 
 	public void setPlayerDirection(int i) {
-		model.getPlayer().setDirection(i);
-		
+		model.getPlayer().setDirection(i);		
 	}
 
 	public void incrementGameClock() {
@@ -236,8 +237,7 @@ public class GameController {
 	}
 
 	public int getGameClock() {
-		return model.getGameClock();
-		
+		return model.getGameClock();	
 	}
 
 	public Object getAnimations() {
