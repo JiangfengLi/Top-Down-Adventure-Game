@@ -307,8 +307,14 @@ public class gameView implements Observer{
 			//draws the animation frame of the player swinging his sword in the appropriate direction
 			if(obj instanceof PlayerSwing) {
 				Image image = new Image(((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1]);
-				gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
+				if(player.getDirection() == 1) {
+					gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
+							controller.getPlayerPosition()[0] - 10, controller.getPlayerPosition()[1] - 5, obj.getWidth()*0.8, obj.getHeight()*0.8);
+				}
+				else {
+					gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
 						controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], obj.getWidth()*0.8, obj.getHeight()*0.8);
+				}
 				if(!player.stalled()) {
 					finished.add(obj);
 				}
