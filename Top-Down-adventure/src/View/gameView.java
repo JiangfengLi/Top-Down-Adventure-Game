@@ -4,15 +4,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import Model.Area;
+import Model.*;
 import Model.Character;
-import Model.Enemy;
-import Model.GameModel;
-import Model.GameObject;
-import Model.Obstacle;
-import Model.Player;
-import Model.PlayerSwing;
-import Model.buttonMaker;
 import controller.GameController;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -25,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class gameView implements Observer{
@@ -55,7 +47,7 @@ public class gameView implements Observer{
 	
 	/**
 	 * getter for the stage
-	 * @return
+	 * @return the stage
 	 */
 	public Stage getStage() {
 		return myStage;
@@ -141,13 +133,6 @@ public class gameView implements Observer{
 		// TODO Auto-generated method stub
 		
 	}
-
-	/**
-	 * checks to see if the weapon hit an enemy
-	 */
-	public void checkProjectileCollision() {
-		controller.checkProjectileCollision();
-	}
 	
 	/**
 	 * sets up listeners for key press and key release
@@ -215,10 +200,10 @@ public class gameView implements Observer{
 	public void setupMouseClickListeners() {
 		myScene.setOnMousePressed((e)->{
 			if(e.getButton() == MouseButton.PRIMARY) {
-				controller.swordAttack(canvas);
+				controller.swordAttack();
 			}
 			else if(e.getButton() == MouseButton.SECONDARY) {
-				controller.bowAttack(canvas);
+				controller.bowAttack();
 			}
 		});
 	}
@@ -297,6 +282,12 @@ public class gameView implements Observer{
 			}
 		}
 		
+		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
+			Image projectileImage = new Image(projectile.getImageArray()[projectile.getDirection()-1]);
+			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
+					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+		}
+		
 		//draw animations currently in progress
 		ArrayList<GameObject> finished = new ArrayList<GameObject>();
 		for(GameObject obj : ((GameModel) model).getAnimations()) {
@@ -327,6 +318,16 @@ public class gameView implements Observer{
 			//plays the enemy's death animation when they die
 			else if(obj instanceof Enemy && ((Enemy) obj).isDead()) {
 				// play death animation
+			}
+			
+			//play bow attack if appropriate
+			else if(obj instanceof BowShot) {
+				Image image = new Image(((BowShot) obj).getImageArray()[((BowShot) obj).getDirection() - 1]);
+				gc.drawImage(image, 54*(5 - player.getStallTime()), 0, 54, 73, controller.getPlayerPosition()[0], 
+						controller.getPlayerPosition()[1], obj.getWidth()*0.7, obj.getHeight()*0.7);
+				if(!player.stalled()) {
+					finished.add(obj);
+				}
 			}
 		}
 		((GameModel) model).getAnimations().removeAll(finished);
@@ -372,8 +373,7 @@ public class gameView implements Observer{
 		
 	}
 
-	public Observable getModel() {
-		// TODO Auto-generated method stub
-		return controller.getModel();
+	public void updateProjectiles() {
+		controller.updateProjectilePosition();
 	}
 }

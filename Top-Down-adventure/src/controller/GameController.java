@@ -1,17 +1,10 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Observable;
+import java.util.Iterator;
 
-import Model.Area;
+import Model.*;
 import Model.Character;
-import Model.Enemy;
-import Model.GameModel;
-import Model.GameObject;
-import Model.Obstacle;
-import Model.Player;
-import Model.PlayerSwing;
-import javafx.scene.canvas.Canvas;
 
 /**
  * The controller part of the MVC paradigm for the game.
@@ -63,7 +56,12 @@ public class GameController {
 				xMovement = attacker.getLocation()[0] > model.getPlayer().getLocation()[0] ? -model.getPlayer().getSpeed()*4 : 0;
 				xMovement += attacker.getLocation()[0] < model.getPlayer().getLocation()[0] ? model.getPlayer().getSpeed()*4 : 0;
 				yMovement = attacker.getLocation()[1] > model.getPlayer().getLocation()[1] ? -model.getPlayer().getSpeed()*4 : 0;
-				yMovement += attacker.getLocation()[1] < model.getPlayer().getLocation()[1] ? model.getPlayer().getSpeed()*4 : 0;				
+				yMovement += attacker.getLocation()[1] < model.getPlayer().getLocation()[1] ? model.getPlayer().getSpeed()*4 : 0;
+				
+				if(model.getPlayer().getLocation()[0] + xMovement < 0) xMovement = 0;
+				if(model.getPlayer().getLocation()[0] + xMovement > 1200 - model.getPlayer().getWidth()) xMovement = 0;
+				if(model.getPlayer().getLocation()[1] + yMovement < 0) yMovement = 0;
+				if(model.getPlayer().getLocation()[1] + yMovement > 800 - model.getPlayer().getHeight()) yMovement = 0;
 			}
 			else model.getPlayer().toggleDamaged();
 		}
@@ -101,7 +99,7 @@ public class GameController {
 			}
 			
 			//if the player walked off the screen, shift to the screen that they walked to
-			if(offScreen()) {
+			if(offScreen() && !model.getPlayer().damaged()) {
 				
 				//determine where to place the player on the next screen
 				int[] collisionCoords = offScreenCoords();
@@ -355,7 +353,7 @@ public class GameController {
 	 * runs the player's sword attack
 	 * @param canvas
 	 */
-	public void swordAttack(Canvas canvas) {
+	public void swordAttack() {
 		if(!model.getPlayer().stalled()) {
 			model.getPlayer().addStall(5);
 			model.addAnimation(new PlayerSwing(model.getPlayer().getDirection()));
@@ -452,16 +450,15 @@ public class GameController {
 	 * performs a bow attack
 	 * @param canvas
 	 */
-	public void bowAttack(Canvas canvas) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * checks projectile collision
-	 */
-	public void checkProjectileCollision() {
-		// TODO Auto-generated method stub
+	public void bowAttack() {
+		if(!model.getPlayer().stalled()) {
+			model.getPlayer().addStall(5);
+			model.addAnimation(new BowShot(model.getPlayer().getDirection()));
+			if(model.getPlayer().getArrowQuantity() > 0) {
+				model.getCurrentArea().addProjectile(new ArrowShot(model.getPlayer().getDirection(), model.getPlayer().getLocation()));
+				model.getPlayer().decrementArrows();
+			}
+		}
 		
 	}
 
@@ -490,18 +487,11 @@ public class GameController {
 
 	//returns the player's speed.
 	public int getPlayerSpeed() {
-		// TODO Auto-generated method stub
 		return model.getPlayer().getSpeed();
 	}
 
 	public boolean playerStalled() {
-		// TODO Auto-generated method stub
 		return model.getPlayer().stalled();
-	}
-
-	public Observable getModel() {
-		// TODO Auto-generated method stub
-		return model;
 	}
 
 	public void enemyAttack() {
@@ -516,5 +506,68 @@ public class GameController {
 				}
 			}
 		}	
+	}
+
+	public void updateProjectilePosition() {
+		Iterator<Character> projectiles = model.getCurrentArea().getProjectiles().iterator();
+		while(projectiles.hasNext()) {
+			Character projectile = projectiles.next();
+			int x;
+			int y;
+			switch(projectile.getDirection()) {
+				case 1:
+					x = 0;
+					y = -projectile.getSpeed();
+					break;
+				case 3:
+					x = 0;
+					y = projectile.getSpeed();
+					break;
+				case 2:
+					y = 0;
+					x = -projectile.getSpeed();
+					break;
+				case 4:
+					y = 0;
+					x = projectile.getSpeed();
+					break;
+				default:
+					x = 0;
+					y = 0;
+			}
+			projectile.updatePosition(x, y);
+			ArrayList<GameObject> things = new ArrayList<GameObject>();
+			things.addAll(model.getCurrentArea().getEnemies());
+			things.addAll(model.getCurrentArea().getObstacles());
+			for(GameObject obj : things) {
+				if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
+				if(projectileCollision(projectile, obj)) {
+					projectiles.remove();
+					if(obj instanceof Enemy) {
+						((Enemy) obj).addStall(1);
+						((Enemy) obj).loseHP(1); 
+					}
+					break;
+				}
+				else if(projectile.getLocation()[0] > 1150 || projectile.getLocation()[0] < 50 ||
+						projectile.getLocation()[1] > 750 || projectile.getLocation()[1] < 50) {
+					projectiles.remove();
+					break;
+				}
+			}
+		}
+	}
+
+	private boolean projectileCollision(Character projectile, GameObject obj) {
+		//return true if the player rectangle overlaps the obstacle rectangle.
+		
+		int[] position = projectile.getLocation();
+		if(position[0] < obj.getLocation()[0] + obj.getWidth() && 
+				position[0] + projectile.getWidth() > obj.getLocation()[0] &&
+				position[1] + projectile.getHeight() < obj.getLocation()[1] + obj.getHeight() && 
+				position[1] + model.getPlayer().getHeight() > obj.getLocation()[1] + obj.getTopHeight()) {
+			return true;
+		}
+		return false;
 	}
 }

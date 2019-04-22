@@ -1,8 +1,6 @@
 
 
-import java.util.ArrayList;
 
-import Model.GameModel;
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -43,6 +41,7 @@ public class Window extends Application{
 				view.updateCharacterPosition();
 				view.updateEnemyPosition();
 				view.updateEnemyCollision();
+				view.updateProjectiles();
 				view.checkDeath();
 				/*/////TO-DO//////
 				Write methods to update everything that needs updated

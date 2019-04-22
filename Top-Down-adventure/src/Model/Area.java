@@ -14,10 +14,12 @@ public class Area {
 	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
 	private int[] coords = new int[2];
+	private ArrayList<Character> projectiles;
 	
 	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles, int x, int y) {
 		this.obstacles = obstacles;
 		this.enemies = enemies;
+		this.projectiles = new ArrayList<Character>();
 		coords[0] = x;
 		coords[1] = y;
 	}
@@ -47,5 +49,23 @@ public class Area {
 	public int[] getCoords() {
 		// TODO Auto-generated method stub
 		return coords;
+	}
+
+	/**
+	 * adds the specified projectile to the area
+	 * @param projectile
+	 */
+	public void addProjectile(Character projectile) {
+		projectiles.add(projectile);
+	}
+	
+	public ArrayList<Character> getProjectiles() {
+		// TODO Auto-generated method stub
+		return projectiles;
+	}
+
+	public void removeProjectile(Character projectile) {
+		projectiles.remove(projectile);
+		
 	}
 }

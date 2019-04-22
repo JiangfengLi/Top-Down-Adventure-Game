@@ -8,7 +8,7 @@ package Model;
  */
 public class Player extends Character{
 	
-	private int arrowQuantity = 3;
+	private int arrowQuantity = 30;
 	private boolean smallKey = false;
 	private boolean bossKey = false;
 	private boolean damaged = false;
@@ -89,5 +89,10 @@ public class Player extends Character{
 	
 	public void setLastEnemy(Enemy enemy) {
 		lastEnemy = enemy;
+	}
+
+	public void decrementArrows() {
+		arrowQuantity--;
+		
 	}
 }
