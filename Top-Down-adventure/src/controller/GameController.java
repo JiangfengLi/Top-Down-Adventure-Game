@@ -1,3 +1,4 @@
+
 package controller;
 
 import java.util.ArrayList;
@@ -468,7 +469,6 @@ public class GameController {
 	 */
 	public void setPlayerDirection(int i) {
 		player.setDirection(i);
-		
 	}
 
 	/**
@@ -484,8 +484,7 @@ public class GameController {
 	 * @return the tick the game clock is currently on
 	 */
 	public int getGameClock() {
-		return model.getGameClock();
-		
+		return model.getGameClock();	
 	}
 
 	/**
@@ -665,5 +664,5 @@ public class GameController {
 			return true;
 		}
 		return false;
-	} 
+	}
 }
