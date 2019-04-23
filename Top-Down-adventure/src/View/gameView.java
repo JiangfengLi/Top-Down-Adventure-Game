@@ -58,6 +58,10 @@ public class gameView implements Observer{
 		myStage.setResizable(false);
 	}
 	
+	/**
+	 * sets up the 'link' button on the title screen to link to the repo that contains this project.
+	 * @param button the button that opens the browser
+	 */
 	private void githubLink(Button button) {
 		button.setOnMouseClicked((c) -> {
 			try {
@@ -270,6 +274,11 @@ public class gameView implements Observer{
 		Image bg = new Image("/style/background.png");
 		gc.drawImage(bg, 0, 0, WIDTH, HEIGHT);		
 		
+		//this should be obvious, but the draw order here is important because it helps to force perspective.
+		//like players should be on top of back ground, but should be able to go underneath the top part of large obstacles
+		//but walk over loot instead of under it.
+		
+		
 		//iterates through the obstacles in current area, draws them to screen
 		for(Obstacle obstacle : obstacles) {
 			Image image = new Image(obstacle.getImageFile()); 
@@ -323,9 +332,7 @@ public class gameView implements Observer{
 			else {
 				gc.drawImage(playerImage, 0, 0, 29, 24, player.getLocation()[0], player.getLocation()[1], 58, 48);
 			}
-		}
-		
-		
+		}		
 		
 		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
@@ -337,7 +344,8 @@ public class gameView implements Observer{
 		//draw animations currently in progress
 		ArrayList<GameObject> finished = new ArrayList<GameObject>();
 		for(GameObject obj : ((GameModel) model).getAnimations()) {
-			//obstacles have a destruction animation
+			
+			//obstacle animations are destruction animations. Play it.
 			if(obj instanceof Obstacle) {
 				int currFrame = ((Obstacle) obj).destroyedFrame()/2;
 				Image image = new Image(obj.getImageFile());
