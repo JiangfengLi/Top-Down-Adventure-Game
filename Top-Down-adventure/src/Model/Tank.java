@@ -29,13 +29,4 @@ public class Tank extends Enemy{
 		drops.put(0, arrowDrop);
 		lootChance = 100;
 	} 
-
-	/**
-	 * returns whether the tank can see the player or not
-	 */
-	@Override
-	public boolean playerIsVisible() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

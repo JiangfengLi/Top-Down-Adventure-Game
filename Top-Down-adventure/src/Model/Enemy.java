@@ -35,14 +35,6 @@ public abstract class Enemy extends Character{
 	public Image getIdleImage() {
 		return idleImage;
 	}
-	
-	/**
-	 * Method stub for determining whether the
-	 * enemy has a straight line path to the player
-	 * without any collision objects in the way
-	 * @return 
-	 */
-	public abstract boolean playerIsVisible();
 
 	/**
 	 * returns whether the enemy is active

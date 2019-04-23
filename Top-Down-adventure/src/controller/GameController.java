@@ -74,9 +74,9 @@ public class GameController {
 				
 				//if the knockback would knock him off screen, remove that directions movement.
 				if(getPlayerPosition()[0] + xMovement < 0) xMovement = 0;
-				if(getPlayerPosition()[0] + xMovement > 1200 - player.getWidth()) xMovement = 0;
+				if(getPlayerPosition()[0] + xMovement > 999 - player.getWidth()) xMovement = 0;
 				if(getPlayerPosition()[1] + yMovement < 0) yMovement = 0;
-				if(getPlayerPosition()[1] + yMovement > 800 - player.getHeight()) yMovement = 0;
+				if(getPlayerPosition()[1] + yMovement > 666 - player.getHeight()) yMovement = 0;
 			}
 			
 			//otherwise, the damage is no longer recent and needs to have its flag changed
@@ -175,12 +175,12 @@ public class GameController {
 		//and set him on the far right side of the screen.
 		if(getPlayerPosition()[0] < 0) {
 			temp[1] = getPlayerPosition()[1];
-			temp[0] = 1149;
+			temp[0] = 948;
 			return temp;
 		}
 		
 		//if off screen to the right, y is the same and x is the left side of the screen
-		if(getPlayerPosition()[0] > 1150){
+		if(getPlayerPosition()[0] > 949){
 			temp[1] = getPlayerPosition()[1];
 			temp[0] = 1;
 			return temp;
@@ -196,7 +196,7 @@ public class GameController {
 		//if off screen to the top, x is the same and y is to the bottom
 		if(getPlayerPosition()[1] < 0) {
 			temp[0] = getPlayerPosition()[0];
-			temp[1] = 749;
+			temp[1] = 615;
 			return temp;
 		}
 		
@@ -209,8 +209,8 @@ public class GameController {
 	 * @return true if the player is off screen, false otherwise
 	 */
 	private boolean offScreen() {
-		if(getPlayerPosition()[0] < 0 || getPlayerPosition()[0] > 1150 ||
-				getPlayerPosition()[1] < 0 || getPlayerPosition()[1]  > 750) {
+		if(getPlayerPosition()[0] < 0 || getPlayerPosition()[0] > 949 ||
+				getPlayerPosition()[1] < 0 || getPlayerPosition()[1]  > 616) {
 			return true;
 		}
 		return false;
@@ -359,8 +359,8 @@ public class GameController {
 					}
 					
 					//if the enemy is offscreen, don't let them be.
-					if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 1200 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
-							enemy.getLocation()[1] > 800 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
+					if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 999 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
+							enemy.getLocation()[1] > 666 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
 				}
 			}
 		}
@@ -638,8 +638,8 @@ public class GameController {
 				}
 				
 				//if the projectile goes off screen, remove it
-				else if(projectile.getLocation()[0] > 1200 || projectile.getLocation()[0] < 0 ||
-						projectile.getLocation()[1] > 800 || projectile.getLocation()[1] < 0) {
+				else if(projectile.getLocation()[0] > 999 || projectile.getLocation()[0] < 0 ||
+						projectile.getLocation()[1] > 666 || projectile.getLocation()[1] < 0) {
 					projectiles.remove();
 					break;
 				}

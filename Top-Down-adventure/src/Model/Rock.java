@@ -8,7 +8,12 @@ package Model;
  */
 public class Rock extends Obstacle {
 
-	public Rock() {
+	public Rock(int x, int y) {
 		destructible = false;
+		width = 50;
+		height = 50;
+		location[0] = x;
+		location[1] = y;
+		topImage = false;
 	} 
 }

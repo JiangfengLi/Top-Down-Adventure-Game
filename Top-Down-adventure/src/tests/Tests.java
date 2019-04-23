@@ -17,17 +17,16 @@ class Tests {
 
 	@Test
 	void testDPS() {
-		Enemy dps = new DPS();
 	}
 	
 	@Test
 	void testFlier() {
-		Enemy flier = new Flier();
-		assertTrue(flier.playerIsVisible());
+		
 	}
 	
 	@Test
 	void testTank() {
+		
 	}
 	
 	@Test

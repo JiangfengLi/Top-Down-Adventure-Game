@@ -13,6 +13,8 @@ public class Heart extends Item {
 	
 	public Heart(int[] location) {
 		this.imageFile = new Image("");
+		this.width = 50;
+		this.width = 50;
 		this.location = location;
 		this.HP = System.nanoTime()%3 > 2 ? 2 : 1;
 	}
@@ -22,7 +24,6 @@ public class Heart extends Item {
 	 * @return HP, an integer telling us how much this drops heals for.
 	 */
 	public int getHP() {
-		// TODO Auto-generated method stub
 		return HP;
 	} 
 }

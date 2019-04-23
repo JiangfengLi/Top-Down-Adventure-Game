@@ -41,15 +41,15 @@ public class GameMap {
 				}
 				if(i == 2) {
 					for(int k = 0; k < 20; k++) {
-						areaOneObstacles.add(new Tree(1150, k*50));
+						areaOneObstacles.add(new Tree(949, k*50));
 					}
 				}
 				if(j == 2) {
 					for(int k = 0; k < 15; k++) {
-						areaOneObstacles.add(new Tree(k*100, 750));
+						areaOneObstacles.add(new Tree(k*100, 616));
 					}
 				}
-				areaOneEnemies.add(new Tank(700, 700));
+				areaOneEnemies.add(new Tank(800, 500));
 				areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
 				areaOneObstacles.add(new Tree(450 + i*50, 300 + j*50));
 				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);

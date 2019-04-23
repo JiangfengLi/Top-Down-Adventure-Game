@@ -27,10 +27,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Stage;
 
+
 public class gameView implements Observer{
 	private final String BACK_GROUND = "/style/title.png";
-	private static final int HEIGHT = 800;
-	private static final int WIDTH = 1200;
+	private static final int HEIGHT = 666;
+	private static final int WIDTH = 999;
 	private AnchorPane myPane;
 	private Scene myScene;
 	private Stage myStage;
@@ -49,14 +50,14 @@ public class gameView implements Observer{
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
 		myStage = new Stage();
 		myStage.setScene(myScene);
-		makeButton("PLAY NOW!",518,700);
+		makeButton("PLAY NOW!",400,583);
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
-		button.setPrefWidth(75);
-		button.setPrefHeight(60);
-		button.setLayoutX(542);
-		button.setLayoutY(494);
+		button.setPrefWidth(63);
+		button.setPrefHeight(50);
+		button.setLayoutX(452);
+		button.setLayoutY(412);
 		githubLink(button);
 		setBackground(BACK_GROUND);
 		
@@ -116,7 +117,7 @@ public class gameView implements Observer{
 	 */
 	private void setBackground(String url) {
 		Image back = new Image(BACK_GROUND);
-		BackgroundImage backGround = new BackgroundImage(back, null, null, BackgroundPosition.DEFAULT, new BackgroundSize(1200, 800, false, false, false, true));
+		BackgroundImage backGround = new BackgroundImage(back, null, null, BackgroundPosition.DEFAULT, new BackgroundSize(999, 666, false, false, false, true));
 		myPane.setBackground(new Background(backGround));
 	}
 	
