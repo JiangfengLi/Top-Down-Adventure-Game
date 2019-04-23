@@ -26,13 +26,15 @@ public class Window extends Application{
 		primaryStage = view.getStage();
 		primaryStage.setTitle("Adventure game");
 		primaryStage.show();		
-		new AnimationTimer() {
-			@Override
-			public void handle(long now) {				
-				tick();
-			}
-		}.start();
-	}
+		 AnimationTimer animationTimer = new AnimationTimer() {
+				@Override
+				public void handle(long now) {				
+					tick();
+				}
+			};
+	        animationTimer.start();
+	        view.setAnimationTimer(animationTimer);
+		}
 	
 	/**
 	 * calls various methods that do all of the things

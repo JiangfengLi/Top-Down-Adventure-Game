@@ -11,6 +11,7 @@ import java.util.Observer;
 import Model.*;
 import Model.Character;
 import controller.GameController;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -38,6 +39,8 @@ public class gameView implements Observer{
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;
+	private AnimationTimer animationTimer;
+	private boolean isStop = false;
 	
 	public gameView() {
 		myPane = new AnchorPane();
@@ -187,6 +190,16 @@ public class gameView implements Observer{
 			if(e.getCode() == KeyCode.D) {
 				controller.setPlayerDirection(4);
 				dPressed = true;
+			}
+			if(e.getCode() == KeyCode.P) {
+				if(!isStop) {
+					isStop  = true;
+					animationTimer.stop();
+				}
+				else {
+					isStop = false;
+					animationTimer.start();
+				}
 			}
 		});
 		
@@ -440,5 +453,10 @@ public class gameView implements Observer{
 	 */
 	public void updateProjectiles() {
 		controller.updateProjectilePosition();
+	}
+
+	public void setAnimationTimer(AnimationTimer animationTimer) {
+		this.animationTimer = animationTimer;
+		
 	}
 }
