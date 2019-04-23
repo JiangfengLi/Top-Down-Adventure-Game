@@ -1,16 +1,6 @@
 package Model;
 
-public abstract class Item {
+public abstract class Item extends GameObject{
 
-	private String name;		
-	
-	/**
-	 * Getter for the item's name
-	 * 
-	 * @return String for the name of the item
-	 */
-	public String getName() {
-		return this.name;
-	}
 	
 }

@@ -1,5 +1,8 @@
 package Model;
 
+import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Abstract class for Obstacles, which are impassable object on
  * the map
@@ -7,29 +10,44 @@ package Model;
  * @author Wes Rodgers
  *
  */
-public abstract class Obstacle {
+public abstract class Obstacle extends GameObject {
 
-	private int[] corners;
-	private String imageFile;
+	protected boolean destructible;
+	protected boolean destroyed = false;
+	protected boolean animationDone = false;
+	protected int destroyedFrame = 0;
+	protected int lastFrame;
 	
 	/**
-	 * Getter for the location of the obstacles corners,
-	 * in order as left x value, bottom y value, right x value,
-	 * top y value
-	 * 
-	 * @return an array of the corners of an obstacle
+	 * getter for the obstacle's destructible flag
+	 * @return true if the obstacle is destructible, false otherwise
 	 */
-	public int[] getCorners() {
-		return corners;
+	public boolean isDestructible() {
+		return destructible;
+	}
+
+	public boolean destroyed() {
+		return destroyed;
+	}
+
+	public void toggleDestroyed() {
+		destroyed = true;
 	}
 	
-	/**
-	 * Getter for the filename of the obstacle's
-	 * image file
-	 * 
-	 * @return A String of the filename of the obstacle's image
-	 */
-	public String getImageName() {
-		return imageFile;
+	public void endAnimation() {
+		animationDone = true;
+	}
+	
+	public boolean animationDone() {
+		return animationDone;
+	}
+	
+	public int destroyedFrame() {
+		destroyedFrame++;
+		return destroyedFrame;
+	}
+
+	public int lastFrame() {
+		return lastFrame;
 	}
 }

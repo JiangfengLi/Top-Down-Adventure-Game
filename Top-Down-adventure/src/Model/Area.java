@@ -10,9 +10,17 @@ import java.util.ArrayList;
  * @author Wes Rodgers
  *
  */
-public abstract class Area {
+public class Area {
 	private ArrayList<Obstacle> obstacles;
 	private ArrayList<Enemy> enemies;
+	private int[] coords = new int[2];
+	
+	public Area(ArrayList<Enemy> enemies, ArrayList<Obstacle> obstacles, int x, int y) {
+		this.obstacles = obstacles;
+		this.enemies = enemies;
+		coords[0] = x;
+		coords[1] = y;
+	}
 	
 	/**
 	 * getter for the obstacles in an area
@@ -30,5 +38,10 @@ public abstract class Area {
 	 */
 	public ArrayList<Enemy> getEnemies(){
 		return enemies;
+	}
+
+	public int[] getCoords() {
+		// TODO Auto-generated method stub
+		return coords;
 	}
 }
