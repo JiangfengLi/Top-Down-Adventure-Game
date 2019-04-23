@@ -42,6 +42,8 @@ public class gameView implements Observer{
 	private AnimationTimer animationTimer;
 	private boolean isStop = false;
 	
+	private Image bg = new Image("/style/background.png");
+	
 	public gameView() {
 		myPane = new AnchorPane();
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
@@ -284,7 +286,6 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		
 		//draws the background layer
-		Image bg = new Image("/style/background.png");
 		gc.drawImage(bg, 0, 0, WIDTH, HEIGHT);		
 		
 		//this should be obvious, but the draw order here is important because it helps to force perspective.
