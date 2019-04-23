@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import Model.Area;
+import Model.Character;
 import Model.Enemy;
 import Model.GameModel;
 import Model.GameObject;
-import Model.Item;
 import Model.Obstacle;
 import Model.Player;
 import Model.PlayerSwing;
@@ -129,30 +129,6 @@ public class GameController {
 		}
 		model.updatePlayerPosition(xMovement, yMovement);
 	}
-	
-	
-	private int[] collisionCoords(int[] location, GameObject obstacle) {
-		int[] retVal = new int[2];
-		Player player = model.getPlayer();
-		
-		if(model.getPlayer().getOldLocation()[1] > location[1]) {
-			retVal[0] = location[0];
-			retVal[1] = obstacle.getLocation()[1] + obstacle.getHeight() - model.getPlayer().getHitboxHeight();
-		}
-		if(model.getPlayer().getOldLocation()[0] > location[0]) {
-			retVal[0] = obstacle.getLocation()[0] + obstacle.getWidth();
-			retVal[1] = location[1];
-		}
-		if(model.getPlayer().getOldLocation()[1] < location[1]) {
-			retVal[0] = location[0];
-			retVal[1] = obstacle.getLocation()[1] - model.getPlayer().getHeight() + obstacle.getTopHeight();
-		}
-		if(model.getPlayer().getOldLocation()[0] < location[0]){
-			retVal[0] = obstacle.getLocation()[0] - model.getPlayer().getWidth();
-			retVal[1] = location[1];
-		}
-		return retVal;
-	}
 
 	/**
 	 * determines where to place the character on a new screen
@@ -205,16 +181,7 @@ public class GameController {
 		}
 		return false;
 	}
-
-	/**
-	 * sets the player's position to a specific location
-	 * @param i x coordinate of the player's new position
-	 * @param j y coordinate of the player's new position
-	 */
-	private void setPlayerPosition(int i, int j) {
-		model.getPlayer().setLocation(i, j);
-	}
-
+	
 	/**
 	 * checks to see if the player collided with a given obstacle
 	 * @param playerPosition the int[2] of the player's x and y coordinates
@@ -233,23 +200,6 @@ public class GameController {
 				playerPosition[0] + model.getPlayer().getHitboxWidth() > obstacle.getLocation()[0] &&
 				playerPosition[1] + model.getPlayer().getHitboxHeight() < obstacle.getLocation()[1] + obstacle.getHeight() && 
 				playerPosition[1] + model.getPlayer().getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
-			return true;
-		}
-		
-		//return false if the player rectangle doesn't overlap the obstacle rectangle
-		return false;
-	}
-	
-	private boolean collision(Enemy en, GameObject obstacle) {
-		if(obstacle instanceof Obstacle && ((Obstacle) obstacle).destroyed()) {
-			return false;
-		}
-		
-		//return true if the player rectangle overlaps the obstacle rectangle.
-		if(en.getLocation()[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-				en.getLocation()[0] + en.getWidth() > obstacle.getLocation()[0] &&
-				en.getLocation()[1] + en.getHeight() < obstacle.getLocation()[1] + obstacle.getHeight() && 
-				en.getLocation()[1] + en.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
 			return true;
 		}
 		
@@ -298,7 +248,18 @@ public class GameController {
 					//knocks the enemy back if they are in a stall
 					if(enemy.stalled()) {
 						enemy.decrementStall();
-						enemy.updatePosition(-x*4, -y*4);
+						x = -x*4;
+						y = -y*4;
+						int[] futurePosition = new int[2];
+						futurePosition[0] = enemy.getLocation()[0] + x;
+						futurePosition[1] = enemy.getLocation()[1] + y;
+						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+							if(collision(futurePosition, obs)) {
+								x = 0;
+								y = 0;
+							}
+						}						
+						enemy.updatePosition(x, y);
 					}
 					else {
 						//if the enemy is a scaredy cat, make him run away when his health is under 1/2
@@ -307,17 +268,6 @@ public class GameController {
 							y = -y;
 						}
 						
-						
-						//update the enemy's direction
-						
-						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
-							if(collision(enemy, obs)) {
-								enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
-								return;
-							}
-						}
-						
-						enemy.updatePosition(x, y);
 						if(x > 0) {
 							enemy.setDirection(4);
 						}
@@ -338,6 +288,31 @@ public class GameController {
 								enemy.setDirection(y > 0 ? 3 : 1);
 							}
 						}
+						
+						//update the enemy's direction
+						int[] futurePosition = new int[2];
+						futurePosition[0] = enemy.getLocation()[0] + x;
+						futurePosition[1] = enemy.getLocation()[1] + y;
+						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+							if(collision(futurePosition, obs)) {
+								switch(enemy.getDirection()){
+									case 1:
+									case 3:
+										y=0;
+										if(enemy.getLocation()[0] > obs.getLocation()[0] + obs.getWidth()/2) x = enemy.getSpeed();
+										else x = -enemy.getSpeed();
+										break;
+									case 2:
+									case 4:
+										x=0;
+										if(enemy.getLocation()[1] > obs.getLocation()[1] + obs.getHeight()/2) y = enemy.getSpeed();
+										else y = -enemy.getSpeed();
+										break;
+								}
+							}
+						}
+						
+						enemy.updatePosition(x, y);
 					}
 					
 					//if the enemy is offscreen, don't let them be.
@@ -355,15 +330,7 @@ public class GameController {
 	 * @return int[2] coordinates for the x,y position the enemy needs to move to to avoid obstacles and get to the player.
 	 */
 	private int[] getPathingTarget(Enemy enemy, Player player) {
-		boolean visible = true;
-		int[] referencePoint = new int[2];
-
-		
-		for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
-			
-		}
-		if(visible)	return player.getLocation();
-		return referencePoint;
+		return player.getLocation();
 	}
 
 	/**
@@ -426,21 +393,21 @@ public class GameController {
 		//if player is facing north, weapon affect 50x50 square north of him
 		if(player.getDirection() == 1) {
 			playerPosition[0] = player.getLocation()[0];
-			playerPosition[1] = player.getLocation()[1] - player.getHeight() - player.getHitboxOffset() + 15;
+			playerPosition[1] = player.getLocation()[1] - player.getHeight() - player.getHitboxOffset() + 7;
 		}
 		//if west, square is west
 		else if(player.getDirection() == 2) {
-			playerPosition[0] = player.getLocation()[0] - player.getWidth() + 15;
+			playerPosition[0] = player.getLocation()[0] - player.getWidth() + 7;
 			playerPosition[1] = player.getLocation()[1];
 		}
 		//if south, square is south
 		else if(player.getDirection() == 3) {
 			playerPosition[0] = player.getLocation()[0];
-			playerPosition[1] = player.getLocation()[1] + player.getHeight() - 15;			
+			playerPosition[1] = player.getLocation()[1] + player.getHeight() - 7;			
 		}
 		//else east, then square is east
 		else {
-			playerPosition[0] = player.getLocation()[0] + player.getWidth() - 15;
+			playerPosition[0] = player.getLocation()[0] + player.getWidth() - 7;
 			playerPosition[1] = player.getLocation()[1];
 		}
 		
@@ -550,20 +517,4 @@ public class GameController {
 			}
 		}	
 	}
-	
-	public boolean getItem(Item stuff) {
-		return model.getPlayer().getItem(stuff);
-	}
-	
-	public Item dropItem(int index) {
-		return model.getPlayer().dropItem(index);
-	}
-	
-	public String peekItem(int index) {
-		if(model.getPlayer().showInventory(index) != null)
-		   return model.getPlayer().showInventory(index).toString();
-		return "empty";
-	}
-	
-	
 }

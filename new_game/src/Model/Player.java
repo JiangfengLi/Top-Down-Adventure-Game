@@ -1,8 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Class for the player character, stores things about him/her
  * 
@@ -16,7 +13,6 @@ public class Player extends Character{
 	private boolean bossKey = false;
 	private boolean damaged = false;
 	private Enemy lastEnemy;
-	private List<Item> inventory;
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -42,7 +38,6 @@ public class Player extends Character{
 		hitbox[1] = 125;
 		hitboxWidth = 30;
 		hitboxHeight = 25;		
-		inventory = new ArrayList<Item>();
 	}	
 	
 	/**
@@ -52,22 +47,6 @@ public class Player extends Character{
 	 */
 	public int getArrowQuantity() {
 		return arrowQuantity;
-	}
-	
-	/**
-	 * getter for hitbox width
-	 * @return hitbox width
-	 */
-	public int getHitboxWidth() {
-		return hitboxWidth;
-	}
-	
-	/**
-	 * getter for hitbox height
-	 * @return hitbox height
-	 */
-	public int getHitboxHeight() {
-		return hitboxHeight;
 	}
 	
 	/**
@@ -111,23 +90,4 @@ public class Player extends Character{
 	public void setLastEnemy(Enemy enemy) {
 		lastEnemy = enemy;
 	}
-	
-	public boolean getItem(Item stuff) {
-		if(inventory.size() >3)
-			return false;
-		inventory.add(stuff);
-		return true;
-	}
-	
-	public Item dropItem(int index) {
-		if(inventory.size() <= 0)
-			return null;
-		return inventory.remove(index);
-	}
-
-	public List<Item> showInventory(int index) {
-		return inventory;
-	}
-	
-	
 }
