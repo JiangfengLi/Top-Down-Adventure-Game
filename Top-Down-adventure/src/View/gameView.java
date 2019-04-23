@@ -294,7 +294,7 @@ public class gameView implements Observer{
 		
 		//iterates through the obstacles in current area, draws them to screen
 		for(Obstacle obstacle : obstacles) {
-			Image image = new Image(obstacle.getImageFile()); 
+			Image image = obstacle.getImageFile(); 
 			if(!obstacle.destroyed()) {
 				gc.drawImage(image, 0,0,obstacle.getWidth(), obstacle.getHeight(), obstacle.getLocation()[0], 
 						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
@@ -310,7 +310,7 @@ public class gameView implements Observer{
 		//iterates through enemies in current area, draws them to screen
 		for(Enemy enemy : enemies) {
 			if(enemy.active()) {
-				Image enemyImage = new Image(enemy.getImageArray()[enemy.getDirection()-1]);
+				Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
 				gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
 						enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 			}
@@ -320,7 +320,7 @@ public class gameView implements Observer{
 		//draws loot items to screen
 		for(Item loot : ((GameModel) model).getCurrentArea().getLoot()) {
 			if(loot instanceof Arrow) {
-				Image image = new Image(loot.getImageFile());
+				Image image = loot.getImageFile();
 				gc.drawImage(image, 15*(((Arrow) loot).getQuantity() == 5 ? 0 : 1), 0, loot.getWidth()/2, 
 						loot.getHeight()/2, loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
@@ -335,7 +335,7 @@ public class gameView implements Observer{
 		}
 		
 		//draw Player to screen
-		Image playerImage = new Image(player.getImageArray()[player.getDirection()-1]);		
+		Image playerImage = player.getImageArray()[player.getDirection()-1];		
 		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters
 			if(wPressed || aPressed || sPressed || dPressed) {
@@ -349,7 +349,7 @@ public class gameView implements Observer{
 		
 		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
-			Image projectileImage = new Image(projectile.getImageArray()[projectile.getDirection()-1]);
+			Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
 			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
 					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
 		}
@@ -361,7 +361,7 @@ public class gameView implements Observer{
 			//obstacle animations are destruction animations. Play it.
 			if(obj instanceof Obstacle) {
 				int currFrame = ((Obstacle) obj).destroyedFrame()/2;
-				Image image = new Image(obj.getImageFile());
+				Image image = obj.getImageFile();
 				gc.drawImage(image, 50*currFrame, 0, 50, 50, obj.getLocation()[0], obj.getLocation()[1], 50, 50);
 				if(currFrame >= 9) {
 					finished.add(obj);
@@ -370,7 +370,7 @@ public class gameView implements Observer{
 			
 			//draws the animation frame of the player swinging his sword in the appropriate direction
 			if(obj instanceof PlayerSwing) {
-				Image image = new Image(((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1]);
+				Image image = ((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1];
 				if(player.getDirection() == 1) {
 					gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
 							controller.getPlayerPosition()[0] - 10, controller.getPlayerPosition()[1] - 5, obj.getWidth()*0.8, obj.getHeight()*0.8);
@@ -386,7 +386,7 @@ public class gameView implements Observer{
 			
 			//plays the enemy's idle animation if they aren't currently chasing the player down
 			else if(obj instanceof Enemy && !((Enemy) obj).isDead()) {
-				Image image = new Image(((Enemy) obj).getIdleImage());
+				Image image = ((Enemy) obj).getIdleImage();
 				gc.drawImage(image, 40*((getGameClock()%64)/4), 0, 40, 74, obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
 			}
 			
@@ -397,7 +397,7 @@ public class gameView implements Observer{
 			
 			//play bow attack animation frame
 			else if(obj instanceof BowShot) {
-				Image image = new Image(((BowShot) obj).getImageArray()[((BowShot) obj).getDirection() - 1]);
+				Image image = ((BowShot) obj).getImageArray()[((BowShot) obj).getDirection() - 1];
 				gc.drawImage(image, 54*(5 - player.getStallTime()), 0, 54, 73, controller.getPlayerPosition()[0], 
 						controller.getPlayerPosition()[1], obj.getWidth()*0.7, obj.getHeight()*0.7);
 				if(!player.stalled()) {
@@ -410,7 +410,7 @@ public class gameView implements Observer{
 		//draw top part of large objects to help force perspective
 		for(Obstacle obstacle : obstacles) {
 			if(obstacle.hasTopImage()) {
-				Image image = new Image(obstacle.getImageFile());
+				Image image = obstacle.getImageFile();
 				gc.drawImage(image, 0, 0, obstacle.getWidth(), obstacle.getTopHeight(), obstacle.getLocation()[0],
 						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getTopHeight());
 			}

@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 public class ArrowShot extends Character {
 
 	public ArrowShot(int direction, int[] location) {
@@ -11,10 +13,10 @@ public class ArrowShot extends Character {
 		speed = 15;
 		this.direction = direction;
 		
-		imageArray[0] = "/style/arrow up.png";
-		imageArray[1] = "/style/arrow left.png";
-		imageArray[2] = "/style/arrow down.png";
-		imageArray[3] = "/style/arrow right.png";
+		imageArray[0] = new Image("/style/arrow up.png");
+		imageArray[1] = new Image("/style/arrow left.png");
+		imageArray[2] = new Image("/style/arrow down.png");
+		imageArray[3] = new Image("/style/arrow right.png");
 		
 		//change these as appropriate once we have the arrow .png file
 		height = 30;

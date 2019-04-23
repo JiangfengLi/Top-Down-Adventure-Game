@@ -1,8 +1,10 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 public abstract class GameObject {
 
-	protected String imageFile;
+	protected Image imageFile;
 	protected int[] location = new int[2];
 	protected int[] oldLocation = new int[2];
 	protected int height;
@@ -31,7 +33,7 @@ public abstract class GameObject {
 	 * 
 	 * @return the object's image file's path.
 	 */
-	public String getImageFile() {
+	public Image getImageFile() {
 		return imageFile;
 	}
 	

@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 /**
  * Abstract class for characters that can move and do damage
  * @author Wes Rodgers
@@ -14,7 +16,7 @@ public abstract class Character extends GameObject{
 	protected int[] hitbox;
 	protected int hitboxWidth;
 	protected int hitboxHeight;
-	protected String imageArray[] = new String[4];
+	protected Image imageArray[] = new Image[4];
 	protected int hitboxOffset;
 	private int stallTime = 0;
 	private boolean stalled = false; 
@@ -63,7 +65,7 @@ public abstract class Character extends GameObject{
 	 * returns the images for the character's movement
 	 * @return an array of Strings where each string is the filepath to an image for the characters movement in a direction
 	 */
-	public String[] getImageArray() {
+	public Image[] getImageArray() {
 		// TODO Auto-generated method stub
 		return imageArray;
 	}

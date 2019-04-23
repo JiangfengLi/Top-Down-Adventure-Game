@@ -2,6 +2,8 @@ package Model;
 
 import java.util.HashMap;
 
+import javafx.scene.image.Image;
+
 /**
  * Abstract class for enemies. Provides methods and fields that all types
  * of enemies will need
@@ -13,7 +15,7 @@ public abstract class Enemy extends Character{
 
 	protected HashMap<Integer, Item> drops = new HashMap<Integer, Item>();
 	protected int lootChance;
-	protected String idleImage;
+	protected Image idleImage;
 	protected boolean active;
 	protected boolean scaredyCat;
 	
@@ -30,7 +32,7 @@ public abstract class Enemy extends Character{
 	 * returns the path to an image of the enemy's idle animation
 	 * @return a string representing the filepath to an enemy's idle animation
 	 */
-	public String getIdleImage() {
+	public Image getIdleImage() {
 		return idleImage;
 	}
 	

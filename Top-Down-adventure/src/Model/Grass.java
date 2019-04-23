@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 /**
  * Grass extends the Obstacle class, this is a destroyable
  * object, with collision until destroyed.
@@ -15,7 +17,7 @@ public class Grass extends Obstacle{
 		location = new int[2];
 		location[0] = x;
 		location[1] = y;
-		imageFile = "/style/Grass and Cut.png";
+		imageFile = new Image("/style/Grass and Cut.png");
 		lastFrame = 9;
 		topImage = false;
 		topHeight = 0;

@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 public class Tank extends Enemy{
 	
 	public Tank(int x, int y) {
@@ -14,13 +16,13 @@ public class Tank extends Enemy{
 		hitbox = new int[2];
 		hitboxHeight = 74;
 		hitboxWidth = 40;
-		imageArray[0] = "/style/tank north.png";
-		imageArray[1] = "/style/tank left.png";
-		imageArray[2] = "/style/tank down.png";
-		imageArray[3] = "/style/tank right.png";
+		imageArray[0] = new Image("/style/tank north.png");
+		imageArray[1] = new Image("/style/tank left.png");
+		imageArray[2] = new Image("/style/tank down.png");
+		imageArray[3] = new Image("/style/tank right.png");
 		direction = 3;
 		topHeight = 0;
-		idleImage = "/style/tank idle.png";
+		idleImage = new Image("/style/tank idle.png");
 		active = false;
 		scaredyCat = false;
 		Arrow arrowDrop = new Arrow(location);
