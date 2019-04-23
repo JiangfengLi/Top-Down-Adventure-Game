@@ -1,11 +1,15 @@
-
-
-
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * This is the "main" class of the game. Creates the view, starts the game engine
+ * has main()
+ * 
+ * @author 
+ *
+ */
 public class Window extends Application{
 	
 	private gameView view;
@@ -31,7 +35,7 @@ public class Window extends Application{
 	}
 	
 	/**
-	 * heart of the game engine, calls various methods that do all of the things
+	 * calls various methods that do all of the things
 	 * that need to be done each tick of the game clock
 	 */
 	public void tick() {
@@ -44,14 +48,9 @@ public class Window extends Application{
 				view.updateProjectiles();
 				view.checkDeath();
 				/*/////TO-DO//////
-				Write methods to update everything that needs updated
-				during a tick
-				something like
 				updateBoss (since it will have a different movement pattern than a standard enemy.
 				checkDeath
 				checkWin
-				setChanged()
-				notifyObservers()
 				*/
 			}
 		}

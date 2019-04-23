@@ -4,7 +4,6 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -248,7 +247,7 @@ public class gameView implements Observer{
 		setupMovementListeners();
 		setupMouseClickListeners();
 		model.addObserver(this);
-		update(model, controller.getCurrentArea());
+		update(model, controller.getArea());
 	}
 
 	/**

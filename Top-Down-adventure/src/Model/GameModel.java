@@ -74,11 +74,28 @@ public class GameModel extends Observable {
 	public void shiftCurrentArea(int[] area) {
 		int x = currArea.getCoords()[0];
 		int y = currArea.getCoords()[1];
+		
+		//when we change screens, first remove all animations on screen
 		ArrayList<GameObject> toRemove = new ArrayList<GameObject>();
 		for(GameObject o : getAnimations()) {
 			toRemove.add(o);
 		}
 		getAnimations().removeAll(toRemove);
+		
+		//then remove all loot objects
+		toRemove = new ArrayList<GameObject>();
+		for(GameObject o : currArea.getLoot()) {
+			toRemove.add(o);
+		}
+		currArea.getLoot().removeAll(toRemove);
+		
+		//finally, remove all projectiles
+		toRemove = new ArrayList<GameObject>();
+		for(GameObject proj : currArea.getProjectiles()) {
+			toRemove.add(proj);
+		}
+		currArea.getProjectiles().removeAll(toRemove);
+		
 		for(Enemy enemy : currArea.getEnemies()) {
 			enemy.setActive(false);
 		}

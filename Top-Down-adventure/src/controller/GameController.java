@@ -8,6 +8,7 @@ import Model.Character;
 
 /**
  * The controller part of the MVC paradigm for the game.
+ * Provides methods to access and modify various parts of the model.
  * 
  * @author Wes Rodgers
  *
@@ -15,13 +16,16 @@ import Model.Character;
 public class GameController {
 
 	private GameModel model;
+	private Player player;
 	
 	public GameController() {
 		this.model = new GameModel();
+		player = model.getPlayer();
 	}
 	
 	public GameController(GameModel model) {
 		this.model = model;
+		player = model.getPlayer();
 	}
 
 	/**
@@ -30,7 +34,7 @@ public class GameController {
 	 * @return true if the player is dead, false otherwise
 	 */
 	public boolean playerDead() {
-		return model.getPlayer().isDead();
+		return player.isDead();
 	}
 
 	/**
@@ -38,8 +42,9 @@ public class GameController {
 	 * @return int[2] representing the x,y coordinates of the player, int[0] = x, int[1] = y
 	 */
 	public int[] getPlayerPosition() {		
-		return model.getPlayer().getLocation();
+		return player.getLocation();
 	}
+	
 	
 	/**
 	 * Updates the character model with the distance that the player
@@ -51,42 +56,42 @@ public class GameController {
 	public void updatePlayerPosition(int xMovement, int yMovement) {
 		
 		//if the player is stalled, decrement his stall
-		if(model.getPlayer().stalled()) model.getPlayer().decrementStall();
+		if(playerStalled()) player.decrementStall();
 		
-		if(model.getPlayer().buffed()) model.getPlayer().decrementBuff();
+		if(player.buffed()) player.decrementBuff();
 		
 		//check to see if the player has been damaged recently
-		if(model.getPlayer().damaged()) {
+		if(player.damaged()) {
 		
 			//if he is still in the stall that caused the damaged flag, he is experiencing knockback.
-			if(model.getPlayer().stalled()) {
-				Enemy attacker = model.getPlayer().lastEnemy();
-				xMovement = attacker.getLocation()[0] > model.getPlayer().getLocation()[0] ? -model.getPlayer().getSpeed()*4 : 0;
-				xMovement += attacker.getLocation()[0] < model.getPlayer().getLocation()[0] ? model.getPlayer().getSpeed()*4 : 0;
-				yMovement = attacker.getLocation()[1] > model.getPlayer().getLocation()[1] ? -model.getPlayer().getSpeed()*4 : 0;
-				yMovement += attacker.getLocation()[1] < model.getPlayer().getLocation()[1] ? model.getPlayer().getSpeed()*4 : 0;
+			if(playerStalled()) {
+				Enemy attacker = player.lastEnemy();
+				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*4 : 0;
+				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*4 : 0;
+				yMovement = attacker.getLocation()[1] > getPlayerPosition()[1] ? -player.getSpeed()*4 : 0;
+				yMovement += attacker.getLocation()[1] < getPlayerPosition()[1] ? player.getSpeed()*4 : 0;
 				
 				//if the knockback would knock him off screen, remove that directions movement.
-				if(model.getPlayer().getLocation()[0] + xMovement < 0) xMovement = 0;
-				if(model.getPlayer().getLocation()[0] + xMovement > 1200 - model.getPlayer().getWidth()) xMovement = 0;
-				if(model.getPlayer().getLocation()[1] + yMovement < 0) yMovement = 0;
-				if(model.getPlayer().getLocation()[1] + yMovement > 800 - model.getPlayer().getHeight()) yMovement = 0;
+				if(getPlayerPosition()[0] + xMovement < 0) xMovement = 0;
+				if(getPlayerPosition()[0] + xMovement > 1200 - player.getWidth()) xMovement = 0;
+				if(getPlayerPosition()[1] + yMovement < 0) yMovement = 0;
+				if(getPlayerPosition()[1] + yMovement > 800 - player.getHeight()) yMovement = 0;
 			}
 			
 			//otherwise, the damage is no longer recent and needs to have its flag changed
-			else model.getPlayer().toggleDamaged();
+			else player.toggleDamaged();
 		}
 		
 		//if the player is stalled and it wasn't because he took damage, then he has no movement.
-		if(model.getPlayer().stalled() && !model.getPlayer().damaged()) {
+		if(playerStalled() && !player.damaged()) {
 			xMovement = 0;
 			yMovement = 0;
 		}
 		
 		//if the player isn't stalled, or if he is stalled but he took damage
-		if(!model.getPlayer().stalled() || model.getPlayer().damaged()) {
+		if(!playerStalled() || player.damaged()) {
 		
-			Area curr = getCurrentArea();
+			Area curr = getArea();
 			ArrayList<Obstacle> obstacles = curr.getObstacles();
 			
 			//checks if the player collides with any obstacles on screen. if so, remove that direction's movement
@@ -96,14 +101,14 @@ public class GameController {
 				futurePosition[1] = getPlayerPosition()[1] + yMovement;
 				if(collision(futurePosition, obstacle)) {
 					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-							futurePosition[0] + model.getPlayer().getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
+							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
 						xMovement = 0;
 					}
-					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + model.getPlayer().getWidth() > obstacle.getLocation()[0]) {
+					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + player.getWidth() > obstacle.getLocation()[0]) {
 						xMovement = 0;
 					}
 					if(futurePosition[1] < obstacle.getLocation()[1] + obstacle.getTopHeight() && 
-							futurePosition[1] + model.getPlayer().getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+							futurePosition[1] + player.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
 						yMovement = 0;
 					}
 					else {
@@ -113,7 +118,7 @@ public class GameController {
 			}
 			
 			//if the player walked off the screen, shift to the screen that they walked to
-			if(offScreen() && !model.getPlayer().damaged()) {
+			if(offScreen() && !player.damaged()) {
 				
 				//determine where to place the player on the next screen
 				int[] collisionCoords = offScreenCoords();
@@ -140,18 +145,18 @@ public class GameController {
 			//if there were no collisions and no area changes, just move the player by the passed in amount
 		}
 		model.updatePlayerPosition(xMovement, yMovement);
-		Iterator<Item> drops = model.getCurrentArea().getLoot().iterator();
+		Iterator<Item> drops = getArea().getLoot().iterator();
 		while(drops.hasNext()) {
 			Item loot = drops.next();
-			if(collision(model.getPlayer().getLocation(), loot)) {
+			if(collision(getPlayerPosition(), loot)) {
 				if(loot instanceof Arrow) {
-					model.getPlayer().addArrows(((Arrow) loot).getQuantity());
+					player.addArrows(((Arrow) loot).getQuantity());
 				}
 				if(loot instanceof Heart) {
-					model.getPlayer().addHP(((Heart) loot).getHP());
+					player.addHP(((Heart) loot).getHP());
 				}
 				if(loot instanceof SpeedBuff) {
-					model.getPlayer().addBuff(200);
+					player.addBuff(200);
 				}
 				drops.remove();
 			}
@@ -225,9 +230,9 @@ public class GameController {
 		
 		//return true if the player rectangle overlaps the obstacle rectangle.
 		if(playerPosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-				playerPosition[0] + model.getPlayer().getHitboxWidth() > obstacle.getLocation()[0] &&
-				playerPosition[1] + model.getPlayer().getHitboxHeight() < obstacle.getLocation()[1] + obstacle.getHeight() && 
-				playerPosition[1] + model.getPlayer().getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+				playerPosition[0] + player.getHitboxWidth() > obstacle.getLocation()[0] &&
+				playerPosition[1] + player.getHitboxHeight() < obstacle.getLocation()[1] + obstacle.getHeight() && 
+				playerPosition[1] + player.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
 			return true;
 		}
 		
@@ -241,7 +246,7 @@ public class GameController {
 	public void updateEnemyPositions() {
 		
 		//iterate through all enemies on screen
-		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+		for(Enemy enemy : getArea().getEnemies()) {
 			
 			//if the player hasn't gotten near the enemy yet, the enemy stays inactive
 			if(distanceToPlayer(enemy) > 400 && !model.getAnimations().contains(enemy)) {
@@ -261,7 +266,7 @@ public class GameController {
 					}
 					
 					//finds the point the enemy needs to move to and increments his position towards it based on his speed
-					int[] referencePoint = getPathingTarget(enemy, model.getPlayer());
+					int[] referencePoint = getPathingTarget(enemy, player);
 					int x = enemy.getLocation()[0] > referencePoint[0] ? -enemy.getSpeed() : 0;
 					x += enemy.getLocation()[0] < referencePoint[0] ? enemy.getSpeed() : 0;
 					int y = enemy.getLocation()[1] > referencePoint[1] ? -enemy.getSpeed() : 0;
@@ -281,7 +286,7 @@ public class GameController {
 						int[] futurePosition = new int[2];
 						futurePosition[0] = enemy.getLocation()[0] + x;
 						futurePosition[1] = enemy.getLocation()[1] + y;
-						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+						for(Obstacle obs : getArea().getObstacles()) {
 							if(collision(futurePosition, obs)) {
 								x = 0;
 								y = 0;
@@ -328,7 +333,7 @@ public class GameController {
 						futurePosition[1] = enemy.getLocation()[1] + y;
 						
 						//iterate through the obstacles to see if the enemy will run into them
-						for(Obstacle obs : model.getCurrentArea().getObstacles()) {
+						for(Obstacle obs : getArea().getObstacles()) {
 							
 							//if so, make it so he walks around it in the quickest direction.
 							if(collision(futurePosition, obs)) {
@@ -376,15 +381,15 @@ public class GameController {
 	 * @return a double representing the enemy's distance to the player
 	 */
 	private double distanceToPlayer(Enemy enemy) {
-		return Math.sqrt(Math.pow(enemy.getLocation()[0] - model.getPlayer().getLocation()[0], 2)
-				+ Math.pow((enemy.getLocation()[1] - model.getPlayer().getLocation()[1]), 2));
+		return Math.sqrt(Math.pow(enemy.getLocation()[0] - getPlayerPosition()[0], 2)
+				+ Math.pow((enemy.getLocation()[1] - getPlayerPosition()[1]), 2));
 	}
 
 	/**
 	 * returns the current Area that the player is in.
 	 * @return
 	 */
-	public Area getCurrentArea() {
+	public Area getArea() {
 		return model.getCurrentArea();
 	}
 
@@ -394,25 +399,25 @@ public class GameController {
 	 */
 	public void swordAttack() {
 		//doesn't let us swing if we have attacked or been damaged recently
-		if(!model.getPlayer().stalled()) {
+		if(!playerStalled()) {
 			
 			//add a stall and create the sword swing animation
-			model.getPlayer().addStall(6);
-			model.addAnimation(new PlayerSwing(model.getPlayer().getDirection()));
+			player.addStall(6);
+			model.addAnimation(new PlayerSwing(player.getDirection()));
 			
 			//checks for collision with obstacles
-			for(Obstacle obstacle : model.getCurrentArea().getObstacles()) {
-				if(obstacle.isDestructible() && weaponCollision(model.getPlayer(), obstacle)) {
-					if(obstacle.didLootDrop()) model.getCurrentArea().addLoot(obstacle.lootDrop());
+			for(Obstacle obstacle : getArea().getObstacles()) {
+				if(obstacle.isDestructible() && weaponCollision(player, obstacle)) {
+					if(obstacle.didLootDrop()) getArea().addLoot(obstacle.lootDrop());
 					obstacle.toggleDestroyed();
 					model.addAnimation(obstacle);
 				}
 			}
 			
 			//checks for collision with enemies
-			for(Enemy enemy : model.getCurrentArea().getEnemies()) {
-				if(weaponCollision(model.getPlayer(), enemy)) {
-					enemy.loseHP(model.getPlayer().getDamage());
+			for(Enemy enemy : getArea().getEnemies()) {
+				if(weaponCollision(player, enemy)) {
+					enemy.loseHP(player.getDamage());
 					enemy.addStall(5);
 				}
 			}
@@ -462,7 +467,7 @@ public class GameController {
 	 * @param i either 1 for north, 2 for west, 3 for south, or 4 for east
 	 */
 	public void setPlayerDirection(int i) {
-		model.getPlayer().setDirection(i);
+		player.setDirection(i);
 		
 	}
 
@@ -497,16 +502,16 @@ public class GameController {
 	 */
 	public void bowAttack() {
 		//doesn't let us attack if we have attacked or been damaged recently
-		if(!model.getPlayer().stalled()) {
+		if(!playerStalled()) {
 			
 			//add in the stall and the new bow shot animation
-			model.getPlayer().addStall(5);
-			model.addAnimation(new BowShot(model.getPlayer().getDirection()));
+			player.addStall(5);
+			model.addAnimation(new BowShot(player.getDirection()));
 			
 			//if we have arrows in inventory, add an arrow projectile to the screen and decrement the player's inventory of arrows
-			if(model.getPlayer().getArrowQuantity() > 0) {
-				model.getCurrentArea().addProjectile(new ArrowShot(model.getPlayer().getDirection(), model.getPlayer().getLocation()));
-				model.getPlayer().decrementArrows();
+			if(player.getArrowQuantity() > 0) {
+				getArea().addProjectile(new ArrowShot(player.getDirection(), getPlayerPosition()));
+				player.decrementArrows();
 			}
 		}
 		
@@ -519,9 +524,9 @@ public class GameController {
 		ArrayList<Enemy> dead = new ArrayList<Enemy>();
 		
 		//gathers up all dead enemies
-		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+		for(Enemy enemy : getArea().getEnemies()) {
 			if(enemy.isDead()) {
-				if(enemy.didLootDrop()) model.getCurrentArea().addLoot(enemy.lootDrop());
+				if(enemy.didLootDrop()) getArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
 			}
 		}
@@ -532,7 +537,7 @@ public class GameController {
 		}
 		
 		//removes them from the area so they can't bother us anymore
-		model.getCurrentArea().getEnemies().removeAll(dead);
+		getArea().getEnemies().removeAll(dead);
 		
 	}
 
@@ -541,7 +546,7 @@ public class GameController {
 	 * @return player's speed in pixels/tick as an integer
 	 */
 	public int getPlayerSpeed() {
-		return model.getPlayer().getSpeed();
+		return player.getSpeed();
 	}
 
 	/**
@@ -549,7 +554,7 @@ public class GameController {
 	 * @return true if the player is stalled, false otherwise
 	 */
 	public boolean playerStalled() {
-		return model.getPlayer().stalled();
+		return player.stalled();
 	}
 
 	/**
@@ -558,19 +563,19 @@ public class GameController {
 	public void enemyAttack() {
 		
 		//for every enemy
-		for(Enemy enemy : model.getCurrentArea().getEnemies()) {
+		for(Enemy enemy : getArea().getEnemies()) {
 			
 			//if the enemy collides with the player
-			if(collision(model.getPlayer().getLocation(), enemy)) {
+			if(collision(getPlayerPosition(), enemy)) {
 				
 				//if the player hasn't been damaged recently, stall him, decrement his hp, 
 				//and set a field to store which the last enemy to hit him was to help with simpler knockback calculations
-				if(!model.getPlayer().damaged()){
-					model.getPlayer().addStall(4);
-					model.getPlayer().toggleDamaged();
-					model.getPlayer().loseHP(enemy.getDamage());
-					model.getPlayer().setLastEnemy(enemy);
-					System.out.println(model.getPlayer().getHP());
+				if(!player.damaged()){
+					player.addStall(4);
+					player.toggleDamaged();
+					player.loseHP(enemy.getDamage());
+					player.setLastEnemy(enemy);
+					System.out.println(player.getHP());
 				}
 			}
 		}	
@@ -582,7 +587,7 @@ public class GameController {
 	public void updateProjectilePosition() {
 		
 		//iterate through the projectiles
-		Iterator<Character> projectiles = model.getCurrentArea().getProjectiles().iterator();
+		Iterator<Character> projectiles = getArea().getProjectiles().iterator();
 		while(projectiles.hasNext()) {
 			Character projectile = projectiles.next();
 			int x;
@@ -614,8 +619,8 @@ public class GameController {
 			ArrayList<GameObject> things = new ArrayList<GameObject>();
 			
 			//grab all of the things an arrow can collide with and iterate through them
-			things.addAll(model.getCurrentArea().getEnemies());
-			things.addAll(model.getCurrentArea().getObstacles());
+			things.addAll(getArea().getEnemies());
+			things.addAll(getArea().getObstacles());
 			for(GameObject obj : things) {
 				
 				//destroyed obstacles are pathable.
@@ -656,7 +661,7 @@ public class GameController {
 		if(position[0] < obj.getLocation()[0] + obj.getWidth() && 
 				position[0] + projectile.getWidth() > obj.getLocation()[0] &&
 				position[1] + projectile.getHeight() < obj.getLocation()[1] + obj.getHeight() && 
-				position[1] + model.getPlayer().getHeight() > obj.getLocation()[1] + obj.getTopHeight()) {
+				position[1] + player.getHeight() > obj.getLocation()[1] + obj.getTopHeight()) {
 			return true;
 		}
 		return false;
