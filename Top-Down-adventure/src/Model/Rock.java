@@ -10,5 +10,5 @@ public class Rock extends Obstacle {
 
 	public Rock() {
 		destructible = false;
-	}
+	} 
 }

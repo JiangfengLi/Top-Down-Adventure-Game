@@ -38,7 +38,7 @@ public abstract class Enemy extends Character{
 	 * Method stub for determining whether the
 	 * enemy has a straight line path to the player
 	 * without any collision objects in the way
-	 * @return
+	 * @return 
 	 */
 	public abstract boolean playerIsVisible();
 

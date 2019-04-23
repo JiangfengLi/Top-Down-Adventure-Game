@@ -21,5 +21,5 @@ public class Grass extends Obstacle{
 		topHeight = 0;
 		drops.put(0, new Arrow(new int[] {location[0], location[1]}));
 		lootChance = 100;
-	}
+	} 
 }

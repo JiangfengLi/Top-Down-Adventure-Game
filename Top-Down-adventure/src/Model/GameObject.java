@@ -15,7 +15,7 @@ public abstract class GameObject {
 	 */
 	public int getHeight() {
 		return height;
-	}
+	} 
 	
 	/**
 	 * returns the objects width

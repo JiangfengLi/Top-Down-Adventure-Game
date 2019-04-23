@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class GameMap {
 	
-	private Area[][] map;
+	private Area[][] map; 
 	
 	public GameMap() {
 		map = new Area[3][3];

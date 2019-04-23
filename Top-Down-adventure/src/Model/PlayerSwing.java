@@ -10,6 +10,6 @@ public class PlayerSwing extends Character {
 		this.direction = direction;
 		width = 75;
 		height = 73;
-	}
+	} 
 
 }

@@ -17,7 +17,7 @@ public abstract class Character extends GameObject{
 	protected String imageArray[] = new String[4];
 	protected int hitboxOffset;
 	private int stallTime = 0;
-	private boolean stalled = false;
+	private boolean stalled = false; 
 	
 	//direction is as follows: 1 is up, 2 is left, 3 is down, 4 is right.
 	protected int direction;

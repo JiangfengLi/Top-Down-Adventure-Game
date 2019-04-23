@@ -20,7 +20,7 @@ public class GameModel extends Observable {
 	private int gameClock = 0;
 	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	
-	public GameModel() {
+	public GameModel() { 
 		player = new Player();
 		map = new GameMap();
 		currArea = map.getStartArea();

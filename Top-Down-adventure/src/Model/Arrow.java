@@ -24,5 +24,5 @@ public class Arrow extends Item {
 	 */
 	public int getQuantity() {
 		return quantity;
-	}
+	} 
 }

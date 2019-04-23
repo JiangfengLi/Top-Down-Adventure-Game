@@ -10,5 +10,5 @@ public class BowShot extends Character {
 		this.direction = direction;
 		width = 54;
 		height = 73;
-	}
+	} 
 }

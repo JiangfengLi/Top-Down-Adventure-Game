@@ -19,7 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseButton; 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -35,7 +35,7 @@ public class gameView implements Observer{
 	private Scene myScene;
 	private Stage myStage;
 	private boolean gameStarted = false;
-	private Canvas canvas;
+	private Canvas canvas; 
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;

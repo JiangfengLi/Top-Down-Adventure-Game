@@ -139,7 +139,7 @@ public class Player extends Character{
 		}
 	}
 
-	/**
+	/** 
 	 * returns true when the player is buffed, false otherwise.
 	 * @return true when the player is buffed, false otherwise.
 	 */

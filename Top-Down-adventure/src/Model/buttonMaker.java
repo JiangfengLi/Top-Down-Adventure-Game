@@ -28,7 +28,7 @@ public class buttonMaker extends Button{
 		setPrefHeight(46);
 		setStyle(OFF_CLICK);
 		buttonListener();
-	}
+	} 
 
 	
 	

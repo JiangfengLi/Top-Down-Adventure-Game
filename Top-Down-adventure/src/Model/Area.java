@@ -75,7 +75,7 @@ public class Area {
 	public int[] getCoords() {
 		// TODO Auto-generated method stub
 		return coords;
-	}
+	} 
 
 	/**
 	 * adds the specified projectile to the area

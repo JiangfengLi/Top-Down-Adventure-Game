@@ -22,5 +22,5 @@ public class Heart extends Item {
 	public int getHP() {
 		// TODO Auto-generated method stub
 		return HP;
-	}
+	} 
 }

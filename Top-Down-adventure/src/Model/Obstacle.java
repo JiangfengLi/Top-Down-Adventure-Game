@@ -20,7 +20,7 @@ public abstract class Obstacle extends GameObject {
 	protected HashMap<Integer, Item> drops = new HashMap<Integer, Item>();
 	protected int lootChance;
 	
-	/**
+	/** 
 	 * Getter for the enemy's drop table
 	 * 
 	 * @return a HashMap mapping the item as a key and a float representing drop chance as the value

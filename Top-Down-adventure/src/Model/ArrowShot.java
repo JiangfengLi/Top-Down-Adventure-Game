@@ -19,6 +19,6 @@ public class ArrowShot extends Character {
 		//change these as appropriate once we have the arrow .png file
 		height = 30;
 		width = 30;
-	}
+	} 
 
 }

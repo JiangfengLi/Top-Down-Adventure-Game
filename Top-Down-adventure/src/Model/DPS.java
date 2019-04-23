@@ -14,7 +14,7 @@ public class DPS extends Enemy {
 	 * returns whether the enemy has a direct path to the player
 	 * @return true if there are no collidable objects between enemy and player, false otherwise.
 	 */
-	@Override
+	@Override 
 	public boolean playerIsVisible() {
 		// TODO Auto-generated method stub
 		return false;

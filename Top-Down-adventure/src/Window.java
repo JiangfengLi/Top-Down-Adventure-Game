@@ -1,7 +1,7 @@
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.stage.Stage; 
 
 /**
  * This is the "main" class of the game. Creates the view, starts the game engine

@@ -26,7 +26,7 @@ public class Tank extends Enemy{
 		Arrow arrowDrop = new Arrow(location);
 		drops.put(0, arrowDrop);
 		lootChance = 100;
-	}
+	} 
 
 	/**
 	 * returns whether the tank can see the player or not

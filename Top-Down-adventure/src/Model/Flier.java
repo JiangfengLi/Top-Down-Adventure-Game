@@ -12,7 +12,7 @@ public class Flier extends Enemy {
 		currentHP = 1;
 		maxHP = 1;
 		damage = 1;
-		speed = 5;
+		speed = 5; 
 	}
 
 	/**
