@@ -1,5 +1,10 @@
 package View;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,6 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -18,10 +24,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Stage;
 
 public class gameView implements Observer{
-	private final String BACK_GROUND = "/style/back_cave.png";
+	private final String BACK_GROUND = "/style/title.png";
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 1200;
 	private AnchorPane myPane;
@@ -38,13 +45,31 @@ public class gameView implements Observer{
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
 		myStage = new Stage();
 		myStage.setScene(myScene);
-		makeButton("PLAY NOW!",200,300);
+		makeButton("PLAY NOW!",518,700);
+		
+		Button button = new Button("Link");
+		myPane.getChildren().add(button);
+		button.setPrefWidth(75);
+		button.setPrefHeight(60);
+		button.setLayoutX(542);
+		button.setLayoutY(494);
+		githubLink(button);
 		setBackground(BACK_GROUND);
 		
-		myStage.minWidthProperty().bind(myScene.heightProperty().multiply(1.5));
-		myStage.minHeightProperty().bind(myScene.heightProperty().divide(1.5));
+		myStage.setResizable(false);
 	}
 	
+	private void githubLink(Button button) {
+		button.setOnMouseClicked((c) -> {
+			try {
+				Desktop.getDesktop().browse(new URI("https://github.com/CSC335Spring2019/csc335-team-zelda-finalproject-tianze-wes-jiangfeng"));
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
+		});
+		
+	}
+
 	/**
 	 * getter for the stage
 	 * @return the stage
@@ -82,8 +107,8 @@ public class gameView implements Observer{
 	 * @param url image's url
 	 */
 	private void setBackground(String url) {
-		Image back = new Image(BACK_GROUND,300,400,false,true);
-		BackgroundImage backGround = new BackgroundImage(back, null, null, BackgroundPosition.DEFAULT, null);
+		Image back = new Image(BACK_GROUND);
+		BackgroundImage backGround = new BackgroundImage(back, null, null, BackgroundPosition.DEFAULT, new BackgroundSize(1200, 800, false, false, false, true));
 		myPane.setBackground(new Background(backGround));
 	}
 	
