@@ -312,9 +312,25 @@ public class gameView implements Observer{
 		//iterates through enemies in current area, draws them to screen
 		for(Enemy enemy : enemies) {
 			if(enemy.active()) {
-				Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
-				gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
-						enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+				if((enemy instanceof Boss)) {
+					if(!((Boss) enemy).preAttack()) {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%60)/12), 0, enemy.getWidth(), enemy.getHeight(),
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					}
+					else {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%25)/5), 0, enemy.getWidth(), enemy.getHeight(),
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					}
+					
+				}
+				else {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					}
+
 			}
 		}
 		
@@ -352,8 +368,14 @@ public class gameView implements Observer{
 		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
 			Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
-			gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
+			if(!(projectile instanceof BossAttack)) {
+				gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
 					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+			}
+			else {
+				gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
+						projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+			}
 		}
 		
 		//draw animations currently in progress
@@ -388,8 +410,15 @@ public class gameView implements Observer{
 			
 			//plays the enemy's idle animation if they aren't currently chasing the player down
 			else if(obj instanceof Enemy && !((Enemy) obj).isDead()) {
-				Image image = ((Enemy) obj).getIdleImage();
-				gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
+				if(!(obj instanceof Boss)) {
+					Image image = ((Enemy) obj).getIdleImage();
+					gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
+				}
+				else {
+					Image image = ((Enemy) obj).getIdleImage();
+					gc.drawImage(image, obj.getWidth()*((getGameClock()%52)/13), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0],
+							obj.getLocation()[1], obj.getWidth(), obj.getHeight());
+				}
 			}
 			
 			//plays the enemy's death animation when they die

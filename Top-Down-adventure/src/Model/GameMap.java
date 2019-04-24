@@ -49,14 +49,25 @@ public class GameMap {
 						areaOneObstacles.add(new Tree(k*100, 616));
 					}
 				}
-				areaOneEnemies.add(new Tank(800, 500));
-				areaOneEnemies.add(new DPS(700, 500));
-				areaOneEnemies.add(new Flier(600,500));
-				areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
-				areaOneObstacles.add(new Rock(450 + i*50, 300 + j*50));
+				if(i != 2 || j != 0) {
+					areaOneEnemies.add(new Tank(800, 500));
+					areaOneEnemies.add(new DPS(700, 500));
+					areaOneEnemies.add(new Flier(600,500));
+					areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
+					areaOneObstacles.add(new Rock(450 + i*50, 300 + j*50));
+				}
+				else {
+					areaOneEnemies.add(new Boss(400, 400, true));
+				}
 				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
 			}
 		}
+	}
+	
+	public GameMap(boolean dungeon) {
+		map = new Area[3][2];
+		
+		//dungeon design here.
 	}
 
 	/**

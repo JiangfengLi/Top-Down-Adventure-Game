@@ -249,119 +249,162 @@ public class GameController {
 		//iterate through all enemies on screen
 		for(Enemy enemy : getArea().getEnemies()) {
 			
-			//if the player hasn't gotten near the enemy yet, the enemy stays inactive
-			if(distanceToPlayer(enemy) > 400 && !model.getAnimations().contains(enemy)) {
-				if(!enemy.active()) {
-					model.getAnimations().add(enemy);
+			//regular enemies and the mini-boss all have the same behavioral patterns
+			if(!(enemy instanceof Boss) || (enemy instanceof Boss && !((Boss) enemy).isMainBoss())) {
+				//if the player hasn't gotten near the enemy yet, the enemy stays inactive
+				if(distanceToPlayer(enemy) > 400 && !model.getAnimations().contains(enemy)) {
+					if(!enemy.active()) {
+						model.getAnimations().add(enemy);
+					}
+				}
+				
+				//if the player gets too close
+				else {
+					if(distanceToPlayer(enemy) <= 400) {
+						
+						//activate the enemy and remove the idle animation from the model
+						enemy.activate();
+						if(model.getAnimations().contains(enemy)) {					
+							model.getAnimations().remove(enemy);
+						}
+						
+						//finds the point the enemy needs to move to and increments his position towards it based on his speed
+						int[] referencePoint = getPathingTarget(enemy, player);
+						int x = enemy.getLocation()[0] > referencePoint[0] ? -enemy.getSpeed() : 0;
+						x += enemy.getLocation()[0] < referencePoint[0] ? enemy.getSpeed() : 0;
+						int y = enemy.getLocation()[1] > referencePoint[1] ? -enemy.getSpeed() : 0;
+						y += enemy.getLocation()[1] < referencePoint[1] ? enemy.getSpeed() : 0;
+						
+						//smooths out enemy movement if their speed is greater than the distance to the player's coordinate
+						if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) < Math.abs(x)) x = x > 0 ? 
+									 referencePoint[0] - enemy.getLocation()[0] : enemy.getLocation()[0] - referencePoint[0];
+							if(Math.abs(enemy.getLocation()[1] - referencePoint[1]) < Math.abs(y)) y = y > 0 ?
+									referencePoint[1] - enemy.getLocation()[1] : enemy.getLocation()[1] - referencePoint[1];
+						
+						//knocks the enemy back if they are in a stall
+						if(enemy.stalled()) {
+							enemy.decrementStall();
+							x = -x*4;
+							y = -y*4;
+							int[] futurePosition = new int[2];
+							futurePosition[0] = enemy.getLocation()[0] + x;
+							futurePosition[1] = enemy.getLocation()[1] + y;
+							for(Obstacle obs : getArea().getObstacles()) {
+								if(collision(futurePosition, obs)) {
+									x = 0;
+									y = 0;
+								}
+							}						
+							enemy.updatePosition(x, y);
+							
+							//if the enemy is offscreen, don't let them be.
+							if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 999 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
+									enemy.getLocation()[1] > 666 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
+						}
+						
+						//if they aren't stalled
+						else {
+							//if the enemy is a scaredy cat, make him run away when his health is under 1/2
+							if(enemy.getHP() <= enemy.getMaxHP()/2 && enemy.willFlee()) {
+								x = -x;
+								y = -y;
+							}
+							
+							//sets the enemy's direction based on which way they are moving
+							if(x > 0) {
+								enemy.setDirection(4);
+							}
+							if(x < 0) {
+								enemy.setDirection(2);
+							}
+							if(y > 0) {
+								enemy.setDirection(3);
+							}
+							if(y < 0) {
+								enemy.setDirection(1);
+							}
+							
+							//smooths out enemy directional setting
+							if(y != 0 && x != 0) {
+								if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) > Math.abs(enemy.getLocation()[1] - referencePoint[1])) {
+									enemy.setDirection(x > 0 ? 4 : 2);
+								}
+								else {
+									enemy.setDirection(y > 0 ? 3 : 1);
+								}
+							}
+							
+							//checks to see where the movement will take the enemy
+							int[] futurePosition = new int[2];
+							futurePosition[0] = enemy.getLocation()[0] + x;
+							futurePosition[1] = enemy.getLocation()[1] + y;
+							
+							//iterate through the obstacles to see if the enemy will run into them
+							for(Obstacle obs : getArea().getObstacles()) {
+								
+								//if so, make it so he walks around it in the quickest direction.
+								if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
+									switch(enemy.getDirection()){
+										case 1:
+										case 3:
+											y=0;
+											if(enemy.getLocation()[0] > obs.getLocation()[0] + obs.getWidth()/2) x = enemy.getSpeed();
+											else x = -enemy.getSpeed();
+											break;
+										case 2:
+										case 4:
+											x=0;
+											if(enemy.getLocation()[1] > obs.getLocation()[1] + obs.getHeight()/2) y = enemy.getSpeed();
+											else y = -enemy.getSpeed();
+											break;
+									}
+								}
+							}
+							
+							enemy.updatePosition(x, y);
+						}
+					}
 				}
 			}
 			
-			//if the player gets too close
+			//otherwise we set the behavior for the main boss.
 			else {
-				if(distanceToPlayer(enemy) <= 400) {
+				enemy.activate();
+				
+				int x = 0;
+				int y = 0;
 					
-					//activate the enemy and remove the idle animation from the model
-					enemy.activate();
-					if(model.getAnimations().contains(enemy)) {					
-						model.getAnimations().remove(enemy);
-					}
+				//boss has 3 phases, shielded, moving, and preparing to attack
 					
-					//finds the point the enemy needs to move to and increments his position towards it based on his speed
-					int[] referencePoint = getPathingTarget(enemy, player);
-					int x = enemy.getLocation()[0] > referencePoint[0] ? -enemy.getSpeed() : 0;
-					x += enemy.getLocation()[0] < referencePoint[0] ? enemy.getSpeed() : 0;
-					int y = enemy.getLocation()[1] > referencePoint[1] ? -enemy.getSpeed() : 0;
-					y += enemy.getLocation()[1] < referencePoint[1] ? enemy.getSpeed() : 0;
-					
-					//smooths out enemy movement if their speed is greater than the distance to the player's coordinate
-					if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) < Math.abs(x)) x = x > 0 ? 
-								 referencePoint[0] - enemy.getLocation()[0] : enemy.getLocation()[0] - referencePoint[0];
-						if(Math.abs(enemy.getLocation()[1] - referencePoint[1]) < Math.abs(y)) y = y > 0 ?
-								referencePoint[1] - enemy.getLocation()[1] : enemy.getLocation()[1] - referencePoint[1];
-					
-					//knocks the enemy back if they are in a stall
-					if(enemy.stalled()) {
-						enemy.decrementStall();
-						x = -x*4;
-						y = -y*4;
-						int[] futurePosition = new int[2];
-						futurePosition[0] = enemy.getLocation()[0] + x;
-						futurePosition[1] = enemy.getLocation()[1] + y;
-						for(Obstacle obs : getArea().getObstacles()) {
-							if(collision(futurePosition, obs)) {
-								x = 0;
-								y = 0;
-							}
-						}						
-						enemy.updatePosition(x, y);
-						
-						//if the enemy is offscreen, don't let them be.
-						if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 999 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
-								enemy.getLocation()[1] > 666 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
-					}
-					
-					//if they aren't stalled
-					else {
-						//if the enemy is a scaredy cat, make him run away when his health is under 1/2
-						if(enemy.getHP() <= enemy.getMaxHP()/2 && enemy.willFlee()) {
-							x = -x;
-							y = -y;
+				//if boss is shielded or in pre-attack, she just sits there
+				if(((Boss) enemy).shielded() || ((Boss) enemy).preAttack()) {
+					x = 0;
+					y = 0;
+				
+				
+					//if boss is preparing to attack, we add a projectile when
+					//the timeToAttack() call returns true. This method increments the timer on its
+					//own and returns true when it gets over 30 giving it a 2 second charge time.
+					if(((Boss) enemy).preAttack()) {							
+						if(((Boss) enemy).timeToAttack()) {
+							getArea().addProjectile(new BossAttack(player, enemy.getLocation()));
 						}
-						
-						//sets the enemy's direction based on which way they are moving
-						if(x > 0) {
-							enemy.setDirection(4);
-						}
-						if(x < 0) {
-							enemy.setDirection(2);
-						}
-						if(y > 0) {
-							enemy.setDirection(3);
-						}
-						if(y < 0) {
-							enemy.setDirection(1);
-						}
-						
-						//smooths out enemy directional setting
-						if(y != 0 && x != 0) {
-							if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) > Math.abs(enemy.getLocation()[1] - referencePoint[1])) {
-								enemy.setDirection(x > 0 ? 4 : 2);
-							}
-							else {
-								enemy.setDirection(y > 0 ? 3 : 1);
-							}
-						}
-						
-						//checks to see where the movement will take the enemy
-						int[] futurePosition = new int[2];
-						futurePosition[0] = enemy.getLocation()[0] + x;
-						futurePosition[1] = enemy.getLocation()[1] + y;
-						
-						//iterate through the obstacles to see if the enemy will run into them
-						for(Obstacle obs : getArea().getObstacles()) {
-							
-							//if so, make it so he walks around it in the quickest direction.
-							if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
-								switch(enemy.getDirection()){
-									case 1:
-									case 3:
-										y=0;
-										if(enemy.getLocation()[0] > obs.getLocation()[0] + obs.getWidth()/2) x = enemy.getSpeed();
-										else x = -enemy.getSpeed();
-										break;
-									case 2:
-									case 4:
-										x=0;
-										if(enemy.getLocation()[1] > obs.getLocation()[1] + obs.getHeight()/2) y = enemy.getSpeed();
-										else y = -enemy.getSpeed();
-										break;
-								}
-							}
-						}
-						
-						enemy.updatePosition(x, y);
 					}
 				}
+					
+				//otherwise, the boss is moving. This has the boss move in a specific pattern across the screen
+				else {
+					if(((Boss) enemy).timeToShield()) {
+						((Boss) enemy).addShield();
+					}
+					if(((Boss) enemy).getBossTimer()%150 == 0) {
+						((Boss) enemy).addPreAttack();
+					}
+					//TO-DO 
+					//BOSS MOVEMENT PATTERN
+				}
+				
+				enemy.updatePosition(x,y);
 			}
 		}
 	}
@@ -589,57 +632,83 @@ public class GameController {
 		Iterator<Character> projectiles = getArea().getProjectiles().iterator();
 		while(projectiles.hasNext()) {
 			Character projectile = projectiles.next();
-			int x;
-			int y;
+			int x = 0;
+			int y = 0;
 			
+			if(!(projectile instanceof BossAttack)) {
 			//switch tells us which way to move the arrow
-			switch(projectile.getDirection()) {
-				case 1:
-					x = 0;
-					y = -projectile.getSpeed();
-					break;
-				case 3:
-					x = 0;
-					y = projectile.getSpeed();
-					break;
-				case 2:
-					y = 0;
-					x = -projectile.getSpeed();
-					break;
-				case 4:
-					y = 0;
-					x = projectile.getSpeed();
-					break;
-				default:
-					x = 0;
-					y = 0;
+				switch(projectile.getDirection()) {
+					case 1:
+						x = 0;
+						y = -projectile.getSpeed();
+						break;
+					case 3:
+						x = 0;
+						y = projectile.getSpeed();
+						break;
+					case 2:
+						y = 0;
+						x = -projectile.getSpeed();
+						break;
+					case 4:
+						y = 0;
+						x = projectile.getSpeed();
+						break;
+					default:
+						x = 0;
+						y = 0;
+				}
+			}
+			else {
+				int[] target = ((BossAttack) projectile).getTarget().getLocation();
+				x = projectile.getLocation()[0] > target[0] ? -projectile.getSpeed() : 0;
+				x += projectile.getLocation()[0] < target[0] ? projectile.getSpeed() : 0;
+				y = projectile.getLocation()[1] > target[1] ? -projectile.getSpeed() : 0;
+				y += projectile.getLocation()[1] < target[1] ? projectile.getSpeed() : 0;
+				
+				//smooths out enemy movement if their speed is greater than the distance to the player's coordinate
+				if(Math.abs(projectile.getLocation()[0] - target[0]) < Math.abs(x)) x = x > 0 ? 
+						target[0] - projectile.getLocation()[0] : projectile.getLocation()[0] - target[0];
+					if(Math.abs(projectile.getLocation()[1] - target[1]) < Math.abs(y)) y = y > 0 ?
+							target[1] - projectile.getLocation()[1] : projectile.getLocation()[1] - target[1];
 			}
 			projectile.updatePosition(x, y);
 			ArrayList<GameObject> things = new ArrayList<GameObject>();
 			
-			//grab all of the things an arrow can collide with and iterate through them
-			things.addAll(getArea().getEnemies());
-			things.addAll(getArea().getObstacles());
-			for(GameObject obj : things) {
-				
-				//destroyed obstacles are pathable.
-				if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
-				
-				//if we collide with an object, the projectile disappears
-				if(projectileCollision(projectile, obj)) {
-					projectiles.remove();
+			//check player attack projectile collision
+			if(!(projectile instanceof BossAttack)) {
+				//grab all of the things an arrow can collide with and iterate through them
+				things.addAll(getArea().getEnemies());
+				things.addAll(getArea().getObstacles());
+				for(GameObject obj : things) {
 					
-					//if it was an enemy, they lose health and suffer a minor knockback.
-					if(obj instanceof Enemy) {
-						((Enemy) obj).addStall(1);
-						((Enemy) obj).loseHP(1); 
+					//destroyed obstacles are pathable.
+					if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
+					
+					//if we collide with an object, the projectile disappears
+					if(projectileCollision(projectile, obj)) {
+						projectiles.remove();
+						
+						//if it was an enemy, they lose health and suffer a minor knockback.
+						if(obj instanceof Enemy) {
+							((Enemy) obj).addStall(1);
+							((Enemy) obj).loseHP(1); 
+						}
+						break;
 					}
-					break;
+					
+					//if the projectile goes off screen, remove it
+					else if(projectile.getLocation()[0] > 999 || projectile.getLocation()[0] < 0 ||
+							projectile.getLocation()[1] > 666 || projectile.getLocation()[1] < 0) {
+						projectiles.remove();
+						break;
+					}
 				}
-				
-				//if the projectile goes off screen, remove it
-				else if(projectile.getLocation()[0] > 999 || projectile.getLocation()[0] < 0 ||
-						projectile.getLocation()[1] > 666 || projectile.getLocation()[1] < 0) {
+			}
+			
+			//check boss attack projectile collision
+			else {
+				if (((BossAttack) projectile).getTimer() > 90){
 					projectiles.remove();
 					break;
 				}
