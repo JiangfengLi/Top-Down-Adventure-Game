@@ -294,12 +294,16 @@ public class GameController {
 							}
 						}						
 						enemy.updatePosition(x, y);
+						
+						//if the enemy is offscreen, don't let them be.
+						if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 999 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
+								enemy.getLocation()[1] > 666 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
 					}
 					
 					//if they aren't stalled
 					else {
 						//if the enemy is a scaredy cat, make him run away when his health is under 1/2
-						if(enemy.getHP() < enemy.getMaxHP()/2 && enemy.willFlee()) {
+						if(enemy.getHP() <= enemy.getMaxHP()/2 && enemy.willFlee()) {
 							x = -x;
 							y = -y;
 						}
@@ -337,7 +341,7 @@ public class GameController {
 						for(Obstacle obs : getArea().getObstacles()) {
 							
 							//if so, make it so he walks around it in the quickest direction.
-							if(collision(futurePosition, obs)) {
+							if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
 								switch(enemy.getDirection()){
 									case 1:
 									case 3:
@@ -357,10 +361,6 @@ public class GameController {
 						
 						enemy.updatePosition(x, y);
 					}
-					
-					//if the enemy is offscreen, don't let them be.
-					if(enemy.getLocation()[0] < 0 || enemy.getLocation()[0] > 999 - enemy.getWidth() || enemy.getLocation()[1] < 0 || 
-							enemy.getLocation()[1] > 666 - enemy.getHeight()) enemy.setLocation(enemy.getOldLocation()[0], enemy.getOldLocation()[1]);
 				}
 			}
 		}
@@ -657,10 +657,10 @@ public class GameController {
 		//return true if the player rectangle overlaps the obstacle rectangle.
 		
 		int[] position = projectile.getLocation();
-		if(position[0] < obj.getLocation()[0] + obj.getWidth() && 
-				position[0] + projectile.getWidth() > obj.getLocation()[0] &&
-				position[1] + projectile.getHeight() < obj.getLocation()[1] + obj.getHeight() && 
-				position[1] + player.getHeight() > obj.getLocation()[1] + obj.getTopHeight()) {
+		if(position[0] <= obj.getLocation()[0] + obj.getWidth() && 
+				position[0] + projectile.getWidth() >= obj.getLocation()[0] &&
+				position[1] + projectile.getHeight() <= obj.getLocation()[1] + obj.getHeight() && 
+				position[1] + projectile.getHeight() >= obj.getLocation()[1] + obj.getTopHeight()) {
 			return true;
 		}
 		return false;

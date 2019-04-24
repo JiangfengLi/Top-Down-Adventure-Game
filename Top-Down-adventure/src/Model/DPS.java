@@ -10,20 +10,20 @@ public class DPS extends Enemy {
 		damage = 2;
 		currentHP = 2;
 		maxHP = 2;
-		speed = 7;
+		speed = 5;
 		
 		location[0] = x;
 		location[1] = y;
-		width = 40;
-		height = 74;
+		width = 30;
+		height = 30;
 		hitbox = new int[2];
-		hitboxHeight = 74;
-		hitboxWidth = 40;
+		hitboxHeight = 30;
+		hitboxWidth = 30;
+		direction = 3;
 		imageArray[0] = new Image("/style/dps north.png");
 		imageArray[1] = new Image("/style/dps left.png");
-		imageArray[2] = new Image("/style/dps down.png");
+		imageArray[2] = new Image("/style/dps south.png");
 		imageArray[3] = new Image("/style/dps right.png");
-		direction = 3;
 		topHeight = 0;
 		idleImage = new Image("/style/dps idle.png");
 		active = false;

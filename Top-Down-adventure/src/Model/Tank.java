@@ -8,7 +8,7 @@ public class Tank extends Enemy{
 		currentHP = 4;
 		maxHP = 4;
 		damage = 1;
-		speed = 6;
+		speed = 4;
 		location[0] = x;
 		location[1] = y;
 		width = 40;
@@ -25,8 +25,7 @@ public class Tank extends Enemy{
 		idleImage = new Image("/style/tank idle.png");
 		active = false;
 		scaredyCat = false;
-		Arrow arrowDrop = new Arrow(location);
-		drops.put(0, arrowDrop);
+		drops.put(0, new Arrow(location));
 		lootChance = 100;
 	} 
 }

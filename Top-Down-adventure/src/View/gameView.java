@@ -389,7 +389,7 @@ public class gameView implements Observer{
 			//plays the enemy's idle animation if they aren't currently chasing the player down
 			else if(obj instanceof Enemy && !((Enemy) obj).isDead()) {
 				Image image = ((Enemy) obj).getIdleImage();
-				gc.drawImage(image, 40*((getGameClock()%64)/4), 0, 40, 74, obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
+				gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
 			}
 			
 			//plays the enemy's death animation when they die

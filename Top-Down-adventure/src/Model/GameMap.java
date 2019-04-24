@@ -50,8 +50,10 @@ public class GameMap {
 					}
 				}
 				areaOneEnemies.add(new Tank(800, 500));
+				areaOneEnemies.add(new DPS(700, 500));
+				areaOneEnemies.add(new Flier(600,500));
 				areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
-				areaOneObstacles.add(new Tree(450 + i*50, 300 + j*50));
+				areaOneObstacles.add(new Rock(450 + i*50, 300 + j*50));
 				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
 			}
 		}
