@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Composed of a 4x4 array of Areas
@@ -17,7 +18,7 @@ public class GameMap {
 	public GameMap() {
 		map = new Area[3][3];
 		
-		ArrayList<Obstacle> areaOneObstacles = new ArrayList<Obstacle>();
+		CopyOnWriteArrayList<Obstacle> areaOneObstacles = new CopyOnWriteArrayList<Obstacle>();
 		areaOneObstacles.add(new Grass(300, 300));
 		
 		/*******TODO**********
@@ -27,8 +28,8 @@ public class GameMap {
 		 */
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
-				ArrayList<Enemy> areaOneEnemies = new ArrayList<Enemy>();
-				areaOneObstacles = new ArrayList<Obstacle>();
+				CopyOnWriteArrayList<Enemy> areaOneEnemies = new CopyOnWriteArrayList<Enemy>();
+				areaOneObstacles = new CopyOnWriteArrayList<Obstacle>();
 				if(j == 0) {
 					for(int k = 0; k < 15; k++) {
 						areaOneObstacles.add(new Tree(k*100, 0));

@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import Model.*;
 import Model.Character;
@@ -25,6 +26,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
@@ -280,8 +284,8 @@ public class gameView implements Observer{
 		
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		ArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
-		ArrayList<Enemy> enemies = ((Area) area).getEnemies();
+		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
+		CopyOnWriteArrayList<Enemy> enemies = ((Area) area).getEnemies();
 		
 		//clears the old screen
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
@@ -309,30 +313,7 @@ public class gameView implements Observer{
 			}
 		}
 		
-		//iterates through enemies in current area, draws them to screen
-		for(Enemy enemy : enemies) {
-			if(enemy.active()) {
-				if((enemy instanceof Boss)) {
-					if(!((Boss) enemy).preAttack()) {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
-						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%60)/12), 0, enemy.getWidth(), enemy.getHeight(),
-								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
-					}
-					else {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
-						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%25)/5), 0, enemy.getWidth(), enemy.getHeight(),
-								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
-					}
-					
-				}
-				else {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
-						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
-								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
-					}
-
-			}
-		}
+		
 		
 		
 		//draws loot items to screen
@@ -378,6 +359,52 @@ public class gameView implements Observer{
 			}
 		}
 		
+		//iterates through enemies in current area, draws them to screen
+		for(Enemy enemy : enemies) {
+			if(enemy.active()) {
+				if((enemy instanceof Boss)) {
+					if(!((Boss) enemy).preAttack()) {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%60)/12), 0, enemy.getWidth(), enemy.getHeight(),
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					}
+					else {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%25)/5), 0, enemy.getWidth(), enemy.getHeight(),
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					}
+					if(((Boss) enemy).shielded()) {
+						gc.setFill(Color.rgb(255,255,255,0.5));
+						gc.setStroke(Color.rgb(255,255,255,1));
+						gc.setLineWidth(9);
+						gc.strokeOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+						gc.fillOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+						gc.setFill(Color.rgb(147,112,219, 0.5));
+						gc.fillOval(enemy.getLocation()[0]-7, enemy.getLocation()[1]-7,  enemy.getWidth()+14, enemy.getWidth()+14);
+					}
+				}
+				else {
+						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
+								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+						
+						if(enemy instanceof ShieldPillar) {
+							gc.setFill(Color.rgb(255,255,255,0.5));
+							gc.setStroke(Color.rgb(255,255,255,1));
+							gc.setLineWidth(9);
+							gc.strokeOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+							gc.fillOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+							gc.setFill(Color.rgb(147,112,219, 0.5));
+							gc.fillOval(enemy.getLocation()[0]-7, enemy.getLocation()[1]-7,  enemy.getWidth()+14, enemy.getWidth()+14);
+							
+							gc.setLineWidth(1);
+							gc.strokeLine(enemy.getLocation()[0]+15, enemy.getLocation()[1]+15, 
+									((GameModel) model).getCurrentArea().getBoss().getLocation()[0]+50, ((GameModel) model).getCurrentArea().getBoss().getLocation()[1]+50);
+						}
+				}
+			}
+		}
+		
 		//draw animations currently in progress
 		ArrayList<GameObject> finished = new ArrayList<GameObject>();
 		for(GameObject obj : ((GameModel) model).getAnimations()) {
@@ -412,7 +439,7 @@ public class gameView implements Observer{
 			else if(obj instanceof Enemy && !((Enemy) obj).isDead()) {
 				if(!(obj instanceof Boss)) {
 					Image image = ((Enemy) obj).getIdleImage();
-					gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());
+					gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());				
 				}
 				else {
 					Image image = ((Enemy) obj).getIdleImage();

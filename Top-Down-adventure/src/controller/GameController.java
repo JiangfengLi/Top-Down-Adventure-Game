@@ -1,8 +1,8 @@
 
 package controller;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import Model.*;
 import Model.Character;
@@ -93,7 +93,7 @@ public class GameController {
 		if(!playerStalled() || player.damaged()) {
 		
 			Area curr = getArea();
-			ArrayList<Obstacle> obstacles = curr.getObstacles();
+			CopyOnWriteArrayList<Obstacle> obstacles = curr.getObstacles();
 			
 			//checks if the player collides with any obstacles on screen. if so, remove that direction's movement
 			for(Obstacle obstacle : obstacles) {
@@ -248,7 +248,6 @@ public class GameController {
 		
 		//iterate through all enemies on screen
 		for(Enemy enemy : getArea().getEnemies()) {
-			
 			//regular enemies and the mini-boss all have the same behavioral patterns
 			if(!(enemy instanceof Boss) || (enemy instanceof Boss && !((Boss) enemy).isMainBoss())) {
 				//if the player hasn't gotten near the enemy yet, the enemy stays inactive
@@ -260,7 +259,7 @@ public class GameController {
 				
 				//if the player gets too close
 				else {
-					if(distanceToPlayer(enemy) <= 400) {
+					if(distanceToPlayer(enemy) <= 400 && !(enemy instanceof ShieldPillar)) {
 						
 						//activate the enemy and remove the idle animation from the model
 						enemy.activate();
@@ -276,10 +275,11 @@ public class GameController {
 						y += enemy.getLocation()[1] < referencePoint[1] ? enemy.getSpeed() : 0;
 						
 						//smooths out enemy movement if their speed is greater than the distance to the player's coordinate
-						if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) < Math.abs(x)) x = x > 0 ? 
-									 referencePoint[0] - enemy.getLocation()[0] : enemy.getLocation()[0] - referencePoint[0];
-							if(Math.abs(enemy.getLocation()[1] - referencePoint[1]) < Math.abs(y)) y = y > 0 ?
-									referencePoint[1] - enemy.getLocation()[1] : enemy.getLocation()[1] - referencePoint[1];
+						if(Math.abs(enemy.getLocation()[0] - referencePoint[0]) < Math.abs(x)) x = x > 0 ?  
+							 referencePoint[0] - enemy.getLocation()[0] : enemy.getLocation()[0] - referencePoint[0];
+						if(Math.abs(enemy.getLocation()[1] - referencePoint[1]) < Math.abs(y)) y = y > 0 ?
+							referencePoint[1] - enemy.getLocation()[1] : enemy.getLocation()[1] - referencePoint[1];
+							
 						
 						//knocks the enemy back if they are in a stall
 						if(enemy.stalled()) {
@@ -294,7 +294,8 @@ public class GameController {
 									x = 0;
 									y = 0;
 								}
-							}						
+							}
+							
 							enemy.updatePosition(x, y);
 							
 							//if the enemy is offscreen, don't let them be.
@@ -360,7 +361,6 @@ public class GameController {
 									}
 								}
 							}
-							
 							enemy.updatePosition(x, y);
 						}
 					}
@@ -378,25 +378,19 @@ public class GameController {
 				//boss has 3 phases, shielded, moving, and preparing to attack
 					
 				//if boss is shielded or in pre-attack, she just sits there
-				if(boss.shielded() || boss.preAttack()) {
+				if(boss.preAttack()) {
 					x = 0;
-					y = 0;
-				
-				
-					//if boss is preparing to attack, we add a projectile when
-					//the timeToAttack() call returns true. This method increments the timer on its
-					//own and returns true when it gets over 30 giving it a 2 second charge time.
-					if(boss.preAttack()) {							
-						if(boss.timeToAttack()) {
-							getArea().addProjectile(new BossAttack(player, enemy.getLocation()));
-						}
+					y = 0;		
+					if(boss.timeToAttack()) {
+						getArea().addProjectile(new BossAttack(player, enemy.getLocation()));
 					}
 				}
 					
 				//otherwise, the boss is moving. This has the boss move in a specific pattern across the screen
 				else {
-					if(boss.timeToShield()) {
+					if(!boss.shielded() && boss.timeToShield()) {
 						boss.addShield();
+						getArea().addEnemy(new ShieldPillar(boss.getPillar()));
 					}
 					if(boss.getBossTimer()%300 <= 2) {
 						boss.addPreAttack();
@@ -483,8 +477,10 @@ public class GameController {
 			//checks for collision with enemies
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
-					enemy.loseHP(player.getDamage());
-					enemy.addStall(5);
+					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
+						enemy.loseHP(player.getDamage());
+						enemy.addStall(5);
+					}
 				}
 			}
 		}
@@ -553,8 +549,8 @@ public class GameController {
 	}
 
 	/**
-	 * returns the current animations that need to be played in ArrayList<GameObject> form
-	 * @return the current animations that need to be played as an ArrayList<GameObject>
+	 * returns the current animations that need to be played in CopyOnWriteArrayList<GameObject> form
+	 * @return the current animations that need to be played as an CopyOnWriteArrayList<GameObject>
 	 */
 	public Object getAnimations() {
 		 return model.getAnimations();
@@ -585,13 +581,16 @@ public class GameController {
 	 * removes enemies that are dead from the map
 	 */
 	public void removeDeadEnemies() {
-		ArrayList<Enemy> dead = new ArrayList<Enemy>();
+		CopyOnWriteArrayList<Enemy> dead = new CopyOnWriteArrayList<Enemy>();
 		
 		//gathers up all dead enemies
 		for(Enemy enemy : getArea().getEnemies()) {
 			if(enemy.isDead()) {
 				if(enemy.didLootDrop()) getArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
+				if(enemy instanceof ShieldPillar) {
+					model.getCurrentArea().getBoss().removeShield();
+				}
 			}
 		}
 		
@@ -695,7 +694,7 @@ public class GameController {
 							target[1] - projectile.getLocation()[1] : projectile.getLocation()[1] - target[1];
 			}
 			projectile.updatePosition(x, y);
-			ArrayList<GameObject> things = new ArrayList<GameObject>();
+			CopyOnWriteArrayList<GameObject> things = new CopyOnWriteArrayList<GameObject>();
 			
 			//check player attack projectile collision
 			if(!(projectile instanceof BossAttack)) {
@@ -713,8 +712,10 @@ public class GameController {
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
 						if(obj instanceof Enemy) {
-							((Enemy) obj).addStall(1);
-							((Enemy) obj).loseHP(1); 
+							if(!(obj instanceof Boss) || ((Boss) obj).shielded()) {
+								((Enemy) obj).addStall(1);
+								((Enemy) obj).loseHP(1); 
+							}
 						}
 						break;
 					}

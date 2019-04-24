@@ -13,9 +13,10 @@ public class Boss extends Enemy{
 	private boolean shielded = false;
 	private boolean preAttack = false;
 	private int attackTimer = 0;
-	private int shieldTimer = 150;
+	private int shieldTimer = 0;
 	private int totalAttacks = 0;
 	private int bossTimer = 0;
+	private int[] shieldLocation = new int[2];
 	
 	//note, I could have made Boss abstract and extended that to main/mini bosses, but 
 	//there's no real need to make it that robust for a game with only 2 bosses.
@@ -32,6 +33,8 @@ public class Boss extends Enemy{
 		speed = 5;
 		location[0] = x;
 		location[1] = y;
+		shieldLocation[0] = 464;
+		shieldLocation[1] = 372;
 		
 		width = finalBoss ? 100 : 0;
 		height = finalBoss ? 84 : 0;
@@ -53,6 +56,9 @@ public class Boss extends Enemy{
 		return mainBoss;
 	}
 
+	public void removeShield() {
+		shielded = false;
+	}
 	
 	public boolean shielded() {
 		return shielded ;
@@ -93,10 +99,11 @@ public class Boss extends Enemy{
 
 	public boolean timeToShield() {
 		if(shieldTimer <= 0) {
+			shieldTimer = 300;
 			return true;
 		}
 		else {
-			//shieldTimer --;
+			shieldTimer --;
 			return false;
 		}
 	}
@@ -105,6 +112,11 @@ public class Boss extends Enemy{
 	public int getBossTimer() {
 		bossTimer ++;
 		return bossTimer;
+	}
+
+
+	public int[] getPillar() {
+		return shieldLocation;
 	}
 
 
