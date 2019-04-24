@@ -57,7 +57,7 @@ public class GameMap {
 					areaOneObstacles.add(new Rock(450 + i*50, 300 + j*50));
 				}
 				else {
-					areaOneEnemies.add(new Boss(400, 400, true));
+					areaOneEnemies.add(new Boss(667, 333, true));
 				}
 				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
 			}

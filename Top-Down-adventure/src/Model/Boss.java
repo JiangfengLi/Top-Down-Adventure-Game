@@ -29,7 +29,7 @@ public class Boss extends Enemy{
 		currentHP = 20;
 		maxHP = 20;
 		damage = 1;
-		speed = 4;
+		speed = 5;
 		location[0] = x;
 		location[1] = y;
 		

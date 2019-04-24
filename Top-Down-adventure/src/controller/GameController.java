@@ -368,7 +368,8 @@ public class GameController {
 			}
 			
 			//otherwise we set the behavior for the main boss.
-			else {
+			else {	
+				Boss boss = (Boss) enemy;
 				enemy.activate();
 				
 				int x = 0;
@@ -377,7 +378,7 @@ public class GameController {
 				//boss has 3 phases, shielded, moving, and preparing to attack
 					
 				//if boss is shielded or in pre-attack, she just sits there
-				if(((Boss) enemy).shielded() || ((Boss) enemy).preAttack()) {
+				if(boss.shielded() || boss.preAttack()) {
 					x = 0;
 					y = 0;
 				
@@ -385,8 +386,8 @@ public class GameController {
 					//if boss is preparing to attack, we add a projectile when
 					//the timeToAttack() call returns true. This method increments the timer on its
 					//own and returns true when it gets over 30 giving it a 2 second charge time.
-					if(((Boss) enemy).preAttack()) {							
-						if(((Boss) enemy).timeToAttack()) {
+					if(boss.preAttack()) {							
+						if(boss.timeToAttack()) {
 							getArea().addProjectile(new BossAttack(player, enemy.getLocation()));
 						}
 					}
@@ -394,14 +395,35 @@ public class GameController {
 					
 				//otherwise, the boss is moving. This has the boss move in a specific pattern across the screen
 				else {
-					if(((Boss) enemy).timeToShield()) {
-						((Boss) enemy).addShield();
+					if(boss.timeToShield()) {
+						boss.addShield();
 					}
-					if(((Boss) enemy).getBossTimer()%150 == 0) {
-						((Boss) enemy).addPreAttack();
+					if(boss.getBossTimer()%300 <= 2) {
+						boss.addPreAttack();
 					}
-					//TO-DO 
-					//BOSS MOVEMENT PATTERN
+					
+					int directional = boss.getBossTimer();
+					if(directional%360 <= 180) {
+						if(directional%360 >= 90 && directional%360 < 270) {
+							x = -boss.getSpeed();
+							y = -boss.getSpeed();
+						}
+						else {
+							y = boss.getSpeed();
+							x = -boss.getSpeed();
+						}
+					}
+					else {
+						if(directional%360 >= 90 && directional%360 < 270) {
+							x = boss.getSpeed();
+							y = -boss.getSpeed();
+						}
+						else {
+							y = boss.getSpeed();
+							x = boss.getSpeed();
+						}
+					}
+					
 				}
 				
 				enemy.updatePosition(x,y);
