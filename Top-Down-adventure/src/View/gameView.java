@@ -339,6 +339,11 @@ public class gameView implements Observer{
 				Image image = loot.getImageFile();
 				gc.drawImage(image, loot.getWidth()*((getGameClock()%40)/8), 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
+			
+			else {
+				Image image = loot.getImageFile();
+				gc.drawImage(image, 0, 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth()*1.5, loot.getHeight()*1.5);
+			}
 		}
 		
 		//draw Player to screen
@@ -357,7 +362,7 @@ public class gameView implements Observer{
 		//iterates through enemies in current area, draws them to screen
 		for(Enemy enemy : enemies) {
 			if(enemy.active()) {
-				if((enemy instanceof Boss)) {
+				if(enemy instanceof Boss && ((Boss)enemy).isMainBoss()) {
 					if(!((Boss) enemy).preAttack()) {
 						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
 						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%60)/12), 0, enemy.getWidth(), enemy.getHeight(),
@@ -377,6 +382,11 @@ public class gameView implements Observer{
 						gc.setFill(Color.rgb(147,112,219, 0.5));
 						gc.fillOval(enemy.getLocation()[0]-7, enemy.getLocation()[1]-7,  enemy.getWidth()+14, enemy.getWidth()+14);
 					}
+				}
+				else if(enemy instanceof Boss && !((Boss)enemy).isMainBoss()) {
+					Image enImg = enemy.getImageArray()[enemy.getDirection()-1];
+					gc.drawImage(enImg, enemy.getWidth()*((getGameClock()%60)/30), 0, enemy.getWidth(), enemy.getHeight(),
+							enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 				}
 				else {
 						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
@@ -449,7 +459,7 @@ public class gameView implements Observer{
 					Image image = ((Enemy) obj).getIdleImage();
 					gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());				
 				}
-				else {
+				else if (obj instanceof Boss && ((Boss)obj).isMainBoss()){
 					Image image = ((Enemy) obj).getIdleImage();
 					gc.drawImage(image, obj.getWidth()*((getGameClock()%52)/13), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0],
 							obj.getLocation()[1], obj.getWidth(), obj.getHeight());

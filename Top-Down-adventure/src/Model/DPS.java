@@ -27,7 +27,7 @@ public class DPS extends Enemy {
 		topHeight = 0;
 		idleImage = new Image("/style/dps idle.png");
 		active = false;
-		scaredyCat = true;
+		scaredyCat = false;
 		Arrow arrowDrop = new Arrow(location);
 		Heart heartDrop = new Heart(location);
 		SpeedBuff speedDrop = new SpeedBuff(location);

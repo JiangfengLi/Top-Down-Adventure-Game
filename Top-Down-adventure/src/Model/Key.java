@@ -7,10 +7,10 @@ public class Key extends Item {
 	private boolean isBoss;
 	
 	public Key(int[] location, boolean boss) {
-		imageFile = new Image(boss ? "" : "");
+		imageFile = new Image(boss ? "/style/bosskey.png" : "/style/key.png");
 		this.location = location;
-		this.height = 0;
-		this.width = 0;
+		this.height = 16;
+		this.width = 14;
 		this.isBoss = boss;
 	}
 	

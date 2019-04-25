@@ -122,10 +122,37 @@ public class GameMap {
 				CopyOnWriteArrayList<Enemy> areaEnemies = new CopyOnWriteArrayList<Enemy>();
 				CopyOnWriteArrayList<Obstacle> areaObstacles = new CopyOnWriteArrayList<Obstacle>();
 				
-				if(i == 0 && j == 0) {
+				if(i==0 && j==0) {
 					areaObstacles.add(new DungeonEntrance(400, 0));
+					for(int k=0; k<20; k++) {
+						areaObstacles.add(new Rock(450+(k*50), 0));
+						areaObstacles.add(new Rock(350-(k*50), 0));
+						areaObstacles.add(new Rock(0, k*50));
+						areaObstacles.add(new Rock(949, k*50));
+					}
 				}
-				
+				if(i==0 && j==1) {
+					areaObstacles.add(new Rock(949, 0));
+					for(int k=0; k<20; k++) {
+						areaObstacles.add(new Rock(50*k, 616));
+						areaObstacles.add(new Rock(0, k*50));
+					}
+				}
+				if(i==1 && j==0) {
+					areaEnemies.add(new Boss(449, 283, false));
+					for(int k=0; k<20; k++) {
+						areaObstacles.add(new Rock(k*50, 0));
+						areaObstacles.add(new Rock(0, k*50));
+						areaObstacles.add(new Rock(949, k*50));
+					}
+				}
+				if(i==1 && j==1) {
+					areaObstacles.add(new Rock(0, 0));
+					for(int k=0; k<20; k++) {
+						areaObstacles.add(new Rock(50*k, 616));
+						areaObstacles.add(new Rock(949, k*50));
+					}
+				}
 				map[i][j] = new Area(areaEnemies, areaObstacles, i, j);
 				
 			}

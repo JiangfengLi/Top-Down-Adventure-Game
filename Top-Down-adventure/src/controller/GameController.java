@@ -177,6 +177,14 @@ public class GameController {
 				if(loot instanceof SpeedBuff) {
 					player.addBuff(200);
 				}
+				if(loot instanceof Key) {
+					if(((Key)loot).isBossKey()) {
+						player.giveBossKey();
+					}
+					else {
+						player.giveKey();
+					}
+				}
 				drops.remove();
 			}
 		}

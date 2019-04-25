@@ -21,33 +21,33 @@ public class Boss extends Enemy{
 	//note, I could have made Boss abstract and extended that to main/mini bosses, but 
 	//there's no real need to make it that robust for a game with only 2 bosses.
 	public Boss(int x, int y, boolean finalBoss) {
-		imageArray[0] = new Image(finalBoss ? "/style/boss.png" : "/style/miniBoss.png");
-		imageArray[1] = new Image(finalBoss ? "/style/boss.png" : "/style/miniBoss.png");
-		imageArray[2] = new Image(finalBoss ? "/style/boss.png" : "/style/miniBoss.png");
-		imageArray[3] = new Image(finalBoss ? "/style/boss.png" : "/style/miniBoss.png");
+		imageArray[0] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
+		imageArray[1] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
+		imageArray[2] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
+		imageArray[3] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		mainBoss = finalBoss;
 		
-		currentHP = 20;
-		maxHP = 20;
+		currentHP = mainBoss ? 20 : 12;
+		maxHP = mainBoss ? 20 : 12;
 		damage = 1;
-		speed = 5;
+		speed = mainBoss ? 5 : 7;
 		location[0] = x;
 		location[1] = y;
 		shieldLocation[0] = 464;
 		shieldLocation[1] = 372;
 		
-		width = finalBoss ? 100 : 0;
-		height = finalBoss ? 84 : 0;
+		width = 100;
+		height = finalBoss ? 84 : 39;
 		hitbox = new int[2];
-		hitboxHeight = finalBoss ? 100 : 0;
-		hitboxWidth = finalBoss ? 84 : 0;
+		hitboxHeight = finalBoss ? 100 : 100;
+		hitboxWidth = finalBoss ? 84 : 39;
 		direction = 3;
 		topHeight = 0;
-		idleImage = new Image(finalBoss ? "/style/boss.png" : "/style/miniBoss idle.png");
+		idleImage = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		active = false;
 		scaredyCat = false;
 		
-		drops.put(0, new Arrow(location));
+		drops.put(0, new Key(this.location, true));
 		lootChance = 100;
 	}
 	

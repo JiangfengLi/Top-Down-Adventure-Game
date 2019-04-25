@@ -115,9 +115,7 @@ public class Player extends Character{
 	 * reduces the player's arrow quantity by 1
 	 */
 	public void decrementArrows() {
-		arrowQuantity--;
-		System.out.println(this.getArrowQuantity());
-		
+		arrowQuantity--;		
 	}
 	
 	/**
@@ -149,5 +147,13 @@ public class Player extends Character{
 	 */
 	public boolean buffed() {
 		return buffed;
+	}
+
+	public void giveBossKey() {
+		bossKey = true;
+	}
+
+	public void giveKey() {
+		smallKey = true;
 	}
 }
