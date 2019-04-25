@@ -325,11 +325,13 @@ public class gameView implements Observer{
 			}
 				
 			if(loot instanceof Heart) {
-					
+				Image image = loot.getImageFile();
+				gc.drawImage(image, loot.getWidth()*((getGameClock()%40)/8), 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
 				
 			if(loot instanceof SpeedBuff) {
-					
+				Image image = loot.getImageFile();
+				gc.drawImage(image, loot.getWidth()*((getGameClock()%40)/8), 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
 		}
 		
