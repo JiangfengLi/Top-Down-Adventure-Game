@@ -12,7 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameMap {
 	
-	private Area[][] map; 
+	private Area[][] map;
+	public int length;
 	
 	/**
 	 * this constructor sets up the actual map design by creating a bunch of
@@ -20,7 +21,7 @@ public class GameMap {
 	 */
 	public GameMap() {
 		map = new Area[3][3];
-		
+		length = 3;
 		/*******TODO**********
 		 * All of the Areas will be different
 		 * so they will have to be initialized
@@ -133,6 +134,7 @@ public class GameMap {
 	 * @param dungeon
 	 */
 	public GameMap(boolean dungeon) {
+		length = 2;
 		map = new Area[2][2];
 		for(int i=0; i<2; i++) {
 			for(int j=0; j<2; j++) {

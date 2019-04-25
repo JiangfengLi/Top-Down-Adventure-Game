@@ -815,4 +815,20 @@ public class GameController {
 		// TODO Auto-generated method stub
 		return model.inDungeon();
 	}
+
+	/**
+	 * returns the Dungeon's GameMap
+	 * @return the dungeon's GameMap
+	 */
+	public GameMap getDungeonMap() {
+		return model.getDungeonMap();
+	}
+
+	/**
+	 * returns the overland GameMap
+	 * @return the overland GameMap
+	 */
+	public GameMap getOverlandMap() {
+		return model.getOverlandMap();
+	}
 }

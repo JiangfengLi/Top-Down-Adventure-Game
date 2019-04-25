@@ -27,6 +27,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 /**
@@ -45,7 +46,8 @@ public class gameView implements Observer{
 	private Scene myScene;
 	private Stage myStage;
 	private boolean gameStarted = false;
-	private Canvas canvas; 
+	private Canvas canvas;
+	private Canvas map;
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;
@@ -208,6 +210,7 @@ public class gameView implements Observer{
 				if(!isStop) {
 					isStop  = true;
 					animationTimer.stop();
+					drawMap();
 				}
 				else {
 					isStop = false;
@@ -248,6 +251,35 @@ public class gameView implements Observer{
 		});
 	}
 	
+	/**
+	 * draws the map to screen
+	 */
+	private void drawMap() {
+		GameMap currMap = controller.getOverlandMap();
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, WIDTH, HEIGHT);
+		Image bg = new Image("/style/background.png");
+		gc.drawImage(bg,  0,  0, WIDTH, HEIGHT);
+		for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				Area area = currMap.getArea(i, j);
+				if(controller.getArea() == area) {
+					gc.setFill(Paint.valueOf("RED"));
+					gc.fillOval(controller.getPlayerPosition()[0]/3 + i*WIDTH/3, controller.getPlayerPosition()[1]/3 + HEIGHT/3*j, 10, 10);
+				}
+				CopyOnWriteArrayList<Obstacle> toDraw = new CopyOnWriteArrayList<Obstacle>();
+				toDraw.addAll(area.getObstacles());
+				for(Obstacle obs : toDraw) {
+					gc.drawImage(obs.getImageFile(), 0, 0, obs.getWidth(), obs.getHeight(), 
+							obs.getLocation()[0]/3 + WIDTH/3*i, obs.getLocation()[1]/3 + HEIGHT/3*j, obs.getWidth()/3, obs.getHeight()/3);
+				}
+				
+			}
+		}
+		
+		
+	}
+
 	/**
 	 * sets up the event listeners for player mouse clicks, sword swing on left click and bow attack on right
 	 */

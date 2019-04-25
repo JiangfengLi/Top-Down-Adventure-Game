@@ -185,5 +185,21 @@ public class GameModel extends Observable {
 	public void swapToOverland() {
 		currArea = map.getArea(2, 2);
 		player.setLocation(753, 424);
+	}
+
+	/**
+	 * returns the dungeon's GameMap
+	 * @return the dungeon's GameMap
+	 */
+	public GameMap getDungeonMap() {
+		return dungeon;
+	}
+
+	/**
+	 * returns the overland GameMap
+	 * @return the overland GameMap
+	 */
+	public GameMap getOverlandMap() {
+		return map;
 	}	
 }
