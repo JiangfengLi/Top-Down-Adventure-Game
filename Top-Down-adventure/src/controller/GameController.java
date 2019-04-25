@@ -701,13 +701,29 @@ public class GameController {
 				//grab all of the things an arrow can collide with and iterate through them
 				things.addAll(getArea().getEnemies());
 				things.addAll(getArea().getObstacles());
+				things.add(player);
 				for(GameObject obj : things) {
 					
+					if(obj instanceof BossAttack) {
+						if (((BossAttack) projectile).getTimer() > 90){
+							projectiles.remove();
+							break;
+						}
+					}
 					//destroyed obstacles are pathable.
 					if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
 					
+					if(projectile instanceof BossAttack && (obj instanceof Player || obj instanceof Obstacle)){
+						projectiles.remove();
+						if(obj instanceof Player) {
+							player.addStall(1);
+							player.loseHP(1);
+						}
+						break;
+					}
+					
 					//if we collide with an object, the projectile disappears
-					if(projectileCollision(projectile, obj)) {
+					else if(projectileCollision(projectile, obj)) {
 						projectiles.remove();
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
@@ -726,14 +742,6 @@ public class GameController {
 						projectiles.remove();
 						break;
 					}
-				}
-			}
-			
-			//check boss attack projectile collision
-			else {
-				if (((BossAttack) projectile).getTimer() > 90){
-					projectiles.remove();
-					break;
 				}
 			}
 		}
