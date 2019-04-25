@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * projectile object to help show arrow movement across the screen, including directionality
+ * @author Wes Rodgers
+ *
+ */
 public class ArrowShot extends Character {
 
 	public ArrowShot(int direction, int[] location) {
@@ -18,9 +23,7 @@ public class ArrowShot extends Character {
 		imageArray[2] = new Image("/style/arrow down.png");
 		imageArray[3] = new Image("/style/arrow right.png");
 		
-		//change these as appropriate once we have the arrow .png file
 		height = 30;
 		width = 30;
 	} 
-
 }

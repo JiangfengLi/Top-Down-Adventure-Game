@@ -7,7 +7,7 @@ import javafx.stage.Stage;
  * This is the "main" class of the game. Creates the view, starts the game engine
  * has main()
  * 
- * @author 
+ * @author TianZeHu, Wes Rodgers
  *
  */
 public class Window extends Application{
@@ -50,7 +50,6 @@ public class Window extends Application{
 				view.updateProjectiles();
 				view.checkDeath();
 				/*/////TO-DO//////
-				updateBoss (since it will have a different movement pattern than a standard enemy.
 				checkDeath
 				checkWin
 				*/

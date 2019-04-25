@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * provides all of the fields necessary for a Tank enemy.
+ * @author Wes Rodgers
+ *
+ */
 public class Tank extends Enemy{
 	
 	public Tank(int x, int y) {

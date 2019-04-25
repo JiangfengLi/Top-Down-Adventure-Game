@@ -14,6 +14,10 @@ public class GameMap {
 	
 	private Area[][] map; 
 	
+	/**
+	 * this constructor sets up the actual map design by creating a bunch of
+	 * objects in their correct positions and passing them to Area constructors
+	 */
 	public GameMap() {
 		map = new Area[3][3];
 		
@@ -26,6 +30,8 @@ public class GameMap {
 			for(int j=0; j<3; j++) {
 				CopyOnWriteArrayList<Enemy> areaEnemies = new CopyOnWriteArrayList<Enemy>();
 				CopyOnWriteArrayList<Obstacle> areaObstacles = new CopyOnWriteArrayList<Obstacle>();
+				
+				//these first checks just add a border around the exterior of the map
 				if(j == 0) {
 					for(int k = 0; k < 15; k++) {
 						areaObstacles.add(new Tree(k*100, -50));
@@ -46,6 +52,9 @@ public class GameMap {
 						areaObstacles.add(new Tree(k*100, 610));
 					}
 				}
+				
+				//from here on each if statement determines the stuff
+				//to be put in a single map space
 				if(i==0 && j==0) {
 					
 				}
@@ -115,6 +124,11 @@ public class GameMap {
 		}
 	}
 	
+	/**
+	 * this constructor sets up the design of the dungeon map in the same manner
+	 * as the previous did for the overland map
+	 * @param dungeon
+	 */
 	public GameMap(boolean dungeon) {
 		map = new Area[2][2];
 		for(int i=0; i<2; i++) {

@@ -13,7 +13,7 @@ public class Boss extends Enemy{
 	private boolean shielded = false;
 	private boolean preAttack = false;
 	private int attackTimer = 0;
-	private int shieldTimer = 0;
+	private int shieldTimer = 45;
 	private int totalAttacks = 0;
 	private int bossTimer = 0;
 	private int[] shieldLocation = new int[2];
@@ -51,35 +51,58 @@ public class Boss extends Enemy{
 		lootChance = 100;
 	}
 	
-	
+	/**
+	 * returns true when this is the main boss, false when it is a mini boss
+	 * @return true when this is the main boss, false when it is a mini boss
+	 */
 	public boolean isMainBoss() {
 		return mainBoss;
 	}
 
+	/**
+	 * removes the boss' shield
+	 */
 	public void removeShield() {
 		shielded = false;
 	}
 	
+	/**
+	 * returns true when the boss is shielded, false otherwise
+	 * @return true when the boss is shielded, false otherwise
+	 */
 	public boolean shielded() {
 		return shielded ;
 	}
 	
-	
+	/**
+	 * adds a shield to the boss
+	 */
 	public void addShield() {
 		shielded = true;
 	}
 	
-	
+	/**
+	 * returns true when the boss is preparing to attack, false otherwise
+	 * @return
+	 */
 	public boolean preAttack() {
 		return preAttack;
 	}
 	
-	
+	/**
+	 * tells the boss to enter their preattack phase
+	 */
 	public void addPreAttack() {
 		preAttack = true;
 	}
 
-
+	/**
+	 * keeps track of how many times the boss has attacked in this attack phase and turns preattack
+	 * off when it hits 4. Keeps track of when the boss needs to attack by incrementing its own timer
+	 * every time it is called.
+	 * Returns true when it is time for the boss to attack, false otherwise.
+	 * @return true when it is time for the boss to attack, false otherwise.
+	 */
 	public boolean timeToAttack() {
 		if(attackTimer > 50) {
 			attackTimer = 0;
@@ -97,6 +120,10 @@ public class Boss extends Enemy{
 	}
 
 
+	/**
+	 * decrements a timer for the boss' shield mechanic, returns true when it is time for the boss to shield.
+	 * @return
+	 */
 	public boolean timeToShield() {
 		if(shieldTimer <= 0) {
 			shieldTimer = 300;
@@ -108,16 +135,21 @@ public class Boss extends Enemy{
 		}
 	}
 
-
+	/**
+	 * keeps track of an implements a separate gameclock unique to the boss. Can be used to
+	 * set behavioral options based on the tick.
+	 * @return the number of times this method has been called.
+	 */
 	public int getBossTimer() {
 		bossTimer ++;
 		return bossTimer;
 	}
 
-
+	/**
+	 * returns the location that the boss' shield pillar needs to spawn
+	 * @return the location that the boss' shield pillar needs to spawn.
+	 */
 	public int[] getPillar() {
 		return shieldLocation;
 	}
-
-
 }

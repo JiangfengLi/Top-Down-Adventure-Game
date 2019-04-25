@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Fills fields specific to dungeon entrance/exits
+ * @author Wes Rodgers
+ *
+ */
 public class DungeonEntrance extends Obstacle{
 
 	public DungeonEntrance(int x, int y) {

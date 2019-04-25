@@ -2,6 +2,12 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Projectile object to be drawn on screen. Acts like a character to help
+ * depict directionality
+ * @author Wes Rodgers
+ *
+ */
 public class BowShot extends Character {
 
 	public BowShot(int direction) {

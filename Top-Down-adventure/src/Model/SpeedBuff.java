@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Loot item that increases the player's speed, provides the necessary fields
+ * @author Wes Rodgers
+ *
+ */
 public class SpeedBuff extends Item{
 
 	public SpeedBuff(int[] location) {

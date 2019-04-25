@@ -29,7 +29,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
+/**
+ * View part of the MVC design pattern. This takes in all
+ * the data given by the model and updates what the player sees. It also listens
+ * for player input and passes that to the controller as appropriate.
+ * 
+ * @author Wes Rodgers
+ *
+ */
 public class gameView implements Observer{
 	private final String BACK_GROUND = "/style/title.png";
 	private static final int HEIGHT = 666;
@@ -531,6 +538,10 @@ public class gameView implements Observer{
 		controller.updateProjectilePosition();
 	}
 
+	/**
+	 * passes in the animation timer so the view can pause the game engine
+	 * @param animationTimer the animation timer running our game engine.
+	 */
 	public void setAnimationTimer(AnimationTimer animationTimer) {
 		this.animationTimer = animationTimer;
 		

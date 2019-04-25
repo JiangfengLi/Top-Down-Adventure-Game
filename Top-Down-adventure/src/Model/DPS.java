@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * fills fields specific to DPS type enemies
+ * @author Wes Rodgers
+ *
+ */
 public class DPS extends Enemy {
 
 	public DPS(int x, int y) {

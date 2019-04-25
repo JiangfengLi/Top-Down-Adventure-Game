@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Enemy class with the fields for the main boss' shield pillar
+ * @author Wes Rodgers
+ *
+ */
 public class ShieldPillar extends Enemy{
 	
 	public ShieldPillar(int[] location) {

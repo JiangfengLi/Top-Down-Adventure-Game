@@ -43,5 +43,4 @@ public class Flier extends Enemy {
 		drops.put(6, speedDrop);
 		lootChance = 30;
 	}
-
 }

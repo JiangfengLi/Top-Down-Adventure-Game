@@ -24,20 +24,34 @@ public abstract class Character extends GameObject{
 	//direction is as follows: 1 is up, 2 is left, 3 is down, 4 is right.
 	protected int direction;
 	
-	
+	/**
+	 * returns true when the character is in a stall, false otherwise
+	 * @return true when the character is in a stall, false otherwise
+	 */
 	public boolean stalled() {
 		return stalled;
 	}
 	
+	/**
+	 * adds a stall to this character
+	 * @param i the number of ticks that the stall should last for
+	 */
 	public void addStall(int i) {
 		stalled = true;
 		stallTime += i;
 	}
 	
+	/**
+	 * returns the length of time remaining on the stall
+	 * @return the length of time remaining on the stall
+	 */
 	public int getStallTime() {
 		return stallTime;
 	}
 	
+	/** decrements the stall time by 1, unstalls
+	 * the character once it hits 0
+	 */
 	public void decrementStall() {
 		stallTime--;
 		if(stallTime == 0) {

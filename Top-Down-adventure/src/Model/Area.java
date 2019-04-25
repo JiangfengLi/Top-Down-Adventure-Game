@@ -92,20 +92,36 @@ public class Area {
 		projectiles.add(projectile);
 	}
 	
+	/**
+	 * returns this area's projectiles as an array list
+	 * @return the projectiles currently in the air in this area
+	 */
 	public ArrayList<Character> getProjectiles() {
 		// TODO Auto-generated method stub
 		return projectiles;
 	}
 
+	/**
+	 * removes the passed in projectile from this area
+	 * @param projectile the projectile we want to remove from the area
+	 */
 	public void removeProjectile(Character projectile) {
 		projectiles.remove(projectile);
 		
 	}
 
+	/**
+	 * returns this area's boss
+	 * @return this area's boss
+	 */
 	public Boss getBoss() {
 		return boss;
 	}
 
+	/**
+	 * adds an enemy to this area
+	 * @param enemy the enemy to be added to this area
+	 */
 	public void addEnemy(Enemy enemy) {
 		enemies.add(enemy);		
 	}

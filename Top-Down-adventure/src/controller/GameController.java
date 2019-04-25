@@ -125,6 +125,8 @@ public class GameController {
 					}
 				}
 			}
+			
+			//determines whether there is a boss on this screen since we can't leave until the boss is defeated.
 			boolean boss = false;
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(enemy instanceof Boss) {
@@ -801,6 +803,10 @@ public class GameController {
 		return false;
 	}
 
+	/**
+	 * returns true if the player is in a dungeon, false otherwise.
+	 * @return
+	 */
 	public boolean inDungeon() {
 		// TODO Auto-generated method stub
 		return model.inDungeon();

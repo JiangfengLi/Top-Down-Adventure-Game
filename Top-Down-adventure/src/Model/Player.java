@@ -149,10 +149,16 @@ public class Player extends Character{
 		return buffed;
 	}
 
+	/**
+	 * gives the player the boss key
+	 */
 	public void giveBossKey() {
 		bossKey = true;
 	}
 
+	/**
+	 * gives the player the regular key
+	 */
 	public void giveKey() {
 		smallKey = true;
 	}

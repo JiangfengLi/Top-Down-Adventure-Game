@@ -31,10 +31,17 @@ public class GameModel extends Observable {
 		notifyObservers();
 	}
 
+	/**
+	 * returns whether the player is in the dungeon or not
+	 * @return true if we're in a dungeon, false otherwise
+	 */
 	public boolean inDungeon() {
 		return inDungeon;
 	}
 	
+	/**
+	 * toggles the indungeon flag
+	 */
 	public void toggleInDungeon() {
 		inDungeon = !inDungeon;
 	}
@@ -162,11 +169,19 @@ public class GameModel extends Observable {
 		return animations;
 	}
 
+	/**
+	 * sets our current area to the dungeon map and puts
+	 * our player in the right spot on the map
+	 */
 	public void swapToDungeon() {
 		currArea = dungeon.getArea(0, 0);
 		player.setLocation(400, 60);
 	}
 
+	/**
+	 * sets our current area to the overland map and puts our
+	 * player in the right spot on the map
+	 */
 	public void swapToOverland() {
 		currArea = map.getArea(2, 2);
 		player.setLocation(753, 424);

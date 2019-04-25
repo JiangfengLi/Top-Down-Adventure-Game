@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Animation character for player sword swings, with directionality.
+ * @author Wes Rodgers
+ *
+ */
 public class PlayerSwing extends Character {
 	
 	public PlayerSwing(int direction) {
