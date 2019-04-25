@@ -27,8 +27,8 @@ public class Boss extends Enemy{
 		imageArray[3] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		mainBoss = finalBoss;
 		
-		currentHP = mainBoss ? 20 : 12;
-		maxHP = mainBoss ? 20 : 12;
+		currentHP = 12;
+		maxHP = 12;
 		damage = 1;
 		speed = mainBoss ? 5 : 7;
 		location[0] = x;
@@ -47,6 +47,7 @@ public class Boss extends Enemy{
 		active = false;
 		scaredyCat = false;
 		if(!mainBoss) drops.put(0, new Key(this.location, true));
+		else drops.put(0, new Heart(this.location));
 		lootChance = 100;
 	}
 	

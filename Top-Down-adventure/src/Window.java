@@ -50,8 +50,8 @@ public class Window extends Application{
 				view.updateProjectiles();
 				view.checkDeath();
 				/*/////TO-DO//////
-				checkDeath
-				checkWin
+				check player death
+				check win conditions
 				*/
 			}
 		}
