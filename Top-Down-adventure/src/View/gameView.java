@@ -398,18 +398,18 @@ public class gameView implements Observer{
 						}
 				}
 			}
-			
-			//iterates through the projectiles that are currently on the screen and draws each one.
-			for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
-				Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
-				if(!(projectile instanceof BossAttack)) {
-					gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
+		}
+		
+		//iterates through the projectiles that are currently on the screen and draws each one.
+		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
+			Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
+			if(!(projectile instanceof BossAttack)) {
+				gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
+					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+			}
+			else {
+				gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
 						projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
-				}
-				else {
-					gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
-							projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
-				}
 			}
 		}
 		

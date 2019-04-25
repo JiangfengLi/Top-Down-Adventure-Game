@@ -163,10 +163,12 @@ public class GameModel extends Observable {
 	}
 
 	public void swapToDungeon() {
-		currArea = dungeon.getArea(1, 0);
+		currArea = dungeon.getArea(0, 0);
+		player.setLocation(400, 60);
 	}
 
 	public void swapToOverland() {
 		currArea = map.getArea(2, 2);
+		player.setLocation(753, 424);
 	}	
 }

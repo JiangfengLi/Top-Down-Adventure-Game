@@ -102,12 +102,10 @@ public class GameController {
 				futurePosition[1] = getPlayerPosition()[1] + yMovement;
 				if(collision(futurePosition, obstacle)) {
 					if(obstacle instanceof DungeonEntrance && !model.inDungeon()) {
-						player.setLocation(400, 60);
 						model.toggleInDungeon();
 						model.swapToDungeon();
 					}
 					else if(obstacle instanceof DungeonEntrance && model.inDungeon()) {
-						player.setLocation(400, 460);
 						model.toggleInDungeon();
 						model.swapToOverland();
 					}
