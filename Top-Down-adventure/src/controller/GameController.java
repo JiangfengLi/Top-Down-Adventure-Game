@@ -747,7 +747,7 @@ public class GameController {
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
 						if(obj instanceof Enemy) {
-							if(!(obj instanceof Boss) || ((Boss) obj).shielded()) {
+							if(!(obj instanceof Boss) || !((Boss) obj).shielded()) {
 								((Enemy) obj).addStall(1);
 								((Enemy) obj).loseHP(1); 
 							}
