@@ -1,6 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -18,9 +17,6 @@ public class GameMap {
 	public GameMap() {
 		map = new Area[3][3];
 		
-		CopyOnWriteArrayList<Obstacle> areaOneObstacles = new CopyOnWriteArrayList<Obstacle>();
-		areaOneObstacles.add(new Grass(300, 300));
-		
 		/*******TODO**********
 		 * All of the Areas will be different
 		 * so they will have to be initialized
@@ -28,46 +24,91 @@ public class GameMap {
 		 */
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
-				CopyOnWriteArrayList<Enemy> areaOneEnemies = new CopyOnWriteArrayList<Enemy>();
-				areaOneObstacles = new CopyOnWriteArrayList<Obstacle>();
+				CopyOnWriteArrayList<Enemy> areaEnemies = new CopyOnWriteArrayList<Enemy>();
+				CopyOnWriteArrayList<Obstacle> areaObstacles = new CopyOnWriteArrayList<Obstacle>();
 				if(j == 0) {
 					for(int k = 0; k < 15; k++) {
-						areaOneObstacles.add(new Tree(k*100, 0));
+						areaObstacles.add(new Tree(k*100, -50));
 					}
 				}
-				if(i == 0) {
+				if(i == 0 || (i==1 && (j==0 || j==1))) {
 					for(int k = 0; k < 20; k++) {
-						areaOneObstacles.add(new Tree(-50, k*50));
+						areaObstacles.add(new Tree(-50, k*50));
 					}
 				}
-				if(i == 2) {
+				if(i == 2 || (i==0 && (j==0 || j==1))) {
 					for(int k = 0; k < 20; k++) {
-						areaOneObstacles.add(new Tree(949, k*50));
+						areaObstacles.add(new Tree(949, k*50));
 					}
 				}
 				if(j == 2) {
 					for(int k = 0; k < 15; k++) {
-						areaOneObstacles.add(new Tree(k*100, 616));
+						areaObstacles.add(new Tree(k*100, 616));
 					}
 				}
-				if(i != 2 || j != 0) {
-					areaOneEnemies.add(new Tank(800, 500));
-					areaOneEnemies.add(new DPS(700, 500));
-					areaOneEnemies.add(new Flier(600,500));
-					areaOneObstacles.add(new Grass(300 + i*50, 300 + j*50));
-					areaOneObstacles.add(new Rock(450 + i*50, 300 + j*50));
+				if(i==0 && j==0) {
+
 				}
-				else {
-					areaOneEnemies.add(new Boss(667, 333, true));
+				if(i==0 && j==1) {
+					
 				}
-				map[i][j] = new Area(areaOneEnemies, areaOneObstacles, i, j);
+				if(i==0 && j==2) {
+					areaObstacles.add(new Tree(949, -50));
+				}
+				if(i==1 && j==0) {
+					areaEnemies.add(new Boss(700, 200, true));
+				}
+				if(i==1 && j==1) {
+					areaObstacles.add(new Tree(949, -50));
+					areaObstacles.add(new Tree(949, 616));
+					for(int k=0; k<3; k++) {
+						areaObstacles.add(new Tree(100*k, -50));
+					}
+				}
+				if(i==1 && j==2) {
+					areaObstacles.add(new Tree(-50, -50));
+					areaObstacles.add(new Tree(949, -50));
+				}
+				if(i==2 && j==0) {
+					
+				}
+				if(i==2 && j==1) {
+					for(int k=0; k<6; k++) {
+						areaObstacles.add(new Tree(100*k, 610));
+					}
+					for(int k=0; k<14; k++) {
+						areaObstacles.add(new Tree(100*k, -50));
+					}
+				}
+				if(i==2 && j==2) {
+					for(int k=0; k<5; k++) {
+						areaObstacles.add(new Tree(100*k, -50));
+					}
+					for(int k=0; k<14; k++) {
+						areaObstacles.add(new Tree(500, -50));
+						areaObstacles.add(new Tree(500, 50*k));
+					}
+				}
+				map[i][j] = new Area(areaEnemies, areaObstacles, i, j);
 			}
 		}
 	}
 	
 	public GameMap(boolean dungeon) {
-		map = new Area[3][2];
-		
+		map = new Area[3][3];
+		for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				CopyOnWriteArrayList<Enemy> areaEnemies = new CopyOnWriteArrayList<Enemy>();
+				CopyOnWriteArrayList<Obstacle> areaObstacles = new CopyOnWriteArrayList<Obstacle>();
+				
+				if(i == 1 && j == 0) {
+					areaObstacles.add(new DungeonEntrance(400, 0));
+				}
+				
+				map[i][j] = new Area(areaEnemies, areaObstacles, i, j);
+				
+			}
+		}
 		//dungeon design here.
 	}
 

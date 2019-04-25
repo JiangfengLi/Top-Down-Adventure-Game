@@ -18,6 +18,7 @@ public class GameModel extends Observable {
 	private Area currArea;
 	private GameMap map;
 	private GameMap dungeon;
+	private boolean inDungeon;
 	private int gameClock = 0;
 	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	
@@ -30,6 +31,14 @@ public class GameModel extends Observable {
 		notifyObservers();
 	}
 
+	public boolean inDungeon() {
+		return inDungeon;
+	}
+	
+	public void toggleInDungeon() {
+		inDungeon = !inDungeon;
+	}
+	
 	/**
 	 * getter for the Player
 	 * 
@@ -101,7 +110,13 @@ public class GameModel extends Observable {
 		for(Enemy enemy : currArea.getEnemies()) {
 			enemy.setActive(false);
 		}
-		currArea = map.getArea(x + area[0], y + area[1]);
+		
+		if(inDungeon) {
+			currArea = dungeon.getArea(x + area[0],  y + area[1]);
+		}
+		else {
+			currArea = map.getArea(x + area[0], y + area[1]);
+		}
 		setChanged();
 		notifyObservers(currArea);
 	}
@@ -145,5 +160,13 @@ public class GameModel extends Observable {
 	 */
 	public ArrayList<GameObject> getAnimations() {
 		return animations;
+	}
+
+	public void swapToDungeon() {
+		currArea = dungeon.getArea(1, 0);
+	}
+
+	public void swapToOverland() {
+		currArea = map.getArea(2, 2);
 	}	
 }

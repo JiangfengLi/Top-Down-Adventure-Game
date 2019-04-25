@@ -101,6 +101,16 @@ public class GameController {
 				futurePosition[0] = getPlayerPosition()[0] + xMovement;
 				futurePosition[1] = getPlayerPosition()[1] + yMovement;
 				if(collision(futurePosition, obstacle)) {
+					if(obstacle instanceof DungeonEntrance && !model.inDungeon()) {
+						player.setLocation(400, 60);
+						model.toggleInDungeon();
+						model.swapToDungeon();
+					}
+					else if(obstacle instanceof DungeonEntrance && model.inDungeon()) {
+						player.setLocation(400, 460);
+						model.toggleInDungeon();
+						model.swapToOverland();
+					}
 					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
 							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
 						xMovement = 0;
@@ -117,9 +127,17 @@ public class GameController {
 					}
 				}
 			}
-			
+			boolean boss = false;
+			for(Enemy enemy : getArea().getEnemies()) {
+				if(enemy instanceof Boss) {
+					boss = true;
+				}
+			}
+			if(offScreen() && boss) {
+				player.setLocation(player.getOldLocation()[0],  player.getOldLocation()[1]);
+			}
 			//if the player walked off the screen, shift to the screen that they walked to
-			if(offScreen() && !player.damaged()) {
+			else if(offScreen() && !player.damaged()) {
 				
 				//determine where to place the player on the next screen
 				int[] collisionCoords = offScreenCoords();
@@ -384,7 +402,10 @@ public class GameController {
 					x = 0;
 					y = 0;		
 					if(boss.timeToAttack()) {
-						getArea().addProjectile(new BossAttack(player, enemy.getLocation()));
+						int[] missileStart = new int[2];
+						missileStart[0] = enemy.getLocation()[0] + 50;
+						missileStart[1] = enemy.getLocation()[1] + 50;
+						getArea().addProjectile(new BossAttack(player, missileStart));
 					}
 				}
 					
@@ -772,5 +793,10 @@ public class GameController {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean inDungeon() {
+		// TODO Auto-generated method stub
+		return model.inDungeon();
 	}
 }

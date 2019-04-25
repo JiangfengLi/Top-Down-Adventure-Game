@@ -27,8 +27,6 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
@@ -48,6 +46,7 @@ public class gameView implements Observer{
 	private boolean isStop = false;
 	
 	private Image bg = new Image("/style/background.png");
+	private Image dungeonBg = new Image("/style/dungeon bg.png");
 	
 	public gameView() {
 		myPane = new AnchorPane();
@@ -291,7 +290,7 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		
 		//draws the background layer
-		gc.drawImage(bg, 0, 0, WIDTH, HEIGHT);		
+		gc.drawImage(controller.inDungeon() ? dungeonBg : bg, 0, 0, WIDTH, HEIGHT);		
 		
 		//this should be obvious, but the draw order here is important because it helps to force perspective.
 		//like players should be on top of back ground, but should be able to go underneath the top part of large obstacles
@@ -301,16 +300,23 @@ public class gameView implements Observer{
 		//iterates through the obstacles in current area, draws them to screen
 		for(Obstacle obstacle : obstacles) {
 			Image image = obstacle.getImageFile(); 
-			if(!obstacle.destroyed()) {
-				gc.drawImage(image, 0,0,obstacle.getWidth(), obstacle.getHeight(), obstacle.getLocation()[0], 
-						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
-			}
 			
 			//obstacles leave behind remains, this draws those remains as pathable objects.
 			if(obstacle.destroyed()) {
 				gc.drawImage(image, obstacle.getWidth()*obstacle.lastFrame(),0, obstacle.getWidth(), obstacle.getHeight(),
 						obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
 			}
+			
+			//just makes sure we draw the dungeon entrance on top of the remains but underneath the obstacle.
+			if(obstacle instanceof DungeonEntrance) {
+				gc.drawImage(image, 0, 0, obstacle.getWidth(), obstacle.getHeight(), 
+						obstacle.getLocation()[0], obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			}
+			
+			if(!obstacle.destroyed() && !(obstacle instanceof DungeonEntrance)) {
+				gc.drawImage(image, 0,0,obstacle.getWidth(), obstacle.getHeight(), obstacle.getLocation()[0], 
+						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getHeight());
+			}			
 		}
 		
 		
@@ -347,19 +353,6 @@ public class gameView implements Observer{
 				gc.drawImage(playerImage, 0, 0, 29, 24, player.getLocation()[0], player.getLocation()[1], 58, 48);
 			}
 		}		
-		
-		//iterates through the projectiles that are currently on the screen and draws each one.
-		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
-			Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
-			if(!(projectile instanceof BossAttack)) {
-				gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
-					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
-			}
-			else {
-				gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
-						projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
-			}
-		}
 		
 		//iterates through enemies in current area, draws them to screen
 		for(Enemy enemy : enemies) {
@@ -403,6 +396,19 @@ public class gameView implements Observer{
 							gc.strokeLine(enemy.getLocation()[0]+15, enemy.getLocation()[1]+15, 
 									((GameModel) model).getCurrentArea().getBoss().getLocation()[0]+50, ((GameModel) model).getCurrentArea().getBoss().getLocation()[1]+50);
 						}
+				}
+			}
+			
+			//iterates through the projectiles that are currently on the screen and draws each one.
+			for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
+				Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
+				if(!(projectile instanceof BossAttack)) {
+					gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
+						projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
+				}
+				else {
+					gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
+							projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
 				}
 			}
 		}
