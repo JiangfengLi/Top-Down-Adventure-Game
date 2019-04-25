@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.image.Image;
 
 /**
@@ -17,6 +20,7 @@ public class Player extends Character{
 	private Enemy lastEnemy;
 	private int buffTimer;
 	private boolean buffed = false;
+	private List<Item> inventory;
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -41,7 +45,9 @@ public class Player extends Character{
 		hitbox[0] = 100;
 		hitbox[1] = 125;
 		hitboxWidth = 30;
-		hitboxHeight = 25;		
+		hitboxHeight = 25;	
+		
+		inventory = new ArrayList<Item>();
 	}	
 	
 	/**
@@ -148,4 +154,56 @@ public class Player extends Character{
 	public boolean buffed() {
 		return buffed;
 	}
+
+    /**
+     * Get the item from map and store it into inventory	
+     * @param stuff - name of the item to pick
+     * @return true if the item was obtained successfully, false otherwise.
+     */
+	public boolean getItem(Item stuff) {
+		if(inventory.size() >= 3)
+			return false;
+		
+		inventory.add(0, stuff);
+		return true;
+	}
+	
+   /**
+     * Show the item in specific spot of inventory
+     * @param idx - the spot that item belongs to in inventory.
+     * @return A string of itemName.
+     */
+ 	public String showItem(int idx) {
+		if(idx >= inventory.size())
+		  return "empty";
+		
+		return inventory.get(idx).toString();
+	}
+ 	
+    /**
+     * drop the item in specific spot of inventory
+     * @param idx - the spot of item that player want to drop.
+     * @return An item being dropped.
+     */
+ 	public Item dropItem(int idx) {
+		if(idx >= inventory.size())
+		  return null;
+		
+		return inventory.remove(idx);
+	}
+
+    /**
+     * check whether the item is included in specific spot of inventory
+     * @param itemName - the name of item that being checked.
+     * @return true if the inventory contains the item, false otherwise.
+     */
+ 	public boolean dropItem(String itemName) {
+        for(int i = 0; i < inventory.size(); i++) {
+        	if(inventory.get(i).toString().equals(itemName))
+        		return true;
+        }
+		
+		return false;
+	}
+ 	
 }
