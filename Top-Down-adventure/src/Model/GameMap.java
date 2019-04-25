@@ -39,12 +39,12 @@ public class GameMap {
 					}
 				}
 				if(i == 0 || (i==1 && (j==0 || j==1))) {
-					for(int k = 0; k < 20; k++) {
+					for(int k = 0; k < 13; k++) {
 						areaObstacles.add(new Tree(-50, k*50));
 					}
 				}
 				if(i == 2 || (i==0 && (j==0 || j==1))) {
-					for(int k = 0; k < 20; k++) {
+					for(int k = 0; k < 13; k++) {
 						areaObstacles.add(new Tree(949, k*50));
 					}
 				}
