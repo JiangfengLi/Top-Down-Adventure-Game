@@ -638,7 +638,6 @@ public class GameController {
 					player.toggleDamaged();
 					player.loseHP(enemy.getDamage());
 					player.setLastEnemy(enemy);
-					System.out.println(player.getHP());
 				}
 			}
 		}	
@@ -695,35 +694,19 @@ public class GameController {
 			}
 			projectile.updatePosition(x, y);
 			CopyOnWriteArrayList<GameObject> things = new CopyOnWriteArrayList<GameObject>();
+			things.addAll(getArea().getObstacles());
 			
 			//check player attack projectile collision
 			if(!(projectile instanceof BossAttack)) {
 				//grab all of the things an arrow can collide with and iterate through them
-				things.addAll(getArea().getEnemies());
-				things.addAll(getArea().getObstacles());
-				things.add(player);
+				things.addAll(getArea().getEnemies());				
 				for(GameObject obj : things) {
 					
-					if(obj instanceof BossAttack) {
-						if (((BossAttack) projectile).getTimer() > 90){
-							projectiles.remove();
-							break;
-						}
-					}
 					//destroyed obstacles are pathable.
 					if(obj instanceof Obstacle && ((Obstacle) obj).destroyed()) continue;
 					
-					if(projectile instanceof BossAttack && (obj instanceof Player || obj instanceof Obstacle)){
-						projectiles.remove();
-						if(obj instanceof Player) {
-							player.addStall(1);
-							player.loseHP(1);
-						}
-						break;
-					}
-					
 					//if we collide with an object, the projectile disappears
-					else if(projectileCollision(projectile, obj)) {
+					if(projectileCollision(projectile, obj)) {
 						projectiles.remove();
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
@@ -742,6 +725,26 @@ public class GameController {
 						projectiles.remove();
 						break;
 					}
+				}
+			}
+			
+			//check boss attack projectile collision
+			else {
+				things.add(player);
+				for(GameObject obj : things) {
+					if(projectileCollision(projectile, obj)){
+						projectiles.remove();
+						
+						if(obj instanceof Player) {
+							((Player) obj).addStall(1);
+							((Player) obj).loseHP(1);
+						}
+						break;
+					}
+				}
+				if (((BossAttack) projectile).getTimer() > 90){
+					projectiles.remove();
+					break;
 				}
 			}
 		}
