@@ -146,6 +146,8 @@ public class GameController {
 			//if there were no collisions and no area changes, just move the player by the passed in amount
 		}
 		model.updatePlayerPosition(xMovement, yMovement);
+		
+		//checks player collision with loot, correctly changes the right attribute when loot is picked up
 		Iterator<Item> drops = getArea().getLoot().iterator();
 		while(drops.hasNext()) {
 			Item loot = drops.next();
@@ -396,9 +398,10 @@ public class GameController {
 						boss.addPreAttack();
 					}
 					
-					int directional = boss.getBossTimer();
-					if(directional%360 <= 180) {
-						if(directional%360 >= 90 && directional%360 < 270) {
+					//this is all just to set the movement based on the boss' internal timer.
+					int directional = boss.getBossTimer()%360;
+					if(directional <= 180) {
+						if(directional >= 45 && directional < 135) {
 							x = -boss.getSpeed();
 							y = -boss.getSpeed();
 						}
@@ -408,7 +411,7 @@ public class GameController {
 						}
 					}
 					else {
-						if(directional%360 >= 90 && directional%360 < 270) {
+						if(directional >= 225 && directional < 315) {
 							x = boss.getSpeed();
 							y = -boss.getSpeed();
 						}
@@ -730,6 +733,12 @@ public class GameController {
 			
 			//check boss attack projectile collision
 			else {
+				
+				if (((BossAttack) projectile).getTimer() > 90){
+					projectiles.remove();
+					break;
+				}
+				
 				things.add(player);
 				for(GameObject obj : things) {
 					if(projectileCollision(projectile, obj)){
@@ -741,10 +750,6 @@ public class GameController {
 						}
 						break;
 					}
-				}
-				if (((BossAttack) projectile).getTimer() > 90){
-					projectiles.remove();
-					break;
 				}
 			}
 		}

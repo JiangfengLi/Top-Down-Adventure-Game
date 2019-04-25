@@ -81,7 +81,7 @@ public class Boss extends Enemy{
 
 
 	public boolean timeToAttack() {
-		if(attackTimer > 30) {
+		if(attackTimer > 50) {
 			attackTimer = 0;
 			totalAttacks++;
 			if(totalAttacks  >= 4) {
