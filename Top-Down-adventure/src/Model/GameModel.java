@@ -18,7 +18,7 @@ public class GameModel extends Observable {
 	private Area currArea;
 	private GameMap map;
 	private GameMap dungeon;
-	private boolean inDungeon;
+	private boolean inDungeon = false;
 	private int gameClock = 0;
 	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	

@@ -109,6 +109,10 @@ public class GameController {
 						model.toggleInDungeon();
 						model.swapToOverland();
 					}
+					if(obstacle instanceof Door && player.hasBossKey()) {
+						obstacles.remove(obstacle);
+						player.removeBossKey();
+					}
 					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
 							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
 						xMovement = 0;

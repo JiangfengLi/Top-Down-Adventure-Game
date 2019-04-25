@@ -72,6 +72,7 @@ public class GameMap {
 					for(int k=0; k<4; k++) {
 						areaObstacles.add(new Tree(899-(100*k), 610));
 					}
+					areaObstacles.add(new Tree(499, 610));
 				}
 				if(i==1 && j==1) {
 					areaObstacles.add(new Tree(949, -50));
@@ -82,6 +83,8 @@ public class GameMap {
 					for(int k=0; k<4; k++) {
 						areaObstacles.add(new Tree(899-(100*k), -50));
 					}
+					areaObstacles.add(new Tree(499, -50));
+					areaObstacles.add(new Door(400, -16));
 				}
 				if(i==1 && j==2) {
 					areaObstacles.add(new Tree(-50, -50));

@@ -162,4 +162,11 @@ public class Player extends Character{
 	public void giveKey() {
 		smallKey = true;
 	}
+
+	/**
+	 * removes the bosskey from the player's inventory
+	 */
+	public void removeBossKey() {
+		bossKey = false;		
+	}
 }

@@ -46,8 +46,7 @@ public class Boss extends Enemy{
 		idleImage = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		active = false;
 		scaredyCat = false;
-		
-		drops.put(0, new Key(this.location, true));
+		if(!mainBoss) drops.put(0, new Key(this.location, true));
 		lootChance = 100;
 	}
 	
