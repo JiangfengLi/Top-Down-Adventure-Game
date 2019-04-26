@@ -71,7 +71,7 @@ public class gameView implements Observer{
 		makeButton("PLAY NOW!",400,583);
 		overlay = new Overlay();
 		backgroundMusic = new MusicPlayer();
-		backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/Backgroundmusic/titlemusic.wav", 1);
+		backgroundMusic.playMusic("/style/Backgroundmusic/titlemusic.wav", 1);
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
@@ -319,7 +319,7 @@ public class gameView implements Observer{
 		setupMouseClickListeners();
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
-		backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/backgroundmusic/zeldatheme.wav", 0);
+		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
 		backgroundMusic.setVolume(0.4);
 		update(model, controller.getArea());
 	}
@@ -350,7 +350,7 @@ public class gameView implements Observer{
 		//draws the background layer
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
-			backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
 			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
 		}
 		previousCheck  = controller.inDungeon();

@@ -3,6 +3,7 @@ package controller;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -864,13 +865,7 @@ public class GameController {
 	}
 	
 	private String sformat(String s) {
-		s = System.getProperty("user.dir") + "/src/style/soundfx/" + s;
-		try {
-			return new File(s).toURI().toURL().toString();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		URL url = GameController.class.getResource("/style/soundfx/" + s);
+		return url.toString();
 	}
 }
