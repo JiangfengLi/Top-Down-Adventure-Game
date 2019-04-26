@@ -3,8 +3,6 @@ package utils;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
-
 public class MusicPlayer {
 
     private MediaPlayer mediaPlayer;
@@ -17,7 +15,7 @@ public class MusicPlayer {
      */
     public void playMusic(String musicFile, int i) {
         try {
-            Media sound = new Media(new File(musicFile).toURI().toURL().toString());
+            Media sound = new Media(MusicPlayer.class.getResource(musicFile).toString());
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.setCycleCount(i == 0 ? MediaPlayer.INDEFINITE : i);
             mediaPlayer.play();
