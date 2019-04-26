@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * fills fields specific to DPS type enemies
+ * @author Wes Rodgers
+ *
+ */
 public class DPS extends Enemy {
 
 	public DPS(int x, int y) {
@@ -27,9 +32,17 @@ public class DPS extends Enemy {
 		topHeight = 0;
 		idleImage = new Image("/style/dps idle.png");
 		active = false;
-		scaredyCat = true;
+		scaredyCat = false;
 		Arrow arrowDrop = new Arrow(location);
+		Heart heartDrop = new Heart(location);
+		SpeedBuff speedDrop = new SpeedBuff(location);
 		drops.put(0, arrowDrop);
-		lootChance = 100;
+		drops.put(1, arrowDrop);
+		drops.put(2 , arrowDrop);
+		drops.put(3, heartDrop);
+		drops.put(4, heartDrop);
+		drops.put(5 , heartDrop);
+		drops.put(6, speedDrop);
+		lootChance = 30;
 	}
 }

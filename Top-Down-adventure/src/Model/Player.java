@@ -32,8 +32,8 @@ public class Player extends Character{
 		damage = 1;
 		direction = 3;
 		speed = 8;
-		width = 50;
-		height = 50;
+		width = 49;
+		height = 49;
 		location = new int[2];
 		location[0] = 100;
 		location[1] = 100;
@@ -45,8 +45,6 @@ public class Player extends Character{
 		hitbox[0] = 100;
 		hitbox[1] = 125;
 		hitboxWidth = 30;
-		hitboxHeight = 25;	
-		
 		inventory = new ArrayList<Item>();
 	}	
 	
@@ -120,8 +118,7 @@ public class Player extends Character{
 	 * reduces the player's arrow quantity by 1
 	 */
 	public void decrementArrows() {
-		arrowQuantity--;
-		
+		arrowQuantity--;		
 	}
 	
 	/**
@@ -206,4 +203,24 @@ public class Player extends Character{
 		return false;
 	}
  	
+	/**
+	 * gives the player the boss key
+	 */
+	public void giveBossKey() {
+		bossKey = true;
+	}
+
+	/**
+	 * gives the player the regular key
+	 */
+	public void giveKey() {
+		smallKey = true;
+	}
+
+	/**
+	 * removes the bosskey from the player's inventory
+	 */
+	public void removeBossKey() {
+		bossKey = false;		
+	}
 }

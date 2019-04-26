@@ -10,6 +10,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
+/**
+ * Class to make buttons with specific mouse over effects and font/style
+ * 
+ * @author TianZeHu
+ *
+ */
 public class buttonMaker extends Button{
 	
 	private final String OFF_CLICK = "-fx-background-image:url('/style/blue_button04.png');";
@@ -29,9 +35,10 @@ public class buttonMaker extends Button{
 		setStyle(OFF_CLICK);
 		buttonListener();
 	} 
-
 	
-	
+	/**
+	 * sets the click style for the button
+	 */
 	private void setClickedStyle() {
 		setStyle(ON_CLICK);
 		setPrefHeight(44);
@@ -39,12 +46,18 @@ public class buttonMaker extends Button{
 		setLayoutY(getLayoutY()+3);
 	}
 	
+	/**
+	 * sets the release style for the button
+	 */
 	private void setReleasedStyle() {
 		setStyle(OFF_CLICK);
 		setPrefHeight(46);
 		setLayoutY(getLayoutY()-3);
 	}
 	
+	/**
+	 * sets up the listener for the buttons style
+	 */
 	private void buttonListener() {
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 			/**

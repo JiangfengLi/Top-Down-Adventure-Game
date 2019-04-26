@@ -21,7 +21,14 @@ public class Grass extends Obstacle{
 		lastFrame = 9;
 		topImage = false;
 		topHeight = 0;
-		drops.put(0, new Arrow(new int[] {location[0], location[1]}));
+		Arrow arrowDrop = new Arrow(location);
+		Heart heartDrop = new Heart(location);
+		SpeedBuff speedDrop = new SpeedBuff(location);
+		drops.put(0, arrowDrop);
+		drops.put(1, arrowDrop);
+		drops.put(2, heartDrop);
+		drops.put(3, heartDrop);
+		drops.put(4, speedDrop);
 		lootChance = 100;
 	} 
 }

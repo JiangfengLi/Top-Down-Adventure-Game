@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * provides all of the fields necessary for a Tank enemy.
+ * @author Wes Rodgers
+ *
+ */
 public class Tank extends Enemy{
 	
 	public Tank(int x, int y) {
@@ -25,7 +30,16 @@ public class Tank extends Enemy{
 		idleImage = new Image("/style/tank idle.png");
 		active = false;
 		scaredyCat = false;
-		drops.put(0, new Arrow(location));
-		lootChance = 100;
+		Arrow arrowDrop = new Arrow(location);
+		Heart heartDrop = new Heart(location);
+		SpeedBuff speedDrop = new SpeedBuff(location);
+		drops.put(0, arrowDrop);
+		drops.put(1, arrowDrop);
+		drops.put(2 , arrowDrop);
+		drops.put(3, heartDrop);
+		drops.put(4, heartDrop);
+		drops.put(5 , heartDrop);
+		drops.put(6, speedDrop);
+		lootChance = 30;
 	} 
 }

@@ -17,17 +17,35 @@ public class GameModel extends Observable {
 	private Player player;
 	private Area currArea;
 	private GameMap map;
-	private int gameClock = 0; 
+	private GameMap dungeon;
+	private boolean inDungeon = false;
+	private int gameClock = 0;
 	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	
 	public GameModel() { 
 		player = new Player();
 		map = new GameMap();
+		dungeon = new GameMap(true);
 		currArea = map.getStartArea();
 		setChanged();
 		notifyObservers();
 	}
 
+	/**
+	 * returns whether the player is in the dungeon or not
+	 * @return true if we're in a dungeon, false otherwise
+	 */
+	public boolean inDungeon() {
+		return inDungeon;
+	}
+	
+	/**
+	 * toggles the indungeon flag
+	 */
+	public void toggleInDungeon() {
+		inDungeon = !inDungeon;
+	}
+	
 	/**
 	 * getter for the Player
 	 * 
@@ -99,7 +117,13 @@ public class GameModel extends Observable {
 		for(Enemy enemy : currArea.getEnemies()) {
 			enemy.setActive(false);
 		}
-		currArea = map.getArea(x + area[0], y + area[1]);
+		
+		if(inDungeon) {
+			currArea = dungeon.getArea(x + area[0],  y + area[1]);
+		}
+		else {
+			currArea = map.getArea(x + area[0], y + area[1]);
+		}
 		setChanged();
 		notifyObservers(currArea);
 	}
@@ -143,5 +167,39 @@ public class GameModel extends Observable {
 	 */
 	public ArrayList<GameObject> getAnimations() {
 		return animations;
+	}
+
+	/**
+	 * sets our current area to the dungeon map and puts
+	 * our player in the right spot on the map
+	 */
+	public void swapToDungeon() {
+		currArea = dungeon.getArea(0, 0);
+		player.setLocation(400, 60);
+	}
+
+	/**
+	 * sets our current area to the overland map and puts our
+	 * player in the right spot on the map
+	 */
+	public void swapToOverland() {
+		currArea = map.getArea(2, 2);
+		player.setLocation(753, 424);
+	}
+
+	/**
+	 * returns the dungeon's GameMap
+	 * @return the dungeon's GameMap
+	 */
+	public GameMap getDungeonMap() {
+		return dungeon;
+	}
+
+	/**
+	 * returns the overland GameMap
+	 * @return the overland GameMap
+	 */
+	public GameMap getOverlandMap() {
+		return map;
 	}	
 }
