@@ -12,13 +12,14 @@ public class MusicPlayer {
 
     /**
      * Create the MediaPlayer class and play the music file specified by music File
+     * passing in 0 will make it indefinite, any other number is the times to repeat.
      * @param musicFile
      */
-    public void playMusic(String musicFile) {
+    public void playMusic(String musicFile, int i) {
         try {
-            Media sound = new Media(new File(musicFile).toURI().toString());
+            Media sound = new Media(new File(musicFile).toURI().toURL().toString());
             mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setCycleCount(i == 0 ? MediaPlayer.INDEFINITE : i);
             mediaPlayer.play();
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,5 +33,9 @@ public class MusicPlayer {
         if(mediaPlayer != null) {
             mediaPlayer.stop();
         }
+    }
+    
+    public void setVolume(double i) {
+    	mediaPlayer.setVolume(i);
     }
 }
