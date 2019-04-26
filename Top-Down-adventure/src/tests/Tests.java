@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,18 +17,16 @@ class Tests {
 
 	@Test
 	void testDPS() {
-		Enemy dps = new DPS();
 	}
 	
 	@Test
 	void testFlier() {
-		Enemy flier = new Flier();
-		assertTrue(flier.playerIsVisible());
+		
 	}
 	
 	@Test
 	void testTank() {
-		Enemy tank = new Tank();
+		
 	}
 	
 	@Test

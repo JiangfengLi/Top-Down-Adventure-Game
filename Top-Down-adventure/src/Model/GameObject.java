@@ -1,12 +1,15 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 public abstract class GameObject {
 
-	protected String imageFile;
-	protected int[] location;
+	protected Image imageFile;
+	protected int[] location = new int[2];
+	protected int[] oldLocation = new int[2];
 	protected int height;
 	protected int width;
-	protected int[] oldLocation;
+	protected int topHeight;
 	
 	/**
 	 * returns the object's height
@@ -14,7 +17,7 @@ public abstract class GameObject {
 	 */
 	public int getHeight() {
 		return height;
-	}
+	} 
 	
 	/**
 	 * returns the objects width
@@ -30,7 +33,7 @@ public abstract class GameObject {
 	 * 
 	 * @return the object's image file's path.
 	 */
-	public String getImageFile() {
+	public Image getImageFile() {
 		return imageFile;
 	}
 	
@@ -50,18 +53,11 @@ public abstract class GameObject {
 	 * @param e the amount to increment/decrement y coordinate by
 	 */
 	public void updatePosition(double d, double e) {
+		oldLocation[0] = location[0];
+		oldLocation[1] = location[1];
 		location[0] += d;
 		location[1] += e;
 
-	}
-	
-	/**
-	 * gets last known location
-	 * 
-	 * @return the coords of the players last location before update
-	 */
-	public int[] getOldLocation() {
-		return oldLocation;
 	}
 	
 	/**
@@ -72,7 +68,19 @@ public abstract class GameObject {
 	 */
 	public void setLocation(int x, int y) {
 		
+		oldLocation[0] = location[0];
+		oldLocation[1] = location[1];
+		
 		location[0] = x;
 		location[1] = y;
+	}
+
+	/**
+	 * returns the height of the image's top half, the half to be rendered on top
+	 * of player characters to help force perspective
+	 * @return the number of pixels of the image that need to be drawn on top of player characters
+	 */
+	public int getTopHeight() {
+		return topHeight;
 	}
 }

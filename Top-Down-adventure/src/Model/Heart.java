@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 /**
  * extends item, this is a possible enemy drop
  * and restores player health.
@@ -7,9 +9,21 @@ package Model;
  *
  */
 public class Heart extends Item {
+	private int HP;
 	
 	public Heart(int[] location) {
-		this.imageFile = "";
+		this.imageFile = new Image("");
+		this.width = 50;
+		this.width = 50;
 		this.location = location;
+		this.HP = System.nanoTime()%3 > 2 ? 2 : 1;
 	}
+
+	/**
+	 * returns the amount of HP that this drop heals
+	 * @return HP, an integer telling us how much this drops heals for.
+	 */
+	public int getHP() {
+		return HP;
+	} 
 }

@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.image.Image;
+
 /**
  * Class for the player character, stores things about him/her
  * 
@@ -8,33 +10,38 @@ package Model;
  */
 public class Player extends Character{
 	
-	private int arrowQuantity = 3;
+	private int arrowQuantity = 30;
 	private boolean smallKey = false;
 	private boolean bossKey = false;
-	private String imageArray[] = new String[4]; 
+	private boolean damaged = false;
+	private Enemy lastEnemy;
+	private int buffTimer;
+	private boolean buffed = false;
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
 	 * to fit whatever we actually decide on.
 	 */
 	public Player() {
-		this.currentHP = 3;
-		this.maxHP = 3;
+		this.currentHP = 6;
+		this.maxHP = 6;
+		damage = 1;
 		direction = 3;
-		speed = 5;
+		speed = 8;
 		width = 50;
 		height = 50;
 		location = new int[2];
 		location[0] = 100;
 		location[1] = 100;
-		imageArray[0] = "/style/playerSprites/link north.png";
-		imageArray[1] = "/style/playerSprites/link left.png";
-		imageArray[2] = "/style/playerSprites/Link south.png";
-		imageArray[3] = "/style/playerSprites/link right.png";
-		hitbox = new int[3];
-		hitbox[0] = 25;
-		hitbox[1] = 30;
-		hitbox[2] = 25;		
+		imageArray[0] = new Image("/style/playerSprites/link north.png");
+		imageArray[1] = new Image("/style/playerSprites/link left.png");
+		imageArray[2] = new Image("/style/playerSprites/Link south.png");
+		imageArray[3] = new Image("/style/playerSprites/link right.png");
+		hitbox = new int[2];
+		hitbox[0] = 100;
+		hitbox[1] = 125;
+		hitboxWidth = 30;
+		hitboxHeight = 25;		
 	}	
 	
 	/**
@@ -72,8 +79,73 @@ public class Player extends Character{
 		return bossKey;
 	}
 
-	public String[] getImageArray() {
-		// TODO Auto-generated method stub
-		return imageArray;
+	/**
+	 * returns true if the player has been recently damaged, false otherwise
+	 * @return true if the player has been recently damaged, false otherwise
+	 */
+	public boolean damaged() {
+		return damaged;
+	}
+	
+	/**
+	 * toggles the player's damaged boolean
+	 */
+	public void toggleDamaged() {
+		damaged = !damaged;
+	}
+	
+	/**
+	 * returns the last enemy to hit the player
+	 * @return the last enemy that damaged the player
+	 */
+	public Enemy lastEnemy() {
+		return lastEnemy;
+	}
+	
+	/**
+	 * sets the last enemy to hit the player
+	 * @param enemy the last enemy to damage the player
+	 */
+	public void setLastEnemy(Enemy enemy) {
+		lastEnemy = enemy;
+	}
+
+	/**
+	 * reduces the player's arrow quantity by 1
+	 */
+	public void decrementArrows() {
+		arrowQuantity--;
+		
+	}
+	
+	/**
+	 * adds time to the player's speed buff
+	 * @param i the number of ticks to add to the buff timer
+	 */
+	public void addBuff(int i) {
+		if(!buffed) {
+			buffed = true;
+			speed = speed*2;
+		}
+		buffTimer += i;		
+	}
+	
+	/**
+	 * decrements the buffTimer by one.
+	 */
+	public void decrementBuff() {
+		buffTimer--;
+		if(buffTimer == 0) {
+			speed = 8;
+			buffed  = false;
+		}
+	}
+
+	/** 
+	 * returns true when the player is buffed, false otherwise.
+	 * @return true when the player is buffed, false otherwise.
+	 */
+	public boolean buffed() {
+		return buffed;
 	}
 }
