@@ -12,11 +12,12 @@ public class Heart extends Item {
 	private int HP;
 	
 	public Heart(int[] location) {
-		this.imageFile = new Image("");
-		this.width = 50;
-		this.width = 50;
+		this.imageFile = new Image("/style/health.png");
+		this.width = 40;
+		this.height = 45;
 		this.location = location;
 		this.HP = System.nanoTime()%3 > 2 ? 2 : 1;
+		this.topHeight = 0;
 	}
 
 	/**

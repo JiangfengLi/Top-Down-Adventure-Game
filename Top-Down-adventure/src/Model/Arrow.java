@@ -18,6 +18,7 @@ public class Arrow extends Item {
 		this.location = location;
 		this.height = 32;
 		this.width = 30;
+		this.topHeight = 0;
 	}
 	
 	/**
