@@ -57,13 +57,41 @@ public class GameMap {
 				//from here on each if statement determines the stuff
 				//to be put in a single map space
 				if(i==0 && j==0) {
-
+					areaObstacles.add(new Rock(200, 200));
+					areaObstacles.add(new Grass(700, 590));
+					areaEnemies.add(new DPS(499, 333));
 				}
 				if(i==0 && j==1) {
+					for(int x=0; x<9; x++) {
+						areaObstacles.add(new Rock(275, 100 + x*50));
+						areaObstacles.add(new Rock(675, 100 + x*50));
+						if(x!=4) areaObstacles.add(new Rock(275 + x*50, 100));
+						if(x!=4) areaObstacles.add(new Rock(275 + x*50, 500));
+					}
+					for(int x=0; x<5; x++) {
+						if(x!=2) areaObstacles.add(new Rock(375, 200 + x*50));
+						if(x!=2) areaObstacles.add(new Rock(575, 200 + x*50));
+						areaObstacles.add(new Rock(375 + x*50, 200));
+						areaObstacles.add(new Rock(375 + x*50, 400));
+					}
+					areaObstacles.add(new Rock(525, 150));
+					areaObstacles.add(new Rock(325, 350));
+					areaObstacles.add(new Grass(475, 100));
+					areaObstacles.add(new Grass(475, 500));
+					areaObstacles.add(new Grass(375, 300));
+					areaObstacles.add(new Grass(475, 300));
+					areaObstacles.add(new Grass(575, 300));
 					
+					areaEnemies.add(new Flier(100, 300));
+					areaEnemies.add(new Flier(850, 300));
 				}
 				if(i==0 && j==2) {
 					areaObstacles.add(new Tree(949, -50));
+					
+					areaObstacles.add(new Rock(499, 333));
+					areaEnemies.add(new Tank(499, 433));
+					areaEnemies.add(new Flier(100, 590));
+					areaObstacles.add(new Grass(600, 333));
 				}
 				if(i==1 && j==0) {
 					areaEnemies.add(new Boss(700, 200, true));
@@ -86,16 +114,35 @@ public class GameMap {
 					}
 					areaObstacles.add(new Tree(499, -50));
 					areaObstacles.add(new Door(400, -16));
+					
+					areaEnemies.add(new DPS(100, 400));
+					areaEnemies.add(new DPS(899, 400));
+					areaEnemies.add(new Tank(500, 400));
 				}
 				if(i==1 && j==2) {
 					areaObstacles.add(new Tree(-50, -50));
 					areaObstacles.add(new Tree(949, -50));
+					
+					for(int x=0; x<9; x++) {
+						areaObstacles.add(new Rock(499, 100 + 50*x));
+					}
+					
+					areaObstacles.add(new Grass(449, 150));
+					areaObstacles.add(new Grass(549, 150));
+					areaObstacles.add(new Grass(399, 200));
+					areaObstacles.add(new Grass(599, 200));
+					areaObstacles.add(new Grass(349, 250));
+					areaObstacles.add(new Grass(649, 250));
 				}
+				
+				//this is the winning room
 				if(i==2 && j==0) {
 					for(int k=0; k<15; k++) {
 						areaObstacles.add(new Tree(100*k, 616));
 					}
 				}
+				
+				
 				if(i==2 && j==1) {
 					for(int k=0; k<6; k++) {
 						areaObstacles.add(new Tree(100*k, 610));
@@ -103,7 +150,14 @@ public class GameMap {
 					for(int k=0; k<14; k++) {
 						areaObstacles.add(new Tree(100*k, -50));
 					}
+					
+					areaObstacles.add(new Rock(150, 200));
+					areaEnemies.add(new Tank(300, 350));
+					areaObstacles.add(new Rock(600, 450));
+					areaEnemies.add(new Tank(800, 600));
 				}
+				
+				
 				if(i==2 && j==2) {
 					for(int k=0; k<5; k++) {
 						areaObstacles.add(new Tree(100*k, -50));
@@ -113,6 +167,18 @@ public class GameMap {
 						areaObstacles.add(new Tree(500, 50*k));
 					}
 					
+					//left side
+					areaObstacles.add(new Grass(100, 150));
+					areaObstacles.add(new Grass(300, 150));
+					areaObstacles.add(new Grass(100, 550));
+					areaObstacles.add(new Grass(300, 550));
+					areaEnemies.add(new Flier(100, 150));
+					areaEnemies.add(new Flier(300, 150));
+					areaEnemies.add(new Flier(100, 550));
+					areaEnemies.add(new Flier(300, 550));
+					
+					
+					//right side
 					areaObstacles.add(new Rock(750, 525));
 					areaObstacles.add(new Rock(800, 525));
 					areaObstacles.add(new Rock(800, 425));
@@ -149,6 +215,10 @@ public class GameMap {
 						areaObstacles.add(new Rock(0, k*50));
 						areaObstacles.add(new Rock(949, k*50));
 					}
+					
+					areaEnemies.add(new Tank(225, 580));
+					areaEnemies.add(new Tank(800, 560));
+					areaEnemies.add(new DPS(499, 333));
 				}
 				if(i==0 && j==1) {
 					areaObstacles.add(new Rock(949, 0));
@@ -156,6 +226,10 @@ public class GameMap {
 						areaObstacles.add(new Rock(50*k, 616));
 						areaObstacles.add(new Rock(0, k*50));
 					}
+					
+					areaEnemies.add(new Flier(599, 333));
+					areaEnemies.add(new Flier(399, 333));
+					areaEnemies.add(new Tank(499, 433));
 				}
 				if(i==1 && j==0) {
 					areaEnemies.add(new Boss(449, 283, false));
@@ -171,6 +245,9 @@ public class GameMap {
 						areaObstacles.add(new Rock(50*k, 616));
 						areaObstacles.add(new Rock(949, k*50));
 					}
+					areaEnemies.add(new DPS(800, 150));
+					areaEnemies.add(new DPS(599, 300));
+					areaEnemies.add(new DPS(299, 400));
 				}
 				map[i][j] = new Area(areaEnemies, areaObstacles, i, j);
 				
