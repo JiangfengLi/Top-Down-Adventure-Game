@@ -17,12 +17,13 @@ public class ShieldPillar extends Enemy{
 		imageArray[3] = new Image("/style/shield gen.png");
 		direction = 3;
 		this.location = location;
-		hitbox = this.location;
+		hitbox = location;
 		scaredyCat = false;
 		speed = 0;
 		damage = 0;
 		width = 30;
 		height = 30;
+		hitboxHeight = 30;
 		currentHP = 2;
 		maxHP = 2;
 	}
