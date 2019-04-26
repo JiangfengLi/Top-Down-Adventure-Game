@@ -17,7 +17,7 @@ public class GameModel extends Observable {
 	private Player player;
 	private Area currArea;
 	private GameMap map;
-	private int gameClock = 0;
+	private int gameClock = 0; 
 	private ArrayList<GameObject> animations = new ArrayList<GameObject>();
 	
 	public GameModel() { 

@@ -20,7 +20,7 @@ public class Player extends Character{
 	private Enemy lastEnemy;
 	private int buffTimer;
 	private boolean buffed = false;
-	private List<Item> inventory;
+	private List<Item> inventory; 
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed

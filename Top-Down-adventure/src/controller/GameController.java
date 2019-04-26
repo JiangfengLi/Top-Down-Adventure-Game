@@ -147,6 +147,7 @@ public class GameController {
 		}
 		model.updatePlayerPosition(xMovement, yMovement);
 		Iterator<Item> drops = getArea().getLoot().iterator();
+		// check out whether the player is moving towards Dropped items and move item to player's inventory if the player want to pick up
 		while(drops.hasNext()) {
 			Item loot = drops.next();
 			if(collision(getPlayerPosition(), loot)) {
@@ -517,7 +518,7 @@ public class GameController {
 	}
 
 	/**
-	 * removes enemies that are dead from the map
+	 * removes enemies that are dead from the map PS: if it is Boss enemy, it should drops the Key
 	 */
 	public void removeDeadEnemies() {
 		ArrayList<Enemy> dead = new ArrayList<Enemy>();

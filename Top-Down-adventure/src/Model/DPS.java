@@ -19,7 +19,7 @@ public class DPS extends Enemy {
 		hitbox = new int[2];
 		hitboxHeight = 30;
 		hitboxWidth = 30;
-		direction = 3;
+		direction = 3; 
 		imageArray[0] = new Image("/style/dps north.png");
 		imageArray[1] = new Image("/style/dps left.png");
 		imageArray[2] = new Image("/style/dps south.png");
