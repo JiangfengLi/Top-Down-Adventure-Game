@@ -51,7 +51,7 @@ public class Window extends Application{
 				view.checkDeath();
 				/*/////TO-DO//////
 				check player death
-				check win conditions
+				check win conditions 
 				*/
 			}
 		}
