@@ -158,13 +158,14 @@ public abstract class Character extends GameObject{
 	 * @param d the amount to increment/decrement x coordinate by
 	 * @param e the amount to increment/decrement y coordinate by
 	 */
-	public void updatePosition(double d, double e) {
+	public void updatePosition(double x, double y) {
+		
 		if (!stalled){
 			oldLocation[0] = location[0];
 			oldLocation[1] = location[1];
 		}
-		location[0] += d;
-		location[1] += e;
+		location[0] += x;
+		location[1] += y;
 		
 		hitbox[0] = location[0];
 		hitbox[1] = location[1] + height - hitboxHeight;

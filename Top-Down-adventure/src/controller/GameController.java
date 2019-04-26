@@ -291,13 +291,13 @@ public class GameController {
 				
 				//if the player gets too close
 				else {
-					if(distanceToPlayer(enemy) <= 400 && !(enemy instanceof ShieldPillar)) {
+					if(distanceToPlayer(enemy) <= 400) {
 						
 						//activate the enemy and remove the idle animation from the model
 						enemy.activate();
 						if(model.getAnimations().contains(enemy)) {					
 							model.getAnimations().remove(enemy);
-						}
+						}						
 						
 						//finds the point the enemy needs to move to and increments his position towards it based on his speed
 						int[] referencePoint = getPathingTarget(enemy, player);
@@ -312,9 +312,9 @@ public class GameController {
 						if(Math.abs(enemy.getLocation()[1] - referencePoint[1]) < Math.abs(y)) y = y > 0 ?
 							referencePoint[1] - enemy.getLocation()[1] : enemy.getLocation()[1] - referencePoint[1];
 							
-						
 						//knocks the enemy back if they are in a stall
 						if(enemy.stalled()) {
+							
 							enemy.decrementStall();
 							x = -x*4;
 							y = -y*4;
@@ -337,6 +337,7 @@ public class GameController {
 						
 						//if they aren't stalled
 						else {
+							
 							//if the enemy is a scaredy cat, make him run away when his health is under 1/2
 							if(enemy.getHP() <= enemy.getMaxHP()/2 && enemy.willFlee()) {
 								x = -x;
@@ -377,6 +378,7 @@ public class GameController {
 								
 								//if so, make it so he walks around it in the quickest direction.
 								if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
+									
 									switch(enemy.getDirection()){
 										case 1:
 										case 3:

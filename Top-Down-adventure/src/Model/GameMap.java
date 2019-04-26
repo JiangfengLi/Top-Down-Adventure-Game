@@ -57,7 +57,7 @@ public class GameMap {
 				//from here on each if statement determines the stuff
 				//to be put in a single map space
 				if(i==0 && j==0) {
-					
+
 				}
 				if(i==0 && j==1) {
 					

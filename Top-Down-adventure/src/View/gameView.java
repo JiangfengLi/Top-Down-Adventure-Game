@@ -47,7 +47,7 @@ public class gameView implements Observer{
 	private Stage myStage;
 	private boolean gameStarted = false;
 	private Canvas canvas;
-	private Canvas map;
+	private Overlay overlay;
 	
 	private GameController controller;
 	private boolean wPressed, aPressed, sPressed, dPressed;
@@ -63,6 +63,7 @@ public class gameView implements Observer{
 		myStage = new Stage();
 		myStage.setScene(myScene);
 		makeButton("PLAY NOW!",400,583);
+		overlay = new Overlay();
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
@@ -530,6 +531,36 @@ public class gameView implements Observer{
 						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getTopHeight());
 			}
 		}
+		
+		
+		//this last part will make sure to draw the HUD/overlay on top of everything else, as is appropriate 
+		gc.drawImage(overlay.getImage("life"), 0, 0, overlay.getWidth("life"), overlay.getHeight("life"),
+				overlay.getLocation("life")[0], overlay.getLocation("life")[1], overlay.getWidth("life"), overlay.getHeight("life"));
+		
+		gc.drawImage(overlay.getImage("arrow"), 0, 0, overlay.getWidth("arrow"), overlay.getHeight("arrow"),
+				overlay.getLocation("arrow")[0], overlay.getLocation("arrow")[1], overlay.getWidth("arrow"), overlay.getHeight("arrow"));
+		gc.setStroke(Paint.valueOf("WHITE"));
+		gc.strokeText(Integer.toString(player.getArrowQuantity()/10), overlay.getLocation("arrow")[0] + 4, overlay.getLocation("arrow")[1] + 30);
+		gc.strokeText(Integer.toString(player.getArrowQuantity()%10), overlay.getLocation("arrow")[0] + 16, overlay.getLocation("arrow")[1] + 30);
+		
+		gc.drawImage(overlay.getImage("key"), 0, 0, overlay.getWidth("key"), overlay.getHeight("key"),
+				overlay.getLocation("key")[0], overlay.getLocation("key")[1], overlay.getWidth("key"), overlay.getHeight("key"));
+		gc.strokeText(Integer.toString(player.hasBossKey() ? 1 : 0), overlay.getLocation("key")[0] + 6, overlay.getLocation("key")[1] + 34);
+		
+		for(int i=0; i<3; i++) {
+			gc.drawImage(overlay.getImage("empty"), 0, 0, overlay.getWidth("heart"), overlay.getHeight("heart"),
+					overlay.getLocation("heart")[0] + i*30, overlay.getLocation("heart")[1], overlay.getWidth("heart"), overlay.getHeight("heart"));
+			if(player.getHP() >= i*2 + 1) {
+				gc.drawImage(overlay.getImage("half"), 0, 0, overlay.getWidth("heart"), overlay.getHeight("heart"),
+					overlay.getLocation("heart")[0] + i*30, overlay.getLocation("heart")[1], overlay.getWidth("heart"), overlay.getHeight("heart"));
+			}
+			if(player.getHP() >= i*2 + 2) {
+				gc.drawImage(overlay.getImage("full"), 0, 0, overlay.getWidth("heart"), overlay.getHeight("heart"),
+					overlay.getLocation("heart")[0] + i*30, overlay.getLocation("heart")[1], overlay.getWidth("heart"), overlay.getHeight("heart"));
+			}
+		}
+		
+		
 	}
 
 	/**
