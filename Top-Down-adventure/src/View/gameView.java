@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,9 +27,11 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import utils.MusicPlayer;
 
 /**
  * View part of the MVC design pattern. This takes in all
@@ -57,6 +60,9 @@ public class gameView implements Observer{
 	private Image bg = new Image("/style/background.png");
 	private Image dungeonBg = new Image("/style/dungeon bg.png");
 	
+	private MusicPlayer backgroundMusic;
+	private boolean previousCheck = false;
+	
 	public gameView() {
 		myPane = new AnchorPane();
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
@@ -64,6 +70,8 @@ public class gameView implements Observer{
 		myStage.setScene(myScene);
 		makeButton("PLAY NOW!",400,583);
 		overlay = new Overlay();
+		backgroundMusic = new MusicPlayer();
+		backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/Backgroundmusic/titlemusic.wav", 1);
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
@@ -310,6 +318,9 @@ public class gameView implements Observer{
 		setupMovementListeners();
 		setupMouseClickListeners();
 		model.addObserver(this);
+		backgroundMusic.stopMusic();
+		backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/backgroundmusic/zeldatheme.wav", 0);
+		backgroundMusic.setVolume(0.4);
 		update(model, controller.getArea());
 	}
 
@@ -321,6 +332,13 @@ public class gameView implements Observer{
 	@Override
 	public void update(Observable model, Object area) {
 		
+		Iterator<AudioClip> clips = controller.getSoundFX().iterator();
+		while(clips.hasNext()) {
+			AudioClip a = clips.next();
+			a.play();
+			clips.remove();			
+		}
+		
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
@@ -330,6 +348,12 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		
 		//draws the background layer
+		if(previousCheck != controller.inDungeon()) {
+			backgroundMusic.stopMusic();
+			backgroundMusic.playMusic(System.getProperty("user.dir") + "/src/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
+		}
+		previousCheck  = controller.inDungeon();
 		gc.drawImage(controller.inDungeon() ? dungeonBg : bg, 0, 0, WIDTH, HEIGHT);		
 		
 		//this should be obvious, but the draw order here is important because it helps to force perspective.

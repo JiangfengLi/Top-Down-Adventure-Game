@@ -1,11 +1,15 @@
 
 package controller;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import Model.*;
 import Model.Character;
+import javafx.scene.media.AudioClip;
 
 /**
  * The controller part of the MVC paradigm for the game.
@@ -18,6 +22,7 @@ public class GameController {
 
 	private GameModel model;
 	private Player player;
+	private ArrayList<AudioClip> soundfx = new ArrayList<AudioClip>();
 	
 	public GameController() {
 		this.model = new GameModel();
@@ -110,6 +115,8 @@ public class GameController {
 						model.swapToOverland();
 					}
 					if(obstacle instanceof Door && player.hasBossKey()) {
+						soundfx.add(new AudioClip(sformat("LTTP_Door_Unlock.wav")));
+						soundfx.add(new AudioClip(sformat("LTTP_Door.wav")));
 						obstacles.remove(obstacle);
 						player.removeBossKey();
 					}
@@ -174,6 +181,9 @@ public class GameController {
 		while(drops.hasNext()) {
 			Item loot = drops.next();
 			if(collision(getPlayerPosition(), loot)) {
+				if(!(loot instanceof Key)) {
+					soundfx.add(new AudioClip(sformat("LTTP_Item.wav")));
+				}
 				if(loot instanceof Arrow) {
 					player.addArrows(((Arrow) loot).getQuantity());
 				}
@@ -184,6 +194,7 @@ public class GameController {
 					player.addBuff(200);
 				}
 				if(loot instanceof Key) {
+					soundfx.add(new AudioClip(sformat("LTTP_Get_Key_StereoL.wav")));
 					if(((Key)loot).isBossKey()) {
 						player.giveBossKey();
 					}
@@ -499,6 +510,8 @@ public class GameController {
 		//doesn't let us swing if we have attacked or been damaged recently
 		if(!playerStalled()) {
 			
+			soundfx.add(new AudioClip(sformat("LTTP_Sword1.wav")));
+			
 			//add a stall and create the sword swing animation
 			player.addStall(6);
 			model.addAnimation(new PlayerSwing(player.getDirection()));
@@ -516,8 +529,12 @@ public class GameController {
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
 					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
+						soundfx.add(new AudioClip(sformat("LTTP_Enemy_Hit.wav")));
 						enemy.loseHP(player.getDamage());
 						enemy.addStall(5);
+					}
+					else {
+						soundfx.add(new AudioClip(sformat("LTTP_Sword_Tap.wav")));
 					}
 				}
 			}
@@ -601,6 +618,7 @@ public class GameController {
 	public void bowAttack() {
 		//doesn't let us attack if we have attacked or been damaged recently
 		if(!playerStalled()) {
+			soundfx.add(new AudioClip(sformat("LTTP_Arrow_Shoot.wav")));
 			
 			//add in the stall and the new bow shot animation
 			player.addStall(5);
@@ -611,8 +629,7 @@ public class GameController {
 				getArea().addProjectile(new ArrowShot(player.getDirection(), getPlayerPosition()));
 				player.decrementArrows();
 			}
-		}
-		
+		}		
 	}
 
 	/**
@@ -624,6 +641,7 @@ public class GameController {
 		//gathers up all dead enemies
 		for(Enemy enemy : getArea().getEnemies()) {
 			if(enemy.isDead()) {
+				soundfx.add(new AudioClip(sformat("LTTP_Enemy_Kill.wav")));
 				if(enemy.didLootDrop()) getArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
 				if(enemy instanceof ShieldPillar) {
@@ -674,6 +692,7 @@ public class GameController {
 				if(!player.damaged()){
 					player.addStall(4);
 					player.toggleDamaged();
+					soundfx.add(new AudioClip(sformat("LTTP_Link_Hurt.wav")));
 					player.loseHP(enemy.getDamage());
 					player.setLastEnemy(enemy);
 				}
@@ -745,13 +764,18 @@ public class GameController {
 					
 					//if we collide with an object, the projectile disappears
 					if(projectileCollision(projectile, obj)) {
+						if(!(obj instanceof Enemy)) soundfx.add(new AudioClip(sformat("LTTP_Arrow_Hit.wav")));
 						projectiles.remove();
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
 						if(obj instanceof Enemy) {
 							if(!(obj instanceof Boss) || !((Boss) obj).shielded()) {
+								soundfx.add(new AudioClip(sformat("LTTP_Arrow_Hit.wav")));
 								((Enemy) obj).addStall(1);
 								((Enemy) obj).loseHP(1); 
+							}
+							else {
+								soundfx.add(new AudioClip(sformat("LTTP_Sword_Tap.wav")));
 							}
 						}
 						break;
@@ -780,6 +804,7 @@ public class GameController {
 						projectiles.remove();
 						
 						if(obj instanceof Player) {
+							soundfx.add(new AudioClip(sformat("LTTP_Link_Hurt.wav")));
 							((Player) obj).addStall(1);
 							((Player) obj).loseHP(1);
 						}
@@ -832,5 +857,20 @@ public class GameController {
 	 */
 	public GameMap getOverlandMap() {
 		return model.getOverlandMap();
+	}
+
+	public ArrayList<AudioClip> getSoundFX() {
+		return soundfx;
+	}
+	
+	private String sformat(String s) {
+		s = System.getProperty("user.dir") + "/src/style/soundfx/" + s;
+		try {
+			return new File(s).toURI().toURL().toString();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

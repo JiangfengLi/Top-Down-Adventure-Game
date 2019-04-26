@@ -17,7 +17,7 @@ public class MusicPlayer {
      */
     public void playMusic(String musicFile, int i) {
         try {
-            Media sound = new Media(new File(musicFile).toURI().toString());
+            Media sound = new Media(new File(musicFile).toURI().toURL().toString());
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.setCycleCount(i == 0 ? MediaPlayer.INDEFINITE : i);
             mediaPlayer.play();
@@ -33,5 +33,9 @@ public class MusicPlayer {
         if(mediaPlayer != null) {
             mediaPlayer.stop();
         }
+    }
+    
+    public void setVolume(double i) {
+    	mediaPlayer.setVolume(i);
     }
 }
