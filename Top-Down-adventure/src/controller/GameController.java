@@ -708,7 +708,7 @@ public class GameController {
 		//iterate through the projectiles
 		Iterator<Character> projectiles = getArea().getProjectiles().iterator();
 		while(projectiles.hasNext()) {
-			Character projectile = projectiles.next();
+			Character projectile = projectiles.next(); 
 			int x = 0;
 			int y = 0;
 			
