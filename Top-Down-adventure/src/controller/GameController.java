@@ -385,9 +385,29 @@ public class GameController {
 							
 							//iterate through the obstacles to see if the enemy will run into them
 							for(Obstacle obs : getArea().getObstacles()) {
+								int[] futureX = new int[2];
+								int[] futureY = new int[2];
 								
+								futureX[0] = enemy.getLocation()[0] + x;
+								futureX[1] = enemy.getLocation()[1];
+								futureY[0] = enemy.getLocation()[0];
+								futureY[1] = enemy.getLocation()[1] + y;
+								if(!(enemy instanceof Flier)) {
+									if(collision(futureX, obs) && y == 0) {
+										y = enemy.getSpeed();
+									}
+									else if(collision(futureY, obs) && x == 0) {
+										x = enemy.getSpeed();
+									}
+									if(collision(futureX, obs)) {
+										x = 0;
+									}
+									if(collision(futureY, obs)) {
+										y = 0;
+									}
+								}
 								//if so, make it so he walks around it in the quickest direction.
-								if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
+								/*if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
 									
 									switch(enemy.getDirection()){
 										case 1:
@@ -403,7 +423,7 @@ public class GameController {
 											else y = -enemy.getSpeed();
 											break;
 									}
-								}
+								}*/
 							}
 							enemy.updatePosition(x, y);
 						}
