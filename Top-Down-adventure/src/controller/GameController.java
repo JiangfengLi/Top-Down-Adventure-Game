@@ -119,20 +119,20 @@ public class GameController {
 						obstacles.remove(obstacle);
 						player.removeBossKey();
 					}
-					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
+					
+					int[] futureX = new int[2];
+					int[] futureY = new int[2];
+					futureX[0] = getPlayerPosition()[0] + xMovement;
+					futureX[1] = getPlayerPosition()[1];
+					futureY[0] = getPlayerPosition()[0];
+					futureY[1] = getPlayerPosition()[1] + yMovement;
+					
+					if(collision(futureX, obstacle)) {
 						xMovement = 0;
 					}
-					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + player.getWidth() > obstacle.getLocation()[0]) {
-						xMovement = 0;
-					}
-					if(futurePosition[1] < obstacle.getLocation()[1] + obstacle.getTopHeight() && 
-							futurePosition[1] + player.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+					if(collision(futureY, obstacle)) {
 						yMovement = 0;
-					}
-					else {
-						yMovement = 0;
-					}
+					}					 
 				}
 			}
 			
