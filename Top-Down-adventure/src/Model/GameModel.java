@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 
 /**
@@ -93,6 +94,14 @@ public class GameModel extends Observable {
 		int x = currArea.getCoords()[0];
 		int y = currArea.getCoords()[1];
 		
+		Area old = currArea;
+		if(inDungeon) {
+			currArea = dungeon.getArea(x + area[0],  y + area[1]);
+		}
+		else {
+			currArea = map.getArea(x + area[0], y + area[1]);
+		}
+		
 		//when we change screens, first remove all animations on screen
 		ArrayList<GameObject> toRemove = new ArrayList<GameObject>();
 		for(GameObject o : getAnimations()) {
@@ -102,28 +111,23 @@ public class GameModel extends Observable {
 		
 		//then remove all loot objects
 		toRemove = new ArrayList<GameObject>();
-		for(GameObject o : currArea.getLoot()) {
+		for(GameObject o : old.getLoot()) {
 			toRemove.add(o);
 		}
-		currArea.getLoot().removeAll(toRemove);
+		old.getLoot().removeAll(toRemove);
 		
 		//finally, remove all projectiles
 		toRemove = new ArrayList<GameObject>();
-		for(GameObject proj : currArea.getProjectiles()) {
+		for(GameObject proj : old.getProjectiles()) {
 			toRemove.add(proj);
 		}
 		currArea.getProjectiles().removeAll(toRemove);
 		
-		for(Enemy enemy : currArea.getEnemies()) {
+		for(Enemy enemy : old.getEnemies()) {
 			enemy.setActive(false);
 		}
 		
-		if(inDungeon) {
-			currArea = dungeon.getArea(x + area[0],  y + area[1]);
-		}
-		else {
-			currArea = map.getArea(x + area[0], y + area[1]);
-		}
+		
 		setChanged();
 		notifyObservers(currArea);
 	}
@@ -174,6 +178,11 @@ public class GameModel extends Observable {
 	 * our player in the right spot on the map
 	 */
 	public void swapToDungeon() {
+		Iterator<GameObject> itr = getAnimations().iterator();
+		while(itr.hasNext()) {
+			itr.next();
+			itr.remove();
+		}
 		currArea = dungeon.getArea(0, 0);
 		player.setLocation(400, 60);
 	}

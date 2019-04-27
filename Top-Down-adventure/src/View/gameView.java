@@ -68,6 +68,7 @@ public class gameView implements Observer{
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
 		myStage = new Stage();
 		myStage.setScene(myScene);
+		
 		makeButton("PLAY NOW!",400,583);
 		overlay = new Overlay();
 		backgroundMusic = new MusicPlayer();
@@ -115,18 +116,20 @@ public class gameView implements Observer{
 	 * @param y y-coordinate
 	 */
 	private void makeButton(String text, int x, int y) {
-		buttonMaker button = new buttonMaker(text);
+		Button button = new Button("Play");
 		myPane.getChildren().add(button);
+		button.setPrefWidth(190);
+		button.setPrefHeight(46);
+		button.setLayoutX(400);
+		button.setLayoutY(583);
 		setClicked(button);
-		button.setLayoutX(x);
-		button.setLayoutY(y);
 	}
 	
 	/**
 	 * sets up the listener for the initial button to start the game
 	 * @param button the button passed in
 	 */
-	public void setClicked(buttonMaker button) {
+	public void setClicked(Button button) {
 		button.setOnMouseReleased((e)->{
 			startGame();
 		});
@@ -342,7 +345,7 @@ public class gameView implements Observer{
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
-		CopyOnWriteArrayList<Enemy> enemies = ((Area) area).getEnemies();
+		CopyOnWriteArrayList<Enemy> enemies = ((Area) area).getEnemies();		
 		
 		//clears the old screen
 		gc.clearRect(0, 0, WIDTH, HEIGHT);

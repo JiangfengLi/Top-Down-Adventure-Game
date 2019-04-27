@@ -71,10 +71,10 @@ public class GameController {
 			//if he is still in the stall that caused the damaged flag, he is experiencing knockback.
 			if(playerStalled()) {
 				Enemy attacker = player.lastEnemy();
-				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*4 : 0;
-				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*4 : 0;
-				yMovement = attacker.getLocation()[1] > getPlayerPosition()[1] ? -player.getSpeed()*4 : 0;
-				yMovement += attacker.getLocation()[1] < getPlayerPosition()[1] ? player.getSpeed()*4 : 0;
+				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*2 : 0;
+				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*2 : 0;
+				yMovement = attacker.getLocation()[1] > getPlayerPosition()[1] ? -player.getSpeed()*2 : 0;
+				yMovement += attacker.getLocation()[1] < getPlayerPosition()[1] ? player.getSpeed()*2 : 0;
 				
 				//if the knockback would knock him off screen, remove that directions movement.
 				if(getPlayerPosition()[0] + xMovement < 0) xMovement = 0;
@@ -689,7 +689,8 @@ public class GameController {
 				//if the player hasn't been damaged recently, stall him, decrement his hp, 
 				//and set a field to store which the last enemy to hit him was to help with simpler knockback calculations
 				if(!player.damaged()){
-					player.addStall(4);
+					player.addStall(5);
+					enemy.addStall(2);
 					player.toggleDamaged();
 					soundfx.add(new AudioClip(sformat("LTTP_Link_Hurt.wav")));
 					player.loseHP(enemy.getDamage());
