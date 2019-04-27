@@ -323,7 +323,7 @@ public class gameView implements Observer{
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
 		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
-		backgroundMusic.setVolume(0.4);
+		backgroundMusic.setVolume(0.2);
 		update(model, controller.getArea());
 	}
 
@@ -354,7 +354,7 @@ public class gameView implements Observer{
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
 			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
-			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
+			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.2);
 		}
 		previousCheck  = controller.inDungeon();
 		gc.drawImage(controller.inDungeon() ? dungeonBg : bg, 0, 0, WIDTH, HEIGHT);		
