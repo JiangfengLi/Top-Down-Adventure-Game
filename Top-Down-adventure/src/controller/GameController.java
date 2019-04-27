@@ -62,14 +62,14 @@ public class GameController {
 		
 		//if the player is stalled, decrement his stall
 		if(playerStalled()) player.decrementStall();
-		
+		if(player.getDamageStall() > 0) player.decrementDamageStall();
 		if(player.buffed()) player.decrementBuff();
 		
 		//check to see if the player has been damaged recently
 		if(player.damaged()) {
 		
 			//if he is still in the stall that caused the damaged flag, he is experiencing knockback.
-			if(playerStalled()) {
+			if(player.getDamageStall() > 0) {
 				Enemy attacker = player.lastEnemy();
 				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*2 : 0;
 				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*2 : 0;
@@ -88,13 +88,13 @@ public class GameController {
 		}
 		
 		//if the player is stalled and it wasn't because he took damage, then he has no movement.
-		if(playerStalled() && !player.damaged()) {
+		if(playerStalled()) {
 			xMovement = 0;
 			yMovement = 0;
 		}
 		
 		//if the player isn't stalled, or if he is stalled but he took damage
-		if(!playerStalled() || player.damaged()) {
+		if(!playerStalled()) {
 		
 			Area curr = getArea();
 			CopyOnWriteArrayList<Obstacle> obstacles = curr.getObstacles();
@@ -406,24 +406,6 @@ public class GameController {
 										y = 0;
 									}
 								}
-								//if so, make it so he walks around it in the quickest direction.
-								/*if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
-									
-									switch(enemy.getDirection()){
-										case 1:
-										case 3:
-											y=0;
-											if(enemy.getLocation()[0] > obs.getLocation()[0] + obs.getWidth()/2) x = enemy.getSpeed();
-											else x = -enemy.getSpeed();
-											break;
-										case 2:
-										case 4:
-											x=0;
-											if(enemy.getLocation()[1] > obs.getLocation()[1] + obs.getHeight()/2) y = enemy.getSpeed();
-											else y = -enemy.getSpeed();
-											break;
-									}
-								}*/
 							}
 							enemy.updatePosition(x, y);
 						}
@@ -713,11 +695,11 @@ public class GameController {
 				//if the player hasn't been damaged recently, stall him, decrement his hp, 
 				//and set a field to store which the last enemy to hit him was to help with simpler knockback calculations
 				if(!player.damaged()){
-					player.addStall(5);
 					enemy.addStall(2);
 					player.toggleDamaged();
 					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
 					player.loseHP(enemy.getDamage());
+					player.addDamageStall(4);
 					player.setLastEnemy(enemy);
 				}
 			}
@@ -829,7 +811,7 @@ public class GameController {
 						
 						if(obj instanceof Player) {
 							soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
-							((Player) obj).addStall(1);
+							((Player) obj).addDamageStall(1);
 							((Player) obj).loseHP(1);
 						}
 						break;
