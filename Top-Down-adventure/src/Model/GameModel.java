@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -12,8 +13,9 @@ import java.util.Observable;
  * @author Wes Rodgers
  */
 
-public class GameModel extends Observable {
+public class GameModel extends Observable implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private Player player;
 	private Area currArea;
 	private GameMap map;
@@ -31,6 +33,15 @@ public class GameModel extends Observable {
 		notifyObservers();
 	}
 
+	public GameMap getMap(){
+		return map;
+	}
+	
+	public GameMap getDungeon() {
+		return dungeon;
+	}
+	
+	
 	/**
 	 * returns whether the player is in the dungeon or not
 	 * @return true if we're in a dungeon, false otherwise

@@ -866,4 +866,11 @@ public class GameController {
 		URL url = GameController.class.getResource("/style/soundfx/" + s);
 		return url.toString();
 	}
+	public GameModel getModel() {
+		return model;
+	}
+	
+	public void setModel(GameModel model) {
+		this.model = model;
+	}
 }
