@@ -23,7 +23,7 @@ public abstract class Obstacle extends GameObject {
 	/** 
 	 * Getter for the enemy's drop table
 	 * 
-	 * @return a HashMap mapping the item as a key and a float representing drop chance as the value
+	 * @return a HashMap mapping the item as a value and a float representing drop chance as the key
 	 */
 	public HashMap<Integer, Item> getDrops() {
 		return this.drops;

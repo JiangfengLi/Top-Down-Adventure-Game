@@ -331,14 +331,14 @@ public class gameView implements Observer{
 	 */
 	@Override
 	public void update(Observable model, Object area) {
-		
+		// update the sound effect of objects
 		Iterator<AudioClip> clips = controller.getSoundFX().iterator();
 		while(clips.hasNext()) {
 			AudioClip a = clips.next();
 			a.play();
 			clips.remove();			
 		}
-		
+		// get the players, obstacles and enemies
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
@@ -348,6 +348,8 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		
 		//draws the background layer
+		
+		// check whether the player move into or out Dungeon and change the beckground music if the players move to different map layout
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
 			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
@@ -597,7 +599,7 @@ public class gameView implements Observer{
 
 	/**
 	 * returns whether the game has started or not
-	 * @return
+	 * @return true if the game has been started, false otherwise.
 	 */
 	public boolean gameStarted() {
 		return gameStarted;
@@ -615,7 +617,6 @@ public class gameView implements Observer{
 	 */
 	public void updateEnemyCollision() {
 		controller.enemyAttack();
-		
 	}
 
 	/**
