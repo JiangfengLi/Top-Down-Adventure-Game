@@ -10,10 +10,6 @@ import java.util.HashMap;
  *
  */
 public abstract class Enemy extends Character{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected HashMap<Integer, Item> drops = new HashMap<Integer, Item>();
 	protected int lootChance;

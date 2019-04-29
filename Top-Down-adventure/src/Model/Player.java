@@ -7,10 +7,6 @@ package Model;
  *
  */
 public class Player extends Character{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int arrowQuantity = 30;
 	private boolean smallKey = false;

@@ -7,10 +7,6 @@ package Model;
  *
  */
 public class Door extends Obstacle {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Door(int x, int y){

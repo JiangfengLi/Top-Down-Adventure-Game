@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class Tank extends Enemy{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Tank(int x, int y) {

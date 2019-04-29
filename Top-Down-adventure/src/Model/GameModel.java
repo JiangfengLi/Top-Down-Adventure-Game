@@ -33,15 +33,6 @@ public class GameModel extends Observable implements Serializable{
 		setChanged();
 		notifyObservers();
 	}
-
-	public GameMap getMap(){
-		return map;
-	}
-	
-	public GameMap getDungeon() {
-		return dungeon;
-	}
-	
 	
 	/**
 	 * returns whether the player is in the dungeon or not

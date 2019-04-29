@@ -8,10 +8,6 @@ package Model;
  *
  */
 public class Tree extends Obstacle{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Tree(int x, int y) {

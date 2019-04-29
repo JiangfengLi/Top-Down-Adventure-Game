@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class ShieldPillar extends Enemy{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ShieldPillar(int[] location) {

@@ -13,6 +13,7 @@ import javafx.scene.media.AudioClip;
 /**
  * The controller part of the MVC paradigm for the game.
  * Provides methods to access and modify various parts of the model.
+ * Can be constructed from scratch or from an existing GameModel
  * 
  * @author Wes Rodgers
  *
@@ -865,19 +866,30 @@ public class GameController {
 		return model.getOverlandMap();
 	}
 
+	/**
+	 * returns a list of soundfx that need played
+	 * @return
+	 */
 	public ArrayList<AudioClip> getSoundFX() {
 		return soundfx;
 	}
 	
+	/**
+	 * formats a passed in string as a URL string to be
+	 * used in getting audio resources
+	 * @param s the string representing the audio clip's path relative to the project src folder
+	 * @return the url string representing the string's location
+	 */
 	private String sformat(String s) {
 		URL url = GameController.class.getResource(s);
 		return url.toString();
 	}
+	
+	/**
+	 * getter for the GameModel
+	 * @return the GameModel
+	 */
 	public GameModel getModel() {
 		return model;
-	}
-	
-	public void setModel(GameModel model) {
-		this.model = model;
 	}
 }

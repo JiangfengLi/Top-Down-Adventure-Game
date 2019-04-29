@@ -3,6 +3,14 @@ package utils;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+/**
+ * Wrapper class for JavaFX MediaPlayer. Provides
+ * methods for starting and stopping music files when
+ * given a string representing the relative file path
+ * to the audio.
+ * @author JiaZhuoMi, Wes Rodgers
+ *
+ */
 public class MusicPlayer {
 
     private MediaPlayer mediaPlayer;
@@ -33,6 +41,10 @@ public class MusicPlayer {
         }
     }
     
+    /**
+     * sets the music's volume 
+     * @param i the percentage to set the volume to 
+     */
     public void setVolume(double i) {
     	mediaPlayer.setVolume(i);
     }

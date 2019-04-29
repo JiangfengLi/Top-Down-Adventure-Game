@@ -8,10 +8,6 @@ package Model;
  *
  */
 public class Grass extends Obstacle{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Grass(int x, int y) {

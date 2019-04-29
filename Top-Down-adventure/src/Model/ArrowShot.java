@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class ArrowShot extends Character {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ArrowShot(int direction, int[] location) {

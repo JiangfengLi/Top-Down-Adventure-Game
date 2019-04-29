@@ -7,10 +7,6 @@ package Model;
  *
  */
 public class PlayerSwing extends Character {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public PlayerSwing(int direction) {

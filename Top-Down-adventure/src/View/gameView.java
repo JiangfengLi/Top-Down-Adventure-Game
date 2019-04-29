@@ -39,7 +39,7 @@ import utils.MusicPlayer;
  * the data given by the model and updates what the player sees. It also listens
  * for player input and passes that to the controller as appropriate.
  * 
- * @author Wes Rodgers
+ * @author Wes Rodgers, TianZeHu
  *
  */
 public class gameView implements Observer{
@@ -196,6 +196,9 @@ public class gameView implements Observer{
 		
 	}
 	
+	/**
+	 * Pulls up the game-menu
+	 */
 	private void invokMenu() {
 		Scene newScene = constructMenu();
 		newScene.setOnKeyPressed((e)->{
@@ -302,6 +305,10 @@ public class gameView implements Observer{
 		});
 	}
 	
+	/**
+	 * Constructs the game-menu's scene and returns it
+	 * @return the game menu's scene
+	 */
 	private Scene constructMenu() {
 		buttonMaker resume = new buttonMaker("RESUME");
 		buttonMaker exit = new buttonMaker("EXIT");
@@ -348,9 +355,8 @@ public class gameView implements Observer{
 		se.setLayoutX(WIDTH/2-100);
 		se.setLayoutY(400);
 		se.setOnAction((e)->{
-			Data data = new Data(controller.getModel());
 			try {
-				GameResource.saveGame(data, "save.dat");
+				GameResource.saveGame(controller.getModel(), "save.dat");
 				System.out.println("saved!");
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -370,14 +376,10 @@ public class gameView implements Observer{
 		load.setLayoutX(WIDTH/2-100);
 		load.setLayoutY(600);
 		load.setOnAction((e)-> {
-			Data data = (Data) GameResource.loadGame("save.dat");
-			startGame((GameModel) data.getModel());
+			startGame((GameModel) GameResource.loadGame("save.dat"));
 			animationTimer.start();			
-			
-			//GameController control = new GameController(data.getModel());
 		});
 		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
-		//scene1.setFill(Color.BLUE);
 		Image im = new Image("/style/background.png");
 		layout.setBackground(new Background(new BackgroundImage(im,BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		return scene1;

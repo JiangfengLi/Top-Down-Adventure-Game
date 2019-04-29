@@ -3,10 +3,6 @@ package Model;
 import java.io.Serializable;
 
 public abstract class GameObject implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected int[] location = new int[2];
 	protected int[] oldLocation = new int[2];

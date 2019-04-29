@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Wrapper class providing static methods for writing and reading saveGame to file.
+ * @author TianZeHu
+ *
+ */
 public class GameResource {
 	public static void saveGame(Serializable serl, String fname) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get(fname)));

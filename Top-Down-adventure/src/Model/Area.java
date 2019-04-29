@@ -13,9 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  */
 public class Area implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private CopyOnWriteArrayList<Obstacle> obstacles;
 	private CopyOnWriteArrayList<Enemy> enemies;

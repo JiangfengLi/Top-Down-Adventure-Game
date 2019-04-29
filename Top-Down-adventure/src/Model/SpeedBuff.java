@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class SpeedBuff extends Item{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public SpeedBuff(int[] location) {

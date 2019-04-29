@@ -7,10 +7,6 @@ package Model;
  *
  */
 public class BowShot extends Character {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public BowShot(int direction) {

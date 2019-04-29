@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class DPS extends Enemy {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public DPS(int x, int y) {		

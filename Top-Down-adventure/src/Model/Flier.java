@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class Flier extends Enemy {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Flier(int x, int y) {
@@ -17,7 +13,6 @@ public class Flier extends Enemy {
 		maxHP = 1;
 		damage = 1;
 		speed = 3; 
-		
 		location[0] = x;
 		location[1] = y;
 		width = 30;

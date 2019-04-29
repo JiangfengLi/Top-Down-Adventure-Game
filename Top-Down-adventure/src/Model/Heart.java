@@ -8,9 +8,6 @@ package Model;
  *
  */
 public class Heart extends Item {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int HP;
 	

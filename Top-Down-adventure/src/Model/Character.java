@@ -6,10 +6,6 @@ package Model;
  *
  */
 public abstract class Character extends GameObject{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected int currentHP;
 	protected int maxHP;

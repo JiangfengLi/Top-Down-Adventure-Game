@@ -8,10 +8,6 @@ package Model;
  *
  */
 public class Arrow extends Item {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public int quantity;
 	

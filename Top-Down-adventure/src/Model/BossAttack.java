@@ -6,9 +6,6 @@ package Model;
  *
  */
 public class BossAttack extends Character {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public int timer = 0;
 	public Player target;

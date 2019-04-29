@@ -7,10 +7,6 @@ package Model;
  *
  */
 public class Rock extends Obstacle {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Rock(int x, int y) {

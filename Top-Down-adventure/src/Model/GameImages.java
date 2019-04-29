@@ -2,6 +2,15 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * Single class to hold Images for all game objects, that way we can still access them without
+ * having to waste massive amounts of overhead creating them 60/second. This way we also don't have to waste memory
+ * saving an individual copy of the object for each instance of the object, or worry about serializing them via pixelgrabs 
+ * when we save. Honestly, I maybe should've just written this as an enum or something, not sure how that would work memory-wise
+ * as far as creating the images goes though and this was mainly a work around to allow us to save the game.
+ * @author Wes Rodgers
+ *
+ */
 public class GameImages {
 	
 	public Image[] player = new Image[4];	

@@ -6,10 +6,6 @@ package Model;
  *
  */
 public class DungeonEntrance extends Obstacle{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public DungeonEntrance(int x, int y) {
