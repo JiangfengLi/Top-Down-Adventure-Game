@@ -174,7 +174,6 @@ public class gameView implements Observer{
 	
 	/**
 	 * checks for player and enemy death
-	 * @return 
 	 */
 	public void checkDeath() {
 		if(controller.playerDead()) {
@@ -501,6 +500,7 @@ public class gameView implements Observer{
 	 * starts up the game, creates the map and sets appropriate class variables
 	 * adds this view as an observer to the model and updates the screen when the model changes
 	 * every tick
+	 * @param model the model to build the game from
 	 */
 	public void startGame(GameModel model) {
 		controller = new GameController(model);
@@ -809,7 +809,7 @@ public class gameView implements Observer{
 
 	/**
 	 * returns whether the game has started or not
-	 * @return
+	 * @return true if the game has started, false otherwise
 	 */
 	public boolean gameStarted() {
 		return gameStarted;

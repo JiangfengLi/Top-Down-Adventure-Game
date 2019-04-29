@@ -45,7 +45,7 @@ public class Area implements Serializable{
 	
 	/**
 	 * getter for the area's loot list
-	 * @return an ArrayList<Item> of the Area's loot items
+	 * @return an arraylist of items of the Area's loot items
 	 */
 	public ArrayList<Item> getLoot(){
 		return loot;
@@ -88,7 +88,7 @@ public class Area implements Serializable{
 
 	/**
 	 * adds the specified projectile to the area
-	 * @param projectile
+	 * @param projectile the projectile we are adding
 	 */
 	public void addProjectile(Character projectile) {
 		projectiles.add(projectile);

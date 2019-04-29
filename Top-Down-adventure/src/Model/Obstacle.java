@@ -93,7 +93,7 @@ public abstract class Obstacle extends GameObject {
 	
 	/**
 	 * increments the current frame of the destroyed animation, returns that frame
-	 * @return
+	 * @return the destroyed frame of an animation
 	 */
 	public int destroyedFrame() {
 		destroyedFrame++;

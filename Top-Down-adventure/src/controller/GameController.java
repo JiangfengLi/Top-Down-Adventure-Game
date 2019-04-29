@@ -502,7 +502,7 @@ public class GameController {
 
 	/**
 	 * returns the current Area that the player is in.
-	 * @return
+	 * @return the area the player is currently in
 	 */
 	public Area getArea() {
 		return model.getCurrentArea();
@@ -510,7 +510,6 @@ public class GameController {
 
 	/**
 	 * runs the player's sword attack
-	 * @param canvas
 	 */
 	public void swordAttack() {
 		//doesn't let us swing if we have attacked or been damaged recently
@@ -610,16 +609,15 @@ public class GameController {
 	}
 
 	/**
-	 * returns the current animations that need to be played in CopyOnWriteArrayList<GameObject> form
-	 * @return the current animations that need to be played as an CopyOnWriteArrayList<GameObject>
+	 * returns the current animations that need to be played as an arraylist of gameobjects form
+	 * @return the current animations that need to be played as an arraylist of gameobjects
 	 */
-	public Object getAnimations() {
+	public ArrayList<GameObject> getAnimations() {
 		 return model.getAnimations();
 	}
 
 	/**
 	 * performs a bow attack
-	 * @param canvas
 	 */
 	public void bowAttack() {
 		//doesn't let us attack if we have attacked or been damaged recently
@@ -843,7 +841,7 @@ public class GameController {
 
 	/**
 	 * returns true if the player is in a dungeon, false otherwise.
-	 * @return
+	 * @return true if the player is in a dungeon, false otherwise.
 	 */
 	public boolean inDungeon() {
 		// TODO Auto-generated method stub
@@ -868,7 +866,7 @@ public class GameController {
 
 	/**
 	 * returns a list of soundfx that need played
-	 * @return
+	 * @return an arraylist of audioclips
 	 */
 	public ArrayList<AudioClip> getSoundFX() {
 		return soundfx;

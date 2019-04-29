@@ -66,7 +66,7 @@ public abstract class Character extends GameObject{
 	
 	/**
 	 * returns the coordinates of the character's last valid location
-	 * @return
+	 * @return the player's previous location
 	 */
 	public int[] getOldLocation() {
 		return oldLocation;
@@ -143,8 +143,8 @@ public abstract class Character extends GameObject{
 	
 	/**
 	 * updates the object's position on the board
-	 * @param d the amount to increment/decrement x coordinate by
-	 * @param e the amount to increment/decrement y coordinate by
+	 * @param x the amount to increment/decrement x coordinate by
+	 * @param y the amount to increment/decrement y coordinate by
 	 */
 	public void updatePosition(double x, double y) {
 		
@@ -203,7 +203,7 @@ public abstract class Character extends GameObject{
 	
 	/**
 	 * sets the character's damage per attack
-	 * @param damge the damage we want the character to have
+	 * @param damage the damage we want the character to have
 	 */
 	public void setDamage(int damage) {
 		this.damage = damage;

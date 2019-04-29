@@ -136,7 +136,7 @@ public class GameModel extends Observable implements Serializable{
 
 	/**
 	 * adds an obstacle to the list of things that need to be animated
-	 * @param obstacle
+	 * @param obstacle the obstacle to add to the animations list
 	 */
 	public void addAnimation(GameObject obstacle) {
 		animations.add(obstacle);

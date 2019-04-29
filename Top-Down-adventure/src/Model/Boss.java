@@ -76,7 +76,7 @@ public class Boss extends Enemy{
 	
 	/**
 	 * returns true when the boss is preparing to attack, false otherwise
-	 * @return
+	 * @return true when the boss is preparing to attack, false otherwise
 	 */
 	public boolean preAttack() {
 		return preAttack;
@@ -115,7 +115,7 @@ public class Boss extends Enemy{
 
 	/**
 	 * decrements a timer for the boss' shield mechanic, returns true when it is time for the boss to shield.
-	 * @return
+	 * @return true when it is time for the boss to shield, false otherwise
 	 */
 	public boolean timeToShield() {
 		if(shieldTimer <= 0) {
