@@ -62,14 +62,16 @@ public class gameView implements Observer{
 	
 	private MusicPlayer backgroundMusic;
 	private boolean previousCheck = false;
-	
+	private boolean isOver = false;
+	private boolean isResTart = true;
+
 	public gameView() {
 		myPane = new AnchorPane();
 		myScene = new Scene(myPane,WIDTH,HEIGHT);
 		myStage = new Stage();
 		myStage.setScene(myScene);
+		
 		makeButton("PLAY NOW!",400,583);
-		overlay = new Overlay();
 		backgroundMusic = new MusicPlayer();
 		backgroundMusic.playMusic("/style/Backgroundmusic/titlemusic.wav", 1);
 		
@@ -115,18 +117,20 @@ public class gameView implements Observer{
 	 * @param y y-coordinate
 	 */
 	private void makeButton(String text, int x, int y) {
-		buttonMaker button = new buttonMaker(text);
+		Button button = new Button("Play");
 		myPane.getChildren().add(button);
+		button.setPrefWidth(190);
+		button.setPrefHeight(46);
+		button.setLayoutX(400);
+		button.setLayoutY(583);
 		setClicked(button);
-		button.setLayoutX(x);
-		button.setLayoutY(y);
 	}
 	
 	/**
 	 * sets up the listener for the initial button to start the game
 	 * @param button the button passed in
 	 */
-	public void setClicked(buttonMaker button) {
+	public void setClicked(Button button) {
 		button.setOnMouseReleased((e)->{
 			startGame();
 		});
@@ -168,7 +172,7 @@ public class gameView implements Observer{
 	 * @return 
 	 */
 	public void checkDeath() {
-		if(controller.playerDead()) {
+		if(controller.playerDead() && !isOver) {
 			deathAnimation();
 			/*********TODO***********
 			 * after playing a death animation,
@@ -186,8 +190,14 @@ public class gameView implements Observer{
 	 */
 	private void deathAnimation() {
 		// TODO Auto-generated method stub
-		
+        System.out.println("*********************************   death");
+        isOver = true;
+        backgroundMusic.stopMusic();
 	}
+
+	public boolean checkPlayerDeath() {
+	    return controller.playerDead();
+    }
 	
 	/**
 	 * sets up listeners for key press and key release
@@ -303,6 +313,14 @@ public class gameView implements Observer{
 		});
 	}
 
+    public void init() {
+        gameStarted = false;
+        isStop = false;
+        previousCheck = false;
+        isOver = false;
+        isResTart = true;
+    }
+
 	/**
 	 * starts up the game, creates the map and sets appropriate class variables
 	 * adds this view as an observer to the model and updates the screen when the model changes
@@ -312,6 +330,8 @@ public class gameView implements Observer{
 		GameModel model= new GameModel();
 		controller = new GameController(model);
 		gameStarted = true;
+        isResTart = true;
+        overlay = new Overlay();
 		canvas = new Canvas(WIDTH, HEIGHT);
 		myScene = new Scene(new Group(canvas));
 		myStage.setScene(myScene);		
@@ -320,7 +340,7 @@ public class gameView implements Observer{
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
 		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
-		backgroundMusic.setVolume(0.4);
+		backgroundMusic.setVolume(0.2);
 		update(model, controller.getArea());
 	}
 
@@ -342,7 +362,7 @@ public class gameView implements Observer{
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
-		CopyOnWriteArrayList<Enemy> enemies = ((Area) area).getEnemies();
+		CopyOnWriteArrayList<Enemy> enemies = ((Area) area).getEnemies();		
 		
 		//clears the old screen
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
@@ -351,7 +371,7 @@ public class gameView implements Observer{
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
 			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
-			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
+			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.2);
 		}
 		previousCheck  = controller.inDungeon();
 		gc.drawImage(controller.inDungeon() ? dungeonBg : bg, 0, 0, WIDTH, HEIGHT);		
@@ -570,7 +590,8 @@ public class gameView implements Observer{
 		gc.drawImage(overlay.getImage("key"), 0, 0, overlay.getWidth("key"), overlay.getHeight("key"),
 				overlay.getLocation("key")[0], overlay.getLocation("key")[1], overlay.getWidth("key"), overlay.getHeight("key"));
 		gc.strokeText(Integer.toString(player.hasBossKey() ? 1 : 0), overlay.getLocation("key")[0] + 6, overlay.getLocation("key")[1] + 34);
-		
+
+
 		for(int i=0; i<3; i++) {
 			gc.drawImage(overlay.getImage("empty"), 0, 0, overlay.getWidth("heart"), overlay.getHeight("heart"),
 					overlay.getLocation("heart")[0] + i*30, overlay.getLocation("heart")[1], overlay.getWidth("heart"), overlay.getHeight("heart"));
@@ -631,6 +652,17 @@ public class gameView implements Observer{
 	 */
 	public void setAnimationTimer(AnimationTimer animationTimer) {
 		this.animationTimer = animationTimer;
-		
 	}
+
+	public boolean checkPlayWin() {
+	    return controller.playerWin();
+    }
+
+    public boolean isResTart() {
+	    return isResTart;
+    }
+
+    public void setIsResTart(boolean isResTart) {
+	    this.isResTart = isResTart;
+    }
 }
