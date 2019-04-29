@@ -401,10 +401,10 @@ public class gameView implements Observer{
 				for(Obstacle obs : toDraw) {
 					Image imgFile;
 					if(obs instanceof Tree) imgFile = images.tree;
-					if(obs instanceof Rock) imgFile = images.rock;
-					if(obs instanceof Grass) imgFile = images.grass;
-					if(obs instanceof Door) imgFile = images.door;
-					if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
+					else if(obs instanceof Rock) imgFile = images.rock;
+					else if(obs instanceof Grass) imgFile = images.grass;
+					else if(obs instanceof Door) imgFile = images.door;
+					else if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
 					else imgFile = new Image("");
 					gc.drawImage(imgFile, 0, 0, obs.getWidth(), obs.getHeight(), 
 							obs.getLocation()[0]/3 + WIDTH/3*i, obs.getLocation()[1]/3 + HEIGHT/3*j, obs.getWidth()/3, obs.getHeight()/3);
