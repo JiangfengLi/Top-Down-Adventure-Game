@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
 
 /**
  * Extends obstacle, this is an indestructible, large,
@@ -10,8 +9,12 @@ import javafx.scene.image.Image;
  */
 public class Tree extends Obstacle{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Tree(int x, int y) {
-		imageFile = new Image("/style/Tree.png");
 		destructible = false;
 		width = 100;
 		height = 100;

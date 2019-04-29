@@ -1,7 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * fills fields specific to DPS type enemies
  * @author Wes Rodgers
@@ -9,14 +7,16 @@ import javafx.scene.image.Image;
  */
 public class DPS extends Enemy {
 
-	public DPS(int x, int y) {
-		this.imageArray = new Image[4];
-		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public DPS(int x, int y) {		
 		damage = 2;
 		currentHP = 2;
 		maxHP = 2;
-		speed = 5;
-		
+		speed = 5;		
 		location[0] = x;
 		location[1] = y;
 		width = 30;
@@ -25,12 +25,7 @@ public class DPS extends Enemy {
 		hitboxHeight = 30;
 		hitboxWidth = 30;
 		direction = 3;
-		imageArray[0] = new Image("/style/dps north.png");
-		imageArray[1] = new Image("/style/dps left.png");
-		imageArray[2] = new Image("/style/dps south.png");
-		imageArray[3] = new Image("/style/dps right.png");
 		topHeight = 0;
-		idleImage = new Image("/style/dps idle.png");
 		active = false;
 		scaredyCat = false;
 		Arrow arrowDrop = new Arrow(location);

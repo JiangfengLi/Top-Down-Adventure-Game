@@ -1,5 +1,7 @@
 package Model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -10,8 +12,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 
  * @author Wes Rodgers
  */
-public class GameMap {
+public class GameMap implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Area[][] map;
 	public int length;
 	

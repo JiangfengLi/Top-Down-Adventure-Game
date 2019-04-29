@@ -11,6 +11,10 @@ import java.util.HashMap;
  */
 public abstract class Obstacle extends GameObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected boolean destructible;
 	protected boolean destroyed = false;
 	protected boolean animationDone = false;

@@ -118,14 +118,14 @@ public class GameController {
 						soundfx.add(new AudioClip(sformat("LTTP_Door.wav")));
 						obstacles.remove(obstacle);
 						player.removeBossKey();
-					}
-					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
+					}  // when the player right collide with obstacle
+					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() &&  
 							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
 						xMovement = 0;
-					}
+					} // when the player left collide with obstacle
 					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + player.getWidth() > obstacle.getLocation()[0]) {
 						xMovement = 0;
-					}
+					} // when the player top collide with obstacle
 					if(futurePosition[1] < obstacle.getLocation()[1] + obstacle.getTopHeight() && 
 							futurePosition[1] + player.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
 						yMovement = 0;
@@ -214,28 +214,28 @@ public class GameController {
 		int[] temp = new int[2];
 		
 		//if the player is off the screen to the left, leave y coordinates the same
-		//and set him on the far right side of the screen.
+		//and set him on the far right side of the new screen.
 		if(getPlayerPosition()[0] < 0) {
 			temp[1] = getPlayerPosition()[1];
 			temp[0] = 948;
 			return temp;
 		}
 		
-		//if off screen to the right, y is the same and x is the left side of the screen
+		//if off screen to the right, y is the same and x is the left side of the new screen
 		if(getPlayerPosition()[0] > 949){
 			temp[1] = getPlayerPosition()[1];
 			temp[0] = 1;
 			return temp;
 		}
 		
-		//if offscreen to the bottom, set x the same and y to the top
+		//if offscreen to the bottom, set x the same and y to the top of the new screen
 		if(getPlayerPosition()[1] > 0) {
 			temp[0] = getPlayerPosition()[0];
 			temp[1] = 1;
 			return temp;
 		}
 		
-		//if off screen to the top, x is the same and y is to the bottom
+		//if off screen to the top, x is the same and y is to the bottom of the new screen
 		if(getPlayerPosition()[1] < 0) {
 			temp[0] = getPlayerPosition()[0];
 			temp[1] = 615;
@@ -260,7 +260,7 @@ public class GameController {
 	
 	/**
 	 * checks to see if the player collided with a given obstacle
-	 * @param playerPosition the int[2] of the player's x and y coordinates
+	 * @param playerPosition the array of integer int[2] of the player's x and y coordinates
 	 * @param obstacle the obstacle we are checking for collision
 	 * @return true if the player collided with the obstacle, false otherwise
 	 */
@@ -527,11 +527,12 @@ public class GameController {
 			//checks for collision with enemies
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
+					// enemy was damaged
 					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
 						soundfx.add(new AudioClip(sformat("LTTP_Enemy_Hit.wav")));
 						enemy.loseHP(player.getDamage());
 						enemy.addStall(5);
-					}
+					}// enemy wasn't damaged
 					else {
 						soundfx.add(new AudioClip(sformat("LTTP_Sword_Tap.wav")));
 					}
@@ -821,7 +822,7 @@ public class GameController {
 	 * @return true if the projectile and the object collide, false otherwise.
 	 */
 	private boolean projectileCollision(Character projectile, GameObject obj) {
-		//return true if the player rectangle overlaps the obstacle rectangle.
+		//return true if the projectile rectangle overlaps the obstacle rectangle.
 		
 		int[] position = projectile.getLocation();
 		if(position[0] <= obj.getLocation()[0] + obj.getWidth() && 
@@ -858,12 +859,36 @@ public class GameController {
 		return model.getOverlandMap();
 	}
 
+	/**
+	 * returns a list of sounds effects
+	 * @return a array list of AudioClip which stores a list of sounds effects
+	 */	
 	public ArrayList<AudioClip> getSoundFX() {
 		return soundfx;
 	}
 	
+	/**
+	 * gets the string of url of sounds effects
+	 * @return string of url of sounds effects
+	 */		
 	private String sformat(String s) {
 		URL url = GameController.class.getResource("/style/soundfx/" + s);
 		return url.toString();
+	}
+	
+	/**
+	 * returns GameModel
+	 * @return the model of the game
+	 */			
+	public GameModel getModel() {
+		return model;
+	}
+
+	/**
+	 * set the GameModel for controller
+	 * @param model the model that will assign to the controller
+	 */				
+	public void setModel(GameModel model) {
+		this.model = model;
 	}
 }

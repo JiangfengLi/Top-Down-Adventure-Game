@@ -1,7 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * Class for the player character, stores things about him/her
  * 
@@ -10,6 +8,10 @@ import javafx.scene.image.Image;
  */
 public class Player extends Character{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int arrowQuantity = 30;
 	private boolean smallKey = false;
 	private boolean bossKey = false;
@@ -33,16 +35,11 @@ public class Player extends Character{
 		location = new int[2];
 		location[0] = 100;
 		location[1] = 100;
-		imageArray[0] = new Image("/style/playerSprites/link north.png");
-		imageArray[1] = new Image("/style/playerSprites/link left.png");
-		imageArray[2] = new Image("/style/playerSprites/Link south.png");
-		imageArray[3] = new Image("/style/playerSprites/link right.png");
 		hitbox = new int[2];
 		hitbox[0] = 100;
 		hitbox[1] = 125;
 		hitboxWidth = 30;
-		hitboxHeight = 25;
-		
+		hitboxHeight = 25;		
 	}	
 	
 	/**
