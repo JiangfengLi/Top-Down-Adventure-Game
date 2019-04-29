@@ -1,14 +1,13 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * provides all of the fields necessary for a Tank enemy.
  * @author Wes Rodgers
  *
  */
 public class Tank extends Enemy{
-	
+	private static final long serialVersionUID = 1L;
+
 	public Tank(int x, int y) {
 		currentHP = 4;
 		maxHP = 4;
@@ -21,13 +20,8 @@ public class Tank extends Enemy{
 		hitbox = new int[2];
 		hitboxHeight = 74;
 		hitboxWidth = 40;
-		imageArray[0] = new Image("/style/tank north.png");
-		imageArray[1] = new Image("/style/tank left.png");
-		imageArray[2] = new Image("/style/tank down.png");
-		imageArray[3] = new Image("/style/tank right.png");
 		direction = 3;
 		topHeight = 0;
-		idleImage = new Image("/style/tank idle.png");
 		active = false;
 		scaredyCat = false;
 		Arrow arrowDrop = new Arrow(location);

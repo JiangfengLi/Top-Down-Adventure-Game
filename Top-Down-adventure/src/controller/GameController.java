@@ -13,6 +13,7 @@ import javafx.scene.media.AudioClip;
 /**
  * The controller part of the MVC paradigm for the game.
  * Provides methods to access and modify various parts of the model.
+ * Can be constructed from scratch or from an existing GameModel
  * 
  * @author Wes Rodgers
  *
@@ -62,19 +63,19 @@ public class GameController {
 		
 		//if the player is stalled, decrement his stall
 		if(playerStalled()) player.decrementStall();
-		
+		if(player.getDamageStall() > 0) player.decrementDamageStall();
 		if(player.buffed()) player.decrementBuff();
 		
 		//check to see if the player has been damaged recently
 		if(player.damaged()) {
 		
 			//if he is still in the stall that caused the damaged flag, he is experiencing knockback.
-			if(playerStalled()) {
+			if(player.getDamageStall() > 0) {
 				Enemy attacker = player.lastEnemy();
-				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*4 : 0;
-				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*4 : 0;
-				yMovement = attacker.getLocation()[1] > getPlayerPosition()[1] ? -player.getSpeed()*4 : 0;
-				yMovement += attacker.getLocation()[1] < getPlayerPosition()[1] ? player.getSpeed()*4 : 0;
+				xMovement = attacker.getLocation()[0] > getPlayerPosition()[0] ? -player.getSpeed()*2 : 0;
+				xMovement += attacker.getLocation()[0] < getPlayerPosition()[0] ? player.getSpeed()*2 : 0;
+				yMovement = attacker.getLocation()[1] > getPlayerPosition()[1] ? -player.getSpeed()*2 : 0;
+				yMovement += attacker.getLocation()[1] < getPlayerPosition()[1] ? player.getSpeed()*2 : 0;
 				
 				//if the knockback would knock him off screen, remove that directions movement.
 				if(getPlayerPosition()[0] + xMovement < 0) xMovement = 0;
@@ -88,13 +89,13 @@ public class GameController {
 		}
 		
 		//if the player is stalled and it wasn't because he took damage, then he has no movement.
-		if(playerStalled() && !player.damaged()) {
+		if(playerStalled()) {
 			xMovement = 0;
 			yMovement = 0;
 		}
 		
 		//if the player isn't stalled, or if he is stalled but he took damage
-		if(!playerStalled() || player.damaged()) {
+		if(!playerStalled()) {
 		
 			Area curr = getArea();
 			CopyOnWriteArrayList<Obstacle> obstacles = curr.getObstacles();
@@ -114,25 +115,25 @@ public class GameController {
 						model.swapToOverland();
 					}
 					if(obstacle instanceof Door && player.hasBossKey()) {
-						soundfx.add(new AudioClip(sformat("LTTP_Door_Unlock.wav")));
-						soundfx.add(new AudioClip(sformat("LTTP_Door.wav")));
+						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Door_Unlock.wav")));
+						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Door.wav")));
 						obstacles.remove(obstacle);
 						player.removeBossKey();
 					}
-					if(futurePosition[0] < obstacle.getLocation()[0] + obstacle.getWidth() && 
-							futurePosition[0] + player.getWidth() > obstacle.getLocation()[0] + obstacle.getWidth()) {
+					
+					int[] futureX = new int[2];
+					int[] futureY = new int[2];
+					futureX[0] = getPlayerPosition()[0] + xMovement;
+					futureX[1] = getPlayerPosition()[1];
+					futureY[0] = getPlayerPosition()[0];
+					futureY[1] = getPlayerPosition()[1] + yMovement;
+					
+					if(collision(futureX, obstacle)) {
 						xMovement = 0;
 					}
-					if(futurePosition[0] < obstacle.getLocation()[0] && futurePosition[0] + player.getWidth() > obstacle.getLocation()[0]) {
-						xMovement = 0;
-					}
-					if(futurePosition[1] < obstacle.getLocation()[1] + obstacle.getTopHeight() && 
-							futurePosition[1] + player.getHeight() > obstacle.getLocation()[1] + obstacle.getTopHeight()) {
+					if(collision(futureY, obstacle)) {
 						yMovement = 0;
-					}
-					else {
-						yMovement = 0;
-					}
+					}					 
 				}
 			}
 			
@@ -181,7 +182,7 @@ public class GameController {
 			Item loot = drops.next();
 			if(collision(getPlayerPosition(), loot)) {
 				if(!(loot instanceof Key)) {
-					soundfx.add(new AudioClip(sformat("LTTP_Item.wav")));
+					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Item.wav")));
 				}
 				if(loot instanceof Arrow) {
 					player.addArrows(((Arrow) loot).getQuantity());
@@ -193,7 +194,7 @@ public class GameController {
 					player.addBuff(200);
 				}
 				if(loot instanceof Key) {
-					soundfx.add(new AudioClip(sformat("LTTP_Get_Key_StereoL.wav")));
+					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Get_Key_StereoL.wav")));
 					if(((Key)loot).isBossKey()) {
 						player.giveBossKey();
 					}
@@ -385,23 +386,25 @@ public class GameController {
 							
 							//iterate through the obstacles to see if the enemy will run into them
 							for(Obstacle obs : getArea().getObstacles()) {
+								int[] futureX = new int[2];
+								int[] futureY = new int[2];
 								
-								//if so, make it so he walks around it in the quickest direction.
-								if(!(enemy instanceof Flier) && collision(futurePosition, obs)) {
-									
-									switch(enemy.getDirection()){
-										case 1:
-										case 3:
-											y=0;
-											if(enemy.getLocation()[0] > obs.getLocation()[0] + obs.getWidth()/2) x = enemy.getSpeed();
-											else x = -enemy.getSpeed();
-											break;
-										case 2:
-										case 4:
-											x=0;
-											if(enemy.getLocation()[1] > obs.getLocation()[1] + obs.getHeight()/2) y = enemy.getSpeed();
-											else y = -enemy.getSpeed();
-											break;
+								futureX[0] = enemy.getLocation()[0] + x;
+								futureX[1] = enemy.getLocation()[1];
+								futureY[0] = enemy.getLocation()[0];
+								futureY[1] = enemy.getLocation()[1] + y;
+								if(!(enemy instanceof Flier)) {
+									if(collision(futureX, obs) && y == 0) {
+										y = enemy.getSpeed();
+									}
+									else if(collision(futureY, obs) && x == 0) {
+										x = enemy.getSpeed();
+									}
+									if(collision(futureX, obs)) {
+										x = 0;
+									}
+									if(collision(futureY, obs)) {
+										y = 0;
 									}
 								}
 							}
@@ -420,26 +423,30 @@ public class GameController {
 				int y = 0;
 					
 				//boss has 3 phases, shielded, moving, and preparing to attack
-					
-				//if boss is shielded or in pre-attack, she just sits there
+				if(getGameClock()%400 == 0) soundfx.add(new AudioClip(sformat("/style/BossSounds/OOT_Navi_Hey1.wav")));
+				
+				
 				if(boss.preAttack()) {
 					x = 0;
 					y = 0;		
 					if(boss.timeToAttack()) {
 						int[] missileStart = new int[2];
+						soundfx.add(new AudioClip(sformat("/style/BossSounds/oot_navi_watchout1.mp3")));
 						missileStart[0] = enemy.getLocation()[0] + 50;
 						missileStart[1] = enemy.getLocation()[1] + 50;
 						getArea().addProjectile(new BossAttack(player, missileStart));
 					}
 				}
-					
+				
 				//otherwise, the boss is moving. This has the boss move in a specific pattern across the screen
 				else {
 					if(!boss.shielded() && boss.timeToShield()) {
+						soundfx.add(new AudioClip(sformat("/style/BossSounds/OOT_Navi_Listen1.wav")));
 						boss.addShield();
 						getArea().addEnemy(new ShieldPillar(boss.getPillar()));
 					}
 					if(boss.getBossTimer()%300 <= 2) {
+
 						boss.addPreAttack();
 					}
 					
@@ -509,7 +516,7 @@ public class GameController {
 		//doesn't let us swing if we have attacked or been damaged recently
 		if(!playerStalled()) {
 			
-			soundfx.add(new AudioClip(sformat("LTTP_Sword1.wav")));
+			soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword1.wav")));
 			
 			//add a stall and create the sword swing animation
 			player.addStall(6);
@@ -528,12 +535,12 @@ public class GameController {
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
 					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
-						soundfx.add(new AudioClip(sformat("LTTP_Enemy_Hit.wav")));
+						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Enemy_Hit.wav")));
 						enemy.loseHP(player.getDamage());
 						enemy.addStall(5);
 					}
 					else {
-						soundfx.add(new AudioClip(sformat("LTTP_Sword_Tap.wav")));
+						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword_Tap.wav")));
 					}
 				}
 			}
@@ -617,7 +624,7 @@ public class GameController {
 	public void bowAttack() {
 		//doesn't let us attack if we have attacked or been damaged recently
 		if(!playerStalled()) {
-			soundfx.add(new AudioClip(sformat("LTTP_Arrow_Shoot.wav")));
+			soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Shoot.wav")));
 			
 			//add in the stall and the new bow shot animation
 			player.addStall(5);
@@ -640,7 +647,7 @@ public class GameController {
 		//gathers up all dead enemies
 		for(Enemy enemy : getArea().getEnemies()) {
 			if(enemy.isDead()) {
-				soundfx.add(new AudioClip(sformat("LTTP_Enemy_Kill.wav")));
+				soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Enemy_Kill.wav")));
 				if(enemy.didLootDrop()) getArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
 				if(enemy instanceof ShieldPillar) {
@@ -689,10 +696,11 @@ public class GameController {
 				//if the player hasn't been damaged recently, stall him, decrement his hp, 
 				//and set a field to store which the last enemy to hit him was to help with simpler knockback calculations
 				if(!player.damaged()){
-					player.addStall(4);
+					enemy.addStall(2);
 					player.toggleDamaged();
-					soundfx.add(new AudioClip(sformat("LTTP_Link_Hurt.wav")));
+					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
 					player.loseHP(enemy.getDamage());
+					player.addDamageStall(4);
 					player.setLastEnemy(enemy);
 				}
 			}
@@ -707,7 +715,7 @@ public class GameController {
 		//iterate through the projectiles
 		Iterator<Character> projectiles = getArea().getProjectiles().iterator();
 		while(projectiles.hasNext()) {
-			Character projectile = projectiles.next();
+			Character projectile = projectiles.next(); 
 			int x = 0;
 			int y = 0;
 			
@@ -763,18 +771,18 @@ public class GameController {
 					
 					//if we collide with an object, the projectile disappears
 					if(projectileCollision(projectile, obj)) {
-						if(!(obj instanceof Enemy)) soundfx.add(new AudioClip(sformat("LTTP_Arrow_Hit.wav")));
+						if(!(obj instanceof Enemy)) soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Hit.wav")));
 						projectiles.remove();
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
 						if(obj instanceof Enemy) {
 							if(!(obj instanceof Boss) || !((Boss) obj).shielded()) {
-								soundfx.add(new AudioClip(sformat("LTTP_Arrow_Hit.wav")));
+								soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Hit.wav")));
 								((Enemy) obj).addStall(1);
 								((Enemy) obj).loseHP(1); 
 							}
 							else {
-								soundfx.add(new AudioClip(sformat("LTTP_Sword_Tap.wav")));
+								soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword_Tap.wav")));
 							}
 						}
 						break;
@@ -803,8 +811,8 @@ public class GameController {
 						projectiles.remove();
 						
 						if(obj instanceof Player) {
-							soundfx.add(new AudioClip(sformat("LTTP_Link_Hurt.wav")));
-							((Player) obj).addStall(1);
+							soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
+							((Player) obj).addDamageStall(1);
 							((Player) obj).loseHP(1);
 						}
 						break;
@@ -858,12 +866,30 @@ public class GameController {
 		return model.getOverlandMap();
 	}
 
+	/**
+	 * returns a list of soundfx that need played
+	 * @return
+	 */
 	public ArrayList<AudioClip> getSoundFX() {
 		return soundfx;
 	}
 	
+	/**
+	 * formats a passed in string as a URL string to be
+	 * used in getting audio resources
+	 * @param s the string representing the audio clip's path relative to the project src folder
+	 * @return the url string representing the string's location
+	 */
 	private String sformat(String s) {
-		URL url = GameController.class.getResource("/style/soundfx/" + s);
+		URL url = GameController.class.getResource(s);
 		return url.toString();
+	}
+	
+	/**
+	 * getter for the GameModel
+	 * @return the GameModel
+	 */
+	public GameModel getModel() {
+		return model;
 	}
 }

@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -11,7 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Wes Rodgers
  *
  */
-public class Area {
+public class Area implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private CopyOnWriteArrayList<Obstacle> obstacles;
 	private CopyOnWriteArrayList<Enemy> enemies;
 	private int[] coords = new int[2];

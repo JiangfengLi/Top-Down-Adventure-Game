@@ -1,10 +1,9 @@
 package Model;
 
-import javafx.scene.image.Image;
+import java.io.Serializable;
 
-public abstract class GameObject {
-
-	protected Image imageFile;
+public abstract class GameObject implements Serializable{
+	private static final long serialVersionUID = 1L;
 	protected int[] location = new int[2];
 	protected int[] oldLocation = new int[2];
 	protected int height;
@@ -25,16 +24,6 @@ public abstract class GameObject {
 	 */
 	public int getWidth() {
 		return width;
-	}
-	
-	/**
-	 * returns the filename / location of this
-	 * object's image file
-	 * 
-	 * @return the object's image file's path.
-	 */
-	public Image getImageFile() {
-		return imageFile;
 	}
 	
 	/**

@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
 
 /**
  * extends item, this is a possible drop from enemies
@@ -9,11 +8,10 @@ import javafx.scene.image.Image;
  *
  */
 public class Arrow extends Item {
-	
+	private static final long serialVersionUID = 1L;
 	public int quantity;
 	
 	public Arrow(int[] location) {
-		this.imageFile = new Image("/style/arrow drop.png");
 		this.quantity = System.nanoTime()%3 == 0 || System.nanoTime()%3 == 1 ? 5 : 10;		
 		this.location = location;
 		this.height = 32;

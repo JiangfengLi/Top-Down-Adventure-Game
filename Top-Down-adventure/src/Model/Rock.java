@@ -1,7 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * extends obstacle, this is a small, indestructible,
  * collision causing obstacle.
@@ -9,9 +7,9 @@ import javafx.scene.image.Image;
  *
  */
 public class Rock extends Obstacle {
+	private static final long serialVersionUID = 1L;
 
 	public Rock(int x, int y) {
-		imageFile = new Image("/style/rock.png");
 		destructible = false;
 		width = 50;
 		height = 50;

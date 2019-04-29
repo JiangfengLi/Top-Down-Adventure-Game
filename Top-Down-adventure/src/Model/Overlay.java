@@ -2,6 +2,11 @@ package Model;
 
 import javafx.scene.image.Image;
 
+/**
+ * provides fields to store where different parts of the HUD need to be drawn
+ * @author Wes Rodgers
+ *
+ */
 public class Overlay {
 
 	double[] lifeBarLocation = new double[2];
@@ -51,6 +56,12 @@ public class Overlay {
 		keyHeight = 20;
 	}
 	
+	/**
+	 * given a string representing a specific part of the overlay, 
+	 * returns that image
+	 * @param s a string "life", "full", "half", "empty", "arrow", "key"
+	 * @return the image relating to the passed in string.
+	 */
 	public Image getImage(String s) {
 		switch(s) {
 			case "life":
@@ -69,6 +80,11 @@ public class Overlay {
 		return null;
 	}
 	
+	/**
+	 * given a string for the item, returns that items location as a double[]
+	 * @param s a string representing "life", "heart", "arrow", "key"
+	 * @return the location of the passed in aspect of the overlay
+	 */
 	public double[] getLocation(String s) {
 		switch(s) {
 		case "life":
@@ -83,6 +99,11 @@ public class Overlay {
 		return null;
 	}
 	
+	/**
+	 * returns the width of the overlay attribute related to the passed in string
+	 * @param s "life", "heart", "arrow", or "key"
+	 * @return the width of the item based on the passed in string
+	 */
 	public double getWidth(String s) {
 		switch(s) {
 		case "life":
@@ -97,6 +118,11 @@ public class Overlay {
 		return 0;
 	}
 	
+	/**
+	 * returns the height of the overlay attribut related to the passed in string
+	 * @param s "life", "heart", "arrow", or "key"
+	 * @return the height of the item based on the passed in string.
+	 */
 	public double getHeight(String s) {
 		switch(s) {
 		case "life":

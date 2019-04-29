@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.image.Image;
 
 /**
  * Provides the fields for a door object
@@ -8,9 +7,9 @@ import javafx.scene.image.Image;
  *
  */
 public class Door extends Obstacle {
-	
+	private static final long serialVersionUID = 1L;
+
 	public Door(int x, int y){
-		imageFile = new Image("/style/door.png");
 		destructible = false;
 		width = 100;
 		height = 66;

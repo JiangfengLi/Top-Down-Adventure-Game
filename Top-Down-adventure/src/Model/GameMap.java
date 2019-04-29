@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -10,8 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 
  * @author Wes Rodgers
  */
-public class GameMap {
-	
+public class GameMap implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private Area[][] map;
 	public int length;
 	
@@ -61,6 +62,7 @@ public class GameMap {
 					areaObstacles.add(new Grass(700, 590));
 					areaEnemies.add(new DPS(499, 333));
 				}
+				
 				if(i==0 && j==1) {
 					for(int x=0; x<9; x++) {
 						areaObstacles.add(new Rock(275, 100 + x*50));
@@ -85,6 +87,7 @@ public class GameMap {
 					areaEnemies.add(new Flier(100, 300));
 					areaEnemies.add(new Flier(850, 300));
 				}
+				
 				if(i==0 && j==2) {
 					areaObstacles.add(new Tree(949, -50));
 					
@@ -93,6 +96,7 @@ public class GameMap {
 					areaEnemies.add(new Flier(100, 590));
 					areaObstacles.add(new Grass(600, 333));
 				}
+				
 				if(i==1 && j==0) {
 					areaEnemies.add(new Boss(700, 200, true));
 					for(int k=0; k<4; k++) {
@@ -103,6 +107,7 @@ public class GameMap {
 					}
 					areaObstacles.add(new Tree(499, 610));
 				}
+				
 				if(i==1 && j==1) {
 					areaObstacles.add(new Tree(949, -50));
 					areaObstacles.add(new Tree(949, 616));
@@ -119,6 +124,7 @@ public class GameMap {
 					areaEnemies.add(new DPS(899, 400));
 					areaEnemies.add(new Tank(500, 400));
 				}
+				
 				if(i==1 && j==2) {
 					areaObstacles.add(new Tree(-50, -50));
 					areaObstacles.add(new Tree(949, -50));
@@ -220,6 +226,7 @@ public class GameMap {
 					areaEnemies.add(new Tank(800, 560));
 					areaEnemies.add(new DPS(499, 333));
 				}
+				
 				if(i==0 && j==1) {
 					areaObstacles.add(new Rock(949, 0));
 					for(int k=0; k<20; k++) {
@@ -231,6 +238,7 @@ public class GameMap {
 					areaEnemies.add(new Flier(399, 333));
 					areaEnemies.add(new Tank(499, 433));
 				}
+				
 				if(i==1 && j==0) {
 					areaEnemies.add(new Boss(449, 283, false));
 					for(int k=0; k<20; k++) {
@@ -239,6 +247,7 @@ public class GameMap {
 						areaObstacles.add(new Rock(949, k*50));
 					}
 				}
+				
 				if(i==1 && j==1) {
 					areaObstacles.add(new Rock(0, 0));
 					for(int k=0; k<20; k++) {
@@ -250,10 +259,8 @@ public class GameMap {
 					areaEnemies.add(new DPS(299, 400));
 				}
 				map[i][j] = new Area(areaEnemies, areaObstacles, i, j);
-				
 			}
 		}
-		//dungeon design here.
 	}
 
 	/**

@@ -1,13 +1,12 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * Projectile class for boss' attacks.
  * @author Wes Rodgers
  *
  */
 public class BossAttack extends Character {
+	private static final long serialVersionUID = 1L;
 	public int timer = 0;
 	public Player target;
 	
@@ -20,11 +19,6 @@ public class BossAttack extends Character {
 		this.oldLocation[1] = location[1];
 		speed = 5;
 		direction = 3;
-		
-		imageArray[0] = new Image("/style/fireball.png");
-		imageArray[1] = new Image("/style/fireball.png");
-		imageArray[2] = new Image("/style/fireball.png");
-		imageArray[3] = new Image("/style/fireball.png");
 		
 		//change these as appropriate once we have the arrow .png file
 		height = 25;

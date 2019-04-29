@@ -1,14 +1,12 @@
 package Model;
 
-import javafx.scene.image.Image;
-
 /**
  * Class for the game boss
  * @author Wes Rodgers
  *
  */
 public class Boss extends Enemy{
-
+	private static final long serialVersionUID = 1L;
 	boolean mainBoss;
 	private boolean shielded = false;
 	private boolean preAttack = false;
@@ -21,10 +19,6 @@ public class Boss extends Enemy{
 	//note, I could have made Boss abstract and extended that to main/mini bosses, but 
 	//there's no real need to make it that robust for a game with only 2 bosses.
 	public Boss(int x, int y, boolean finalBoss) {
-		imageArray[0] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
-		imageArray[1] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
-		imageArray[2] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
-		imageArray[3] = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		mainBoss = finalBoss;
 		
 		currentHP = mainBoss ? 20 : 12;
@@ -43,7 +37,6 @@ public class Boss extends Enemy{
 		hitboxWidth = finalBoss ? 84 : 39;
 		direction = 3;
 		topHeight = 0;
-		idleImage = new Image(finalBoss ? "/style/boss.png" : "/style/miniboss.png");
 		active = false;
 		scaredyCat = false;
 		if(!mainBoss) drops.put(0, new Key(this.location, true));
