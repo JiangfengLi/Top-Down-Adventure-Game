@@ -44,7 +44,7 @@ import utils.MusicPlayer;
  *
  */
 public class gameView implements Observer{
-	private final String BACK_GROUND = "/style/title.png";
+	private final String BACK_GROUND = "/title.png";
 	private static final int HEIGHT = 666;
 	private static final int WIDTH = 999;
 	private AnchorPane myPane;
@@ -60,8 +60,8 @@ public class gameView implements Observer{
 	private boolean isStop = false;
 	private GameImages images = new GameImages();
 	
-	private Image bg = new Image("/style/background.png");
-	private Image dungeonBg = new Image("/style/dungeon bg.png");
+	private Image bg = new Image("background.png");
+	private Image dungeonBg = new Image("dungeon bg.png");
 	
 	private MusicPlayer backgroundMusic;
 	private boolean previousCheck = false;
@@ -78,7 +78,7 @@ public class gameView implements Observer{
 		makeButton("PLAY NOW!",400,583);
 		overlay = new Overlay();
 		backgroundMusic = new MusicPlayer();
-		backgroundMusic.playMusic("/style/Backgroundmusic/titlemusic.wav", 1);
+		backgroundMusic.playMusic("/Backgroundmusic/titlemusic.wav", 1);
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
@@ -400,12 +400,12 @@ public class gameView implements Observer{
 			} else {
 				if (controller.inDungeon()) {
 					backgroundMusic.stopMusic();
-					backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+					backgroundMusic.playMusic("/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
 					backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
 					bgmStart = true;
 				} else {
 					backgroundMusic.stopMusic();
-					backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
+					backgroundMusic.playMusic("/Backgroundmusic/zeldatheme.wav", 0);
 					backgroundMusic.setVolume(0.4);
 					bgmStart = true;
 				}
@@ -452,7 +452,7 @@ public class gameView implements Observer{
 		GameMap currMap = controller.getOverlandMap();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
-		Image bg = new Image("/style/background.png");
+		Image bg = new Image("/background.png");
 		gc.drawImage(bg,  0,  0, WIDTH, HEIGHT);
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
@@ -510,7 +510,7 @@ public class gameView implements Observer{
 		setupMouseClickListeners();
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
-		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
+		backgroundMusic.playMusic("/Backgroundmusic/zeldatheme.wav", 0);
 		backgroundMusic.setVolume(0.4);
 		bgmStart = true;
 		update(model, controller.getArea());
@@ -543,7 +543,7 @@ public class gameView implements Observer{
 		//draws the background layer
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
-			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+			backgroundMusic.playMusic("/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
 			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.2);
 		}
 		previousCheck  = controller.inDungeon();

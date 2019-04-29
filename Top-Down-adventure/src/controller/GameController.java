@@ -115,8 +115,8 @@ public class GameController {
 						model.swapToOverland();
 					}
 					if(obstacle instanceof Door && player.hasBossKey()) {
-						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Door_Unlock.wav")));
-						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Door.wav")));
+						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Door_Unlock.wav")));
+						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Door.wav")));
 						obstacles.remove(obstacle);
 						player.removeBossKey();
 					}
@@ -182,7 +182,7 @@ public class GameController {
 			Item loot = drops.next();
 			if(collision(getPlayerPosition(), loot)) {
 				if(!(loot instanceof Key)) {
-					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Item.wav")));
+					soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Item.wav")));
 				}
 				if(loot instanceof Arrow) {
 					player.addArrows(((Arrow) loot).getQuantity());
@@ -194,7 +194,7 @@ public class GameController {
 					player.addBuff(200);
 				}
 				if(loot instanceof Key) {
-					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Get_Key_StereoL.wav")));
+					soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Get_Key_StereoL.wav")));
 					if(((Key)loot).isBossKey()) {
 						player.giveBossKey();
 					}
@@ -423,7 +423,7 @@ public class GameController {
 				int y = 0;
 					
 				//boss has 3 phases, shielded, moving, and preparing to attack
-				if(getGameClock()%400 == 0) soundfx.add(new AudioClip(sformat("/style/BossSounds/OOT_Navi_Hey1.wav")));
+				if(getGameClock()%400 == 0) soundfx.add(new AudioClip(sformat("/BossSounds/OOT_Navi_Hey1.wav")));
 				
 				
 				if(boss.preAttack()) {
@@ -431,7 +431,7 @@ public class GameController {
 					y = 0;		
 					if(boss.timeToAttack()) {
 						int[] missileStart = new int[2];
-						soundfx.add(new AudioClip(sformat("/style/BossSounds/oot_navi_watchout1.mp3")));
+						soundfx.add(new AudioClip(sformat("/BossSounds/oot_navi_watchout1.mp3")));
 						missileStart[0] = enemy.getLocation()[0] + 50;
 						missileStart[1] = enemy.getLocation()[1] + 50;
 						getArea().addProjectile(new BossAttack(player, missileStart));
@@ -441,7 +441,7 @@ public class GameController {
 				//otherwise, the boss is moving. This has the boss move in a specific pattern across the screen
 				else {
 					if(!boss.shielded() && boss.timeToShield()) {
-						soundfx.add(new AudioClip(sformat("/style/BossSounds/OOT_Navi_Listen1.wav")));
+						soundfx.add(new AudioClip(sformat("/BossSounds/OOT_Navi_Listen1.wav")));
 						boss.addShield();
 						getArea().addEnemy(new ShieldPillar(boss.getPillar()));
 					}
@@ -516,7 +516,7 @@ public class GameController {
 		//doesn't let us swing if we have attacked or been damaged recently
 		if(!playerStalled()) {
 			
-			soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword1.wav")));
+			soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Sword1.wav")));
 			
 			//add a stall and create the sword swing animation
 			player.addStall(6);
@@ -535,12 +535,12 @@ public class GameController {
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
 					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
-						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Enemy_Hit.wav")));
+						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Enemy_Hit.wav")));
 						enemy.loseHP(player.getDamage());
 						enemy.addStall(5);
 					}
 					else {
-						soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword_Tap.wav")));
+						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Sword_Tap.wav")));
 					}
 				}
 			}
@@ -624,7 +624,7 @@ public class GameController {
 	public void bowAttack() {
 		//doesn't let us attack if we have attacked or been damaged recently
 		if(!playerStalled()) {
-			soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Shoot.wav")));
+			soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Arrow_Shoot.wav")));
 			
 			//add in the stall and the new bow shot animation
 			player.addStall(5);
@@ -647,7 +647,7 @@ public class GameController {
 		//gathers up all dead enemies
 		for(Enemy enemy : getArea().getEnemies()) {
 			if(enemy.isDead()) {
-				soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Enemy_Kill.wav")));
+				soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Enemy_Kill.wav")));
 				if(enemy.didLootDrop()) getArea().addLoot(enemy.lootDrop());
 				dead.add(enemy);
 				if(enemy instanceof ShieldPillar) {
@@ -698,7 +698,7 @@ public class GameController {
 				if(!player.damaged()){
 					enemy.addStall(2);
 					player.toggleDamaged();
-					soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
+					soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Link_Hurt.wav")));
 					player.loseHP(enemy.getDamage());
 					player.addDamageStall(4);
 					player.setLastEnemy(enemy);
@@ -771,18 +771,18 @@ public class GameController {
 					
 					//if we collide with an object, the projectile disappears
 					if(projectileCollision(projectile, obj)) {
-						if(!(obj instanceof Enemy)) soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Hit.wav")));
+						if(!(obj instanceof Enemy)) soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Arrow_Hit.wav")));
 						projectiles.remove();
 						
 						//if it was an enemy, they lose health and suffer a minor knockback.
 						if(obj instanceof Enemy) {
 							if(!(obj instanceof Boss) || !((Boss) obj).shielded()) {
-								soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Arrow_Hit.wav")));
+								soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Arrow_Hit.wav")));
 								((Enemy) obj).addStall(1);
 								((Enemy) obj).loseHP(1); 
 							}
 							else {
-								soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Sword_Tap.wav")));
+								soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Sword_Tap.wav")));
 							}
 						}
 						break;
@@ -811,7 +811,7 @@ public class GameController {
 						projectiles.remove();
 						
 						if(obj instanceof Player) {
-							soundfx.add(new AudioClip(sformat("/style/soundfx/LTTP_Link_Hurt.wav")));
+							soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Link_Hurt.wav")));
 							((Player) obj).addDamageStall(1);
 							((Player) obj).loseHP(1);
 						}

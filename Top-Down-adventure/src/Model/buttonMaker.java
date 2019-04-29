@@ -18,8 +18,8 @@ import javafx.scene.text.Font;
  */
 public class buttonMaker extends Button{
 	
-	private final String OFF_CLICK = "-fx-background-image:url('/style/blue_button04.png');";
-	private final String ON_CLICK = "-fx-background-image:url('/style/blue_button03.png');";
+	private final String OFF_CLICK = "-fx-background-image:url('/blue_button04.png');";
+	private final String ON_CLICK = "-fx-background-image:url('/blue_button03.png');";
 	private final String FONT_STYLE = "src/style/Kenney Pixel.ttf";
 	
 	public buttonMaker(String name) {
