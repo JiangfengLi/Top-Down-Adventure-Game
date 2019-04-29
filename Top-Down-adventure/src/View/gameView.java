@@ -271,6 +271,14 @@ public class gameView implements Observer{
 			animationTimer.start();
 			startGame(new GameModel());
 		});
+		buttonMaker load = new buttonMaker("Load Game");
+		layout.getChildren().add(load);
+		load.setLayoutX(WIDTH/2-100);
+		load.setLayoutY(350);
+		load.setOnAction((e)-> {
+			startGame((GameModel) GameResource.loadGame("save.dat"));
+			animationTimer.start();			
+		});
 		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
 		layout.setBackground(new Background(new BackgroundFill(Paint.valueOf("Black"), null, null)));
 		return scene1;
