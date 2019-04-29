@@ -17,6 +17,7 @@ public class Player extends Character{
 	private Enemy lastEnemy;
 	private int buffTimer;
 	private boolean buffed = false;
+	private int damageStall = 0;
 	
 	/**
 	 * Constructor. Initializes the player character with 3 max HP and 3 current HP. This can be changed
@@ -61,6 +62,29 @@ public class Player extends Character{
 	 */
 	public void addArrows(int quantity) {
 		arrowQuantity = arrowQuantity + quantity > 30 ? 30 : arrowQuantity + quantity;
+	}
+	
+	/**
+	 * adds a damage stall
+	 * @param i the amount to add
+	 */
+	public void addDamageStall(int i) {
+		damageStall += i;
+	}
+	
+	/**
+	 * decrements the damage stall
+	 */
+	public void decrementDamageStall() {
+		damageStall --;
+	}
+	
+	/**
+	 * returns the damage stall
+	 * @return the damage stall
+	 */
+	public int getDamageStall() {
+		return damageStall;
 	}
 	
 	/**
@@ -169,4 +193,21 @@ public class Player extends Character{
 	public void removeBossKey() {
 		bossKey = false;		
 	}
+	
+	/**
+	 * updates just the characters x coordinate
+	 * @param x the amount to update the x coord by.
+	 */
+	public void updateX(int x) {
+		location[0] += x;
+	}
+	
+	/**
+	 * updates the player's y coordinate
+	 * @param y the amount to update the y coord by.
+	 */
+	public void updateY(int y) {
+		location[1] += y;
+	}
+
 }

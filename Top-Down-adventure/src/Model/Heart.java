@@ -16,7 +16,7 @@ public class Heart extends Item {
 		this.width = 40;
 		this.height = 45;
 		this.location = location;
-		this.HP = System.nanoTime()%3 > 2 ? 2 : 1;
+		this.HP = System.nanoTime()%3 >= 2 ? 2 : 1;
 		this.topHeight = 0;
 	}
 
