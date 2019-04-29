@@ -873,4 +873,11 @@ public class GameController {
 		URL url = GameController.class.getResource(s);
 		return url.toString();
 	}
+	public GameModel getModel() {
+		return model;
+	}
+	
+	public void setModel(GameModel model) {
+		this.model = model;
+	}
 }

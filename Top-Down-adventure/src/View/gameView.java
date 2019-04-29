@@ -26,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -56,12 +57,15 @@ public class gameView implements Observer{
 	private boolean wPressed, aPressed, sPressed, dPressed;
 	private AnimationTimer animationTimer;
 	private boolean isStop = false;
+	private GameImages images = new GameImages();
 	
 	private Image bg = new Image("/style/background.png");
 	private Image dungeonBg = new Image("/style/dungeon bg.png");
 	
 	private MusicPlayer backgroundMusic;
 	private boolean previousCheck = false;
+	private boolean bgmStart = true;
+	
 	
 	public gameView() {
 		myPane = new AnchorPane();
@@ -131,7 +135,7 @@ public class gameView implements Observer{
 	 */
 	public void setClicked(Button button) {
 		button.setOnMouseReleased((e)->{
-			startGame();
+			startGame(new GameModel());
 		});
 	}
 	
@@ -192,6 +196,21 @@ public class gameView implements Observer{
 		
 	}
 	
+	private void invokMenu() {
+		Scene newScene = constructMenu();
+		newScene.setOnKeyPressed((e)->{
+			if (e.getCode()==KeyCode.M) {
+				myStage.setScene(myScene);
+				myStage.setTitle("Adventure Game");
+				isStop = false;
+				animationTimer.start();
+			}
+		});
+		myStage.setTitle("Menu");
+		myStage.setScene(newScene);
+	}
+	
+	
 	/**
 	 * sets up listeners for key press and key release
 	 * so we can tell when a combination of keys are pressed
@@ -220,14 +239,34 @@ public class gameView implements Observer{
 			}
 			if(e.getCode() == KeyCode.P) {
 				if(!isStop) {
+					//System.out.println("paused");
+					aPressed = false;
+					sPressed = false;
+					dPressed = false;
+					wPressed = false;
+					myStage.setTitle("PAUSED");
 					isStop  = true;
 					animationTimer.stop();
 					drawMap();
 				}
 				else {
 					isStop = false;
+					myStage.setTitle("Adventure Game");
 					animationTimer.start();
 				}
+			}
+			if (e.getCode() == KeyCode.M && !isStop) {
+				aPressed = false;
+				sPressed = false;
+				dPressed = false;
+				wPressed = false;
+				isStop=true;
+				animationTimer.stop();
+				invokMenu();
+			} else if (e.getCode() == KeyCode.M && isStop) {
+				isStop=false;
+				animationTimer.start();
+				myStage.setTitle("Adventure Game");
 			}
 		});
 		
@@ -263,6 +302,87 @@ public class gameView implements Observer{
 		});
 	}
 	
+	private Scene constructMenu() {
+		buttonMaker resume = new buttonMaker("RESUME");
+		buttonMaker exit = new buttonMaker("EXIT");
+		AnchorPane layout= new AnchorPane();
+		layout.getChildren().add(resume);
+		resume.setLayoutX(WIDTH/2-100);
+        resume.setLayoutY(100);
+		layout.getChildren().add(exit);
+		exit.setLayoutY(200);
+		exit.setLayoutX(WIDTH/2-100);
+		exit.setOnMouseReleased((e)->{
+			myStage.close();
+		});
+		resume.setOnMouseReleased((e)->{
+			myStage.setScene(myScene);
+			isStop = false;
+			animationTimer.start();
+		});
+		buttonMaker bgm = new buttonMaker("Enable/Disable Background Music");
+		layout.getChildren().add(bgm);
+		bgm.setLayoutX(WIDTH/2-100);
+		bgm.setLayoutY(300);
+		bgm.setOnAction((e)->{
+			// TODO: implement when we add bgm.
+			if (bgmStart) {
+				backgroundMusic.stopMusic();
+				bgmStart = false;
+			} else {
+				if (controller.inDungeon()) {
+					backgroundMusic.stopMusic();
+					backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+					backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
+					bgmStart = true;
+				} else {
+					backgroundMusic.stopMusic();
+					backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
+					backgroundMusic.setVolume(0.4);
+					bgmStart = true;
+				}
+			}
+		});
+		buttonMaker se = new buttonMaker("Save Game");
+		layout.getChildren().add(se);
+		se.setLayoutX(WIDTH/2-100);
+		se.setLayoutY(400);
+		se.setOnAction((e)->{
+			Data data = new Data(controller.getModel());
+			try {
+				GameResource.saveGame(data, "save.dat");
+				System.out.println("saved!");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		});
+		buttonMaker restart = new buttonMaker("RESTART");
+		layout.getChildren().add(restart);
+		restart.setLayoutX(WIDTH/2-100);
+		restart.setLayoutY(500);
+		restart.setOnAction((e)->{
+			isStop = false;
+			animationTimer.start();
+			startGame(new GameModel());
+		});
+		buttonMaker load = new buttonMaker("Load Game");
+		layout.getChildren().add(load);
+		load.setLayoutX(WIDTH/2-100);
+		load.setLayoutY(600);
+		load.setOnAction((e)-> {
+			Data data = (Data) GameResource.loadGame("save.dat");
+			startGame((GameModel) data.getModel());
+			animationTimer.start();			
+			
+			//GameController control = new GameController(data.getModel());
+		});
+		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
+		//scene1.setFill(Color.BLUE);
+		Image im = new Image("/style/background.png");
+		layout.setBackground(new Background(new BackgroundImage(im,BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		return scene1;
+	}
+	
 	/**
 	 * draws the map to screen
 	 */
@@ -282,7 +402,14 @@ public class gameView implements Observer{
 				CopyOnWriteArrayList<Obstacle> toDraw = new CopyOnWriteArrayList<Obstacle>();
 				toDraw.addAll(area.getObstacles());
 				for(Obstacle obs : toDraw) {
-					gc.drawImage(obs.getImageFile(), 0, 0, obs.getWidth(), obs.getHeight(), 
+					Image imgFile;
+					if(obs instanceof Tree) imgFile = images.tree;
+					if(obs instanceof Rock) imgFile = images.rock;
+					if(obs instanceof Grass) imgFile = images.grass;
+					if(obs instanceof Door) imgFile = images.door;
+					if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
+					else imgFile = new Image("");
+					gc.drawImage(imgFile, 0, 0, obs.getWidth(), obs.getHeight(), 
 							obs.getLocation()[0]/3 + WIDTH/3*i, obs.getLocation()[1]/3 + HEIGHT/3*j, obs.getWidth()/3, obs.getHeight()/3);
 				}
 				
@@ -311,8 +438,7 @@ public class gameView implements Observer{
 	 * adds this view as an observer to the model and updates the screen when the model changes
 	 * every tick
 	 */
-	public void startGame() {
-		GameModel model= new GameModel();
+	public void startGame(GameModel model) {
 		controller = new GameController(model);
 		gameStarted = true;
 		canvas = new Canvas(WIDTH, HEIGHT);
@@ -323,9 +449,11 @@ public class gameView implements Observer{
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
 		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
-		backgroundMusic.setVolume(0.2);
+		backgroundMusic.setVolume(0.4);
+		bgmStart = true;
 		update(model, controller.getArea());
 	}
+	
 
 	/**
 	 * redraws things on screen when the model updates and notifies us
@@ -366,7 +494,13 @@ public class gameView implements Observer{
 		
 		//iterates through the obstacles in current area, draws them to screen
 		for(Obstacle obstacle : obstacles) {
-			Image image = obstacle.getImageFile(); 
+			Image image;
+			if(obstacle instanceof Tree) image = images.tree;
+			else if(obstacle instanceof Rock) image = images.rock;
+			else if(obstacle instanceof Grass) image = images.grass;
+			else if(obstacle instanceof Door) image = images.door;
+			else if(obstacle instanceof DungeonEntrance) image = images.dungeonEntrance;
+			else image = new Image("");
 			
 			//obstacles leave behind remains, this draws those remains as pathable objects.
 			if(obstacle.destroyed()) {
@@ -392,29 +526,29 @@ public class gameView implements Observer{
 		//draws loot items to screen
 		for(Item loot : ((GameModel) model).getCurrentArea().getLoot()) {
 			if(loot instanceof Arrow) {
-				Image image = loot.getImageFile();
+				Image image = images.arrow;
 				gc.drawImage(image, 15*(((Arrow) loot).getQuantity() == 5 ? 0 : 1), 0, loot.getWidth()/2, 
 						loot.getHeight()/2, loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
 				
 			else if(loot instanceof Heart) {
-				Image image = loot.getImageFile();
+				Image image = images.heart;
 				gc.drawImage(image, loot.getWidth()*((getGameClock()%40)/8), 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
 				
 			else if(loot instanceof SpeedBuff) {
-				Image image = loot.getImageFile();
+				Image image = images.speedBuff;
 				gc.drawImage(image, loot.getWidth()*((getGameClock()%40)/8), 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth(), loot.getHeight());
 			}
 			
 			else {
-				Image image = loot.getImageFile();
+				Image image = images.key;
 				gc.drawImage(image, 0, 0, loot.getWidth(), loot.getHeight(), loot.getLocation()[0], loot.getLocation()[1], loot.getWidth()*1.5, loot.getHeight()*1.5);
 			}
 		}
 		
 		//draw Player to screen
-		Image playerImage = player.getImageArray()[player.getDirection()-1];		
+		Image playerImage = images.player[player.getDirection()-1];		
 		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters
 			if(wPressed || aPressed || sPressed || dPressed) {
@@ -431,12 +565,12 @@ public class gameView implements Observer{
 			if(enemy.active()) {
 				if(enemy instanceof Boss && ((Boss)enemy).isMainBoss()) {
 					if(!((Boss) enemy).preAttack()) {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						Image enemyImage = images.mainBoss[enemy.getDirection()-1];
 						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%60)/12), 0, enemy.getWidth(), enemy.getHeight(),
 								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 					}
 					else {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
+						Image enemyImage = images.mainBoss[enemy.getDirection()-1];
 						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%25)/5), 0, enemy.getWidth(), enemy.getHeight(),
 								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 					}
@@ -451,40 +585,47 @@ public class gameView implements Observer{
 					}
 				}
 				else if(enemy instanceof Boss && !((Boss)enemy).isMainBoss()) {
-					Image enImg = enemy.getImageArray()[enemy.getDirection()-1];
+					Image enImg = images.miniBoss[enemy.getDirection()-1];
 					gc.drawImage(enImg, enemy.getWidth()*((getGameClock()%60)/30), 0, enemy.getWidth(), enemy.getHeight(),
 							enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 				}
 				else {
-						Image enemyImage = enemy.getImageArray()[enemy.getDirection()-1];
-						gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
-								enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
+					Image enemyImage;
+					if(enemy instanceof Tank) enemyImage = images.tank[enemy.getDirection()-1];
+					else if(enemy instanceof DPS) enemyImage = images.dps[enemy.getDirection()-1];
+					else if(enemy instanceof Flier) enemyImage = images.flier[enemy.getDirection()-1];
+					else if(enemy instanceof ShieldPillar) enemyImage = images.shieldPillar;
+					else enemyImage = new Image("");
+					gc.drawImage(enemyImage, enemy.getWidth()*((getGameClock()%6)/3), 0, enemy.getWidth(), enemy.getHeight(), 
+							enemy.getLocation()[0], enemy.getLocation()[1], enemy.getWidth(), enemy.getHeight());
 						
-						if(enemy instanceof ShieldPillar) {
-							gc.setFill(Color.rgb(255,255,255,0.5));
-							gc.setStroke(Color.rgb(255,255,255,1));
-							gc.setLineWidth(9);
-							gc.strokeOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
-							gc.fillOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
-							gc.setFill(Color.rgb(147,112,219, 0.5));
-							gc.fillOval(enemy.getLocation()[0]-7, enemy.getLocation()[1]-7,  enemy.getWidth()+14, enemy.getWidth()+14);
-							
-							gc.setLineWidth(1);
-							gc.strokeLine(enemy.getLocation()[0]+15, enemy.getLocation()[1]+15, 
-									((GameModel) model).getCurrentArea().getBoss().getLocation()[0]+50, ((GameModel) model).getCurrentArea().getBoss().getLocation()[1]+50);
-						}
+					if(enemy instanceof ShieldPillar) {
+						gc.setFill(Color.rgb(255,255,255,0.5));
+						gc.setStroke(Color.rgb(255,255,255,1));
+						gc.setLineWidth(9);
+						gc.strokeOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+						gc.fillOval(enemy.getLocation()[0]-10, enemy.getLocation()[1]-10, enemy.getWidth()+20, enemy.getWidth()+20);
+						gc.setFill(Color.rgb(147,112,219, 0.5));
+						gc.fillOval(enemy.getLocation()[0]-7, enemy.getLocation()[1]-7,  enemy.getWidth()+14, enemy.getWidth()+14);
+						
+						gc.setLineWidth(1);
+						gc.strokeLine(enemy.getLocation()[0]+15, enemy.getLocation()[1]+15, 
+								((GameModel) model).getCurrentArea().getBoss().getLocation()[0]+50, ((GameModel) model).getCurrentArea().getBoss().getLocation()[1]+50);
+					}
 				}
 			}
 		}
 		
 		//iterates through the projectiles that are currently on the screen and draws each one.
 		for(Character projectile : ((GameModel) model).getCurrentArea().getProjectiles()) {
-			Image projectileImage = projectile.getImageArray()[projectile.getDirection()-1];
+			Image projectileImage;
 			if(!(projectile instanceof BossAttack)) {
+				projectileImage = images.arrowShot[projectile.getDirection()-1];
 				gc.drawImage(projectileImage, 0, 0, projectile.getWidth()/2, projectile.getHeight()/2, 
 					projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
 			}
 			else {
+				projectileImage = images.fireball[0];
 				gc.drawImage(projectileImage, 0, 0 , projectile.getWidth(), projectile.getHeight(), 
 						projectile.getLocation()[0], projectile.getLocation()[1], projectile.getWidth(), projectile.getHeight());
 			}
@@ -497,7 +638,7 @@ public class gameView implements Observer{
 			//obstacle animations are destruction animations. Play it.
 			if(obj instanceof Obstacle) {
 				int currFrame = ((Obstacle) obj).destroyedFrame()/2;
-				Image image = obj.getImageFile();
+				Image image = images.grass;
 				gc.drawImage(image, 50*currFrame, 0, 50, 50, obj.getLocation()[0], obj.getLocation()[1], 50, 50);
 				if(currFrame >= 9) {
 					finished.add(obj);
@@ -506,7 +647,7 @@ public class gameView implements Observer{
 			
 			//draws the animation frame of the player swinging his sword in the appropriate direction
 			if(obj instanceof PlayerSwing) {
-				Image image = ((PlayerSwing) obj).getImageArray()[((PlayerSwing) obj).getDirection() - 1];
+				Image image = images.playerSwing[((PlayerSwing) obj).getDirection() - 1];
 				if(player.getDirection() == 1) {
 					gc.drawImage(image, 75*((5 - player.getStallTime())), 0, 75, 73, 
 							controller.getPlayerPosition()[0] - 10, controller.getPlayerPosition()[1] - 5, obj.getWidth()*0.8, obj.getHeight()*0.8);
@@ -523,11 +664,15 @@ public class gameView implements Observer{
 			//plays the enemy's idle animation if they aren't currently chasing the player down
 			else if(obj instanceof Enemy && !((Enemy) obj).isDead()) {
 				if(!(obj instanceof Boss)) {
-					Image image = ((Enemy) obj).getIdleImage();
+					Image image;
+					if(obj instanceof Tank) image = images.tankIdle;
+					else if(obj instanceof Flier) image = images.flierIdle;
+					else if(obj instanceof DPS) image = images.dpsIdle;
+					else image = new Image("");
 					gc.drawImage(image, obj.getWidth()*((getGameClock()%64)/4), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0], obj.getLocation()[1], obj.getWidth(), obj.getHeight());				
 				}
 				else if (obj instanceof Boss && ((Boss)obj).isMainBoss()){
-					Image image = ((Enemy) obj).getIdleImage();
+					Image image = images.mainBoss[0];
 					gc.drawImage(image, obj.getWidth()*((getGameClock()%52)/13), 0, obj.getWidth(), obj.getHeight(), obj.getLocation()[0],
 							obj.getLocation()[1], obj.getWidth(), obj.getHeight());
 				}
@@ -540,7 +685,7 @@ public class gameView implements Observer{
 			
 			//play bow attack animation frame
 			else if(obj instanceof BowShot) {
-				Image image = ((BowShot) obj).getImageArray()[((BowShot) obj).getDirection() - 1];
+				Image image = images.bowShot[((BowShot) obj).getDirection() - 1];
 				gc.drawImage(image, 54*(5 - player.getStallTime()), 0, 54, 73, controller.getPlayerPosition()[0], 
 						controller.getPlayerPosition()[1], obj.getWidth()*0.7, obj.getHeight()*0.7);
 				if(!player.stalled()) {
@@ -553,7 +698,7 @@ public class gameView implements Observer{
 		//draw top part of large objects to help force perspective
 		for(Obstacle obstacle : obstacles) {
 			if(obstacle.hasTopImage()) {
-				Image image = obstacle.getImageFile();
+				Image image = images.tree;
 				gc.drawImage(image, 0, 0, obstacle.getWidth(), obstacle.getTopHeight(), obstacle.getLocation()[0],
 						obstacle.getLocation()[1], obstacle.getWidth(), obstacle.getTopHeight());
 			}
@@ -634,6 +779,5 @@ public class gameView implements Observer{
 	 */
 	public void setAnimationTimer(AnimationTimer animationTimer) {
 		this.animationTimer = animationTimer;
-		
 	}
 }
