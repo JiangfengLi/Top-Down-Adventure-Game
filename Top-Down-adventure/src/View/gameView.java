@@ -869,7 +869,7 @@ public class gameView implements Observer{
 				gc.setFill(Paint.valueOf("white"));
 				gc.setFont(new Font(20));
 				if(deathTick >= 0) gc.fillText("With Navi's death, a twenty year long reign of terror has been brought to an end.", 160, 200);
-				if(deathTick >= 100) gc.fillText("The evil fairy has finally harassed her last generation of impressionable youth", 180, 250);;
+				if(deathTick >= 100) gc.fillText("The evil fairy has finally harassed her last generation of impressionable youth.", 180, 250);;
 				if(deathTick >= 200) gc.fillText("Thanks for playing!", 400, 600);;
 				deathTick++;
 			}
