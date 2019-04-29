@@ -181,6 +181,8 @@ public class gameView implements Observer{
 			animationTimer.stop();
 			backgroundMusic.stopMusic();
 			bgmStart = false;
+			AudioClip death = new AudioClip(getClass().getResource("/soundfx/LTTP_Link_Dying.wav").toString());
+			death.play();
 			deathAnimation();
 			
 			
@@ -198,8 +200,9 @@ public class gameView implements Observer{
 		AnimationTimer animationTimer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {				
-				if(deathTick > 80) {
+				if(deathTick > 100) {
 					this.stop();
+					invokMenu(true);
 				}
 				GraphicsContext gc = canvas.getGraphicsContext2D();
 				gc.clearRect(0, 0, WIDTH, HEIGHT);
@@ -218,8 +221,7 @@ public class gameView implements Observer{
 				else {
 					gc.setFill(Paint.valueOf("BLACK"));
 					gc.fillRect(0, 0, WIDTH, HEIGHT);
-					gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
-					invokMenu(true);					
+					gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);					
 				}
 				deathTick++;
 			}
