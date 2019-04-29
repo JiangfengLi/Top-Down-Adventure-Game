@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 public class GameImages {
 	
 	public Image[] player = new Image[4];	
-	public Image[] tank = new Image[4];
+	public Image[] tank = new Image[4]; 
 	public Image tankIdle;
 	public Image shieldPillar;
 	public Image rock;

@@ -10,12 +10,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class GameResource {
+	
+/**
+ *  saveGame the current situations as well as relevant elements into the file with given name
+ * @param serl - Serializable class that need to store in the file for saving game
+ * @param fname - name and path of the file storing the information of saved game.
+ * @throws IOException
+ */
 	public static void saveGame(Serializable serl, String fname) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get(fname)));
-		oos.writeObject(serl);
+		oos.writeObject(serl); 
 		oos.close();
 	}
-	
+
+	/**
+	 * loadGame the all the necessary information and elements of last saved game.
+	 * @param fname - name and path of the file storing the information of saved game.
+	 * @return
+	 */
 	public static Object loadGame(String fname) {
 		try {
 			File file = new File(fname);

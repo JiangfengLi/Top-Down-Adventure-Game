@@ -33,10 +33,18 @@ public class GameModel extends Observable implements Serializable{
 		notifyObservers();
 	}
 
+	/**
+	 * returns the GameMap.
+	 * @return GameMap - GameMap of the GameModel
+	 */	
 	public GameMap getMap(){
 		return map;
 	}
-	
+
+	/**
+	 * returns the Dungeon of the GameModel.
+	 * @return GameMap - Dungeon of the GameModel
+	 */		
 	public GameMap getDungeon() {
 		return dungeon;
 	}

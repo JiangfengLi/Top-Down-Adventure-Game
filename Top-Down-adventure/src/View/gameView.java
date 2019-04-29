@@ -546,7 +546,7 @@ public class gameView implements Observer{
 			}
 		}
 		
-		//draw Player to screen
+		//draw Player to screen 
 		Image playerImage = images.player[player.getDirection()-1];		
 		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters

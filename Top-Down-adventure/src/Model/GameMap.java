@@ -203,7 +203,7 @@ public class GameMap implements Serializable{
 	/**
 	 * this constructor sets up the design of the dungeon map in the same manner
 	 * as the previous did for the overland map
-	 * @param dungeon
+	 * @param dungeon - true if it is dungeon, false otherwise.
 	 */
 	public GameMap(boolean dungeon) {
 		length = 2;

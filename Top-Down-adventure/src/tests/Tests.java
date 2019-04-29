@@ -9,7 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import Model.*;
 import controller.GameController;
-
+/**
+ * Class to test all the functions and codes of program except GUI, network code.
+ * @author Jiangfeng Li
+ *
+ */
 class Tests {
 
 	@Test
