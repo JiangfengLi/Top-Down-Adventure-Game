@@ -26,15 +26,15 @@ public class Window extends Application{
 		primaryStage = view.getStage();
 		primaryStage.setTitle("Adventure game");
 		primaryStage.show();		
-		 AnimationTimer animationTimer = new AnimationTimer() {
-				@Override
-				public void handle(long now) {				
-					tick();
-				}
-			};
-	        animationTimer.start();
-	        view.setAnimationTimer(animationTimer);
-		}
+		AnimationTimer animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {				
+				tick();
+			}
+		};
+		animationTimer.start();
+	    view.setAnimationTimer(animationTimer);
+	}
 	
 	/**
 	 * calls various methods that do all of the things
@@ -49,10 +49,7 @@ public class Window extends Application{
 				view.updateEnemyCollision();
 				view.updateProjectiles();
 				view.checkDeath();
-				/*/////TO-DO//////
-				check player death
-				check win conditions 
-				*/
+				view.checkWin();
 			}
 		}
 	}

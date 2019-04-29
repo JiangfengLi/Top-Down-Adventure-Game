@@ -24,13 +24,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton; 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utils.MusicPlayer;
 
@@ -65,6 +66,7 @@ public class gameView implements Observer{
 	private MusicPlayer backgroundMusic;
 	private boolean previousCheck = false;
 	private boolean bgmStart = true;
+	private int deathTick;
 	
 	
 	public gameView() {
@@ -176,12 +178,12 @@ public class gameView implements Observer{
 	 */
 	public void checkDeath() {
 		if(controller.playerDead()) {
+			animationTimer.stop();
+			backgroundMusic.stopMusic();
+			bgmStart = false;
 			deathAnimation();
-			/*********TODO***********
-			 * after playing a death animation,
-			 * set area and player position to 
-			 * after-death location, fill health 
-			 */
+			
+			
 		}
 		
 		//remove any dead enemies from the map and add in their death animations
@@ -192,9 +194,39 @@ public class gameView implements Observer{
 	 * Plays a death animation for the character
 	 */
 	private void deathAnimation() {
-		// TODO Auto-generated method stub
-		
+		deathTick = 0;
+		AnimationTimer animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {				
+				if(deathTick > 80) {
+					this.stop();
+				}
+				GraphicsContext gc = canvas.getGraphicsContext2D();
+				gc.clearRect(0, 0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("RED"));
+				gc.fillRect(0,0, WIDTH, HEIGHT);
+				if(deathTick <= 8) gc.drawImage(images.player[2], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=16) gc.drawImage(images.player[1], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=24) gc.drawImage(images.player[0], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=32) gc.drawImage(images.player[3], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=40) gc.drawImage(images.player[2], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=48) gc.drawImage(images.player[1], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=56) gc.drawImage(images.player[0], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=64) gc.drawImage(images.player[3], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=72) gc.drawImage(images.playerDeath, 0, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
+				else if(deathTick <=80) gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
+				else {
+					gc.setFill(Paint.valueOf("BLACK"));
+					gc.fillRect(0, 0, WIDTH, HEIGHT);
+					gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
+					invokMenu(true);					
+				}
+				deathTick++;
+			}
+		};
+		animationTimer.start();
 	}
+	
 	
 	/**
 	 * Pulls up the game-menu
@@ -213,7 +245,36 @@ public class gameView implements Observer{
 		myStage.setScene(newScene);
 	}
 	
+	private void invokMenu(boolean death) {
+		Scene newScene = deathMenu();
+		myStage.setTitle("Game Over");
+		myStage.setScene(newScene);
+	}
 	
+	
+	private Scene deathMenu() {
+		buttonMaker exit = new buttonMaker("EXIT");
+		AnchorPane layout= new AnchorPane();
+		layout.getChildren().add(exit);
+		exit.setLayoutY(200);
+		exit.setLayoutX(WIDTH/2-100);
+		exit.setOnMouseReleased((e)->{
+			myStage.close();
+		});
+		buttonMaker restart = new buttonMaker("RESTART");
+		layout.getChildren().add(restart);
+		restart.setLayoutX(WIDTH/2-100);
+		restart.setLayoutY(500);
+		restart.setOnAction((e)->{
+			isStop = false;
+			animationTimer.start();
+			startGame(new GameModel());
+		});
+		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
+		layout.setBackground(new Background(new BackgroundFill(Paint.valueOf("Black"), null, null)));
+		return scene1;
+	}
+
 	/**
 	 * sets up listeners for key press and key release
 	 * so we can tell when a combination of keys are pressed
@@ -380,8 +441,7 @@ public class gameView implements Observer{
 			animationTimer.start();			
 		});
 		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
-		Image im = new Image("/style/background.png");
-		layout.setBackground(new Background(new BackgroundImage(im,BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		layout.setBackground(new Background(new BackgroundFill(Paint.valueOf("black"), null, null)));
 		return scene1;
 	}
 	
@@ -406,10 +466,10 @@ public class gameView implements Observer{
 				for(Obstacle obs : toDraw) {
 					Image imgFile;
 					if(obs instanceof Tree) imgFile = images.tree;
-					if(obs instanceof Rock) imgFile = images.rock;
-					if(obs instanceof Grass) imgFile = images.grass;
-					if(obs instanceof Door) imgFile = images.door;
-					if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
+					else if(obs instanceof Rock) imgFile = images.rock;
+					else if(obs instanceof Grass) imgFile = images.grass;
+					else if(obs instanceof Door) imgFile = images.door;
+					else if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
 					else imgFile = new Image("");
 					gc.drawImage(imgFile, 0, 0, obs.getWidth(), obs.getHeight(), 
 							obs.getLocation()[0]/3 + WIDTH/3*i, obs.getLocation()[1]/3 + HEIGHT/3*j, obs.getWidth()/3, obs.getHeight()/3);
@@ -781,5 +841,40 @@ public class gameView implements Observer{
 	 */
 	public void setAnimationTimer(AnimationTimer animationTimer) {
 		this.animationTimer = animationTimer;
+	}
+
+	public void checkWin() {
+		if(controller.getArea().getCoords()[0] == 2 && controller.getArea().getCoords()[1] == 0) {
+			animationTimer.stop();
+			backgroundMusic.stopMusic();
+			bgmStart = false;
+			winScreen();
+		}			
+	}
+
+	private void winScreen() {
+		deathTick = 0;
+		AnimationTimer animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {				
+				if(deathTick > 500) {
+					
+					this.stop();
+					invokMenu(true);
+				}
+				GraphicsContext gc = canvas.getGraphicsContext2D();
+				gc.clearRect(0, 0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("black"));
+				gc.fillRect(0,0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("white"));
+				gc.setFont(new Font(20));
+				if(deathTick >= 0) gc.fillText("With Navi's death, a twenty year long reign of terror has been brought to an end.", 160, 200);
+				if(deathTick >= 100) gc.fillText("The evil fairy has finally harassed her last generation of impressionable youth", 180, 250);;
+				if(deathTick >= 200) gc.fillText("Thanks for playing!", 400, 600);;
+				deathTick++;
+			}
+		};
+		animationTimer.start();
+		
 	}
 }

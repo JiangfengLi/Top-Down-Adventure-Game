@@ -13,7 +13,8 @@ import javafx.scene.image.Image;
  */
 public class GameImages {
 	
-	public Image[] player = new Image[4];	
+	public Image[] player = new Image[4];
+	public Image playerDeath;
 	public Image[] tank = new Image[4];
 	public Image tankIdle;
 	public Image shieldPillar;
@@ -38,6 +39,7 @@ public class GameImages {
 	public Image key;
 	
 	public GameImages() {
+		playerDeath = new Image("/style/playerSprites/link death.png");
 		player[0] = new Image("/style/playerSprites/link north.png");
 		player[1] = new Image("/style/playerSprites/link left.png");
 		player[2] = new Image("/style/playerSprites/Link south.png");
