@@ -1,3 +1,5 @@
+import Model.DeathScene;
+import Model.WinScene;
 import View.gameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -26,14 +28,16 @@ public class Window extends Application{
 		primaryStage = view.getStage();
 		primaryStage.setTitle("Adventure game");
 		primaryStage.show();		
-		 AnimationTimer animationTimer = new AnimationTimer() {
+		AnimationTimer animationTimer = new AnimationTimer() {
 				@Override
 				public void handle(long now) {				
 					tick();
 				}
 			};
-	        animationTimer.start();
-	        view.setAnimationTimer(animationTimer);
+		animationTimer.start();
+		view.setAnimationTimer(animationTimer);
+
+        new WinScene(view);
 		}
 	
 	/**
@@ -49,10 +53,15 @@ public class Window extends Application{
 				view.updateEnemyCollision();
 				view.updateProjectiles();
 				view.checkDeath();
-				/*/////TO-DO//////
-				check player death
-				check win conditions 
-				*/
+				if(view.checkPlayerDeath() && view.isResTart()) {
+				    view.setIsResTart(false);
+				    new DeathScene(view);
+                }
+                if(view.checkPlayWin() && view.isResTart()) {
+                    view.setIsResTart(false);
+                    new WinScene(view);
+                }
+
 			}
 		}
 	}
