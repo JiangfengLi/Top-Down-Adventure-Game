@@ -24,13 +24,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton; 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utils.MusicPlayer;
 
@@ -43,7 +44,7 @@ import utils.MusicPlayer;
  *
  */
 public class gameView implements Observer{
-	private final String BACK_GROUND = "/style/title.png";
+	private final String BACK_GROUND = "/title.png";
 	private static final int HEIGHT = 666;
 	private static final int WIDTH = 999;
 	private AnchorPane myPane;
@@ -59,12 +60,13 @@ public class gameView implements Observer{
 	private boolean isStop = false;
 	private GameImages images = new GameImages();
 	
-	private Image bg = new Image("/style/background.png");
-	private Image dungeonBg = new Image("/style/dungeon bg.png");
+	private Image bg = new Image("background.png");
+	private Image dungeonBg = new Image("dungeon bg.png");
 	
 	private MusicPlayer backgroundMusic;
 	private boolean previousCheck = false;
 	private boolean bgmStart = true;
+	private int deathTick;
 	
 	
 	public gameView() {
@@ -76,7 +78,7 @@ public class gameView implements Observer{
 		makeButton("PLAY NOW!",400,583);
 		overlay = new Overlay();
 		backgroundMusic = new MusicPlayer();
-		backgroundMusic.playMusic("/style/Backgroundmusic/titlemusic.wav", 1);
+		backgroundMusic.playMusic("/Backgroundmusic/titlemusic.wav", 1);
 		
 		Button button = new Button("Link");
 		myPane.getChildren().add(button);
@@ -172,16 +174,17 @@ public class gameView implements Observer{
 	
 	/**
 	 * checks for player and enemy death
-	 * @return 
 	 */
 	public void checkDeath() {
 		if(controller.playerDead()) {
+			animationTimer.stop();
+			backgroundMusic.stopMusic();
+			bgmStart = false;
+			AudioClip death = new AudioClip(getClass().getResource("/soundfx/LTTP_Link_Dying.wav").toString());
+			death.play();
 			deathAnimation();
-			/*********TODO***********
-			 * after playing a death animation,
-			 * set area and player position to 
-			 * after-death location, fill health 
-			 */
+			
+			
 		}
 		
 		//remove any dead enemies from the map and add in their death animations
@@ -192,9 +195,39 @@ public class gameView implements Observer{
 	 * Plays a death animation for the character
 	 */
 	private void deathAnimation() {
-		// TODO Auto-generated method stub
-		
+		deathTick = 0;
+		AnimationTimer animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {				
+				if(deathTick > 100) {
+					this.stop();
+					invokMenu(true);
+				}
+				GraphicsContext gc = canvas.getGraphicsContext2D();
+				gc.clearRect(0, 0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("RED"));
+				gc.fillRect(0,0, WIDTH, HEIGHT);
+				if(deathTick <= 8) gc.drawImage(images.player[2], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=16) gc.drawImage(images.player[1], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=24) gc.drawImage(images.player[0], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=32) gc.drawImage(images.player[3], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=40) gc.drawImage(images.player[2], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=48) gc.drawImage(images.player[1], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=56) gc.drawImage(images.player[0], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=64) gc.drawImage(images.player[3], 0, 0, 29, 24, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 58, 48);
+				else if(deathTick <=72) gc.drawImage(images.playerDeath, 0, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
+				else if(deathTick <=80) gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);
+				else {
+					gc.setFill(Paint.valueOf("BLACK"));
+					gc.fillRect(0, 0, WIDTH, HEIGHT);
+					gc.drawImage(images.playerDeath, 25, 0, 24, 22, controller.getPlayerPosition()[0], controller.getPlayerPosition()[1], 48, 44);					
+				}
+				deathTick++;
+			}
+		};
+		animationTimer.start();
 	}
+	
 	
 	/**
 	 * Pulls up the game-menu
@@ -213,7 +246,44 @@ public class gameView implements Observer{
 		myStage.setScene(newScene);
 	}
 	
+	private void invokMenu(boolean death) {
+		Scene newScene = deathMenu();
+		myStage.setTitle("Game Over");
+		myStage.setScene(newScene);
+	}
 	
+	
+	private Scene deathMenu() {
+		buttonMaker exit = new buttonMaker("EXIT");
+		AnchorPane layout= new AnchorPane();
+		layout.getChildren().add(exit);
+		exit.setLayoutY(200);
+		exit.setLayoutX(WIDTH/2-100);
+		exit.setOnMouseReleased((e)->{
+			myStage.close();
+		});
+		buttonMaker restart = new buttonMaker("RESTART");
+		layout.getChildren().add(restart);
+		restart.setLayoutX(WIDTH/2-100);
+		restart.setLayoutY(500);
+		restart.setOnAction((e)->{
+			isStop = false;
+			animationTimer.start();
+			startGame(new GameModel());
+		});
+		buttonMaker load = new buttonMaker("Load Game");
+		layout.getChildren().add(load);
+		load.setLayoutX(WIDTH/2-100);
+		load.setLayoutY(350);
+		load.setOnAction((e)-> {
+			startGame((GameModel) GameResource.loadGame("save.dat"));
+			animationTimer.start();			
+		});
+		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
+		layout.setBackground(new Background(new BackgroundFill(Paint.valueOf("Black"), null, null)));
+		return scene1;
+	}
+
 	/**
 	 * sets up listeners for key press and key release
 	 * so we can tell when a combination of keys are pressed
@@ -339,12 +409,12 @@ public class gameView implements Observer{
 			} else {
 				if (controller.inDungeon()) {
 					backgroundMusic.stopMusic();
-					backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+					backgroundMusic.playMusic("/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
 					backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.4);
 					bgmStart = true;
 				} else {
 					backgroundMusic.stopMusic();
-					backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
+					backgroundMusic.playMusic("/Backgroundmusic/zeldatheme.wav", 0);
 					backgroundMusic.setVolume(0.4);
 					bgmStart = true;
 				}
@@ -380,8 +450,7 @@ public class gameView implements Observer{
 			animationTimer.start();			
 		});
 		Scene scene1= new Scene(layout, WIDTH, HEIGHT);
-		Image im = new Image("/style/background.png");
-		layout.setBackground(new Background(new BackgroundImage(im,BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		layout.setBackground(new Background(new BackgroundFill(Paint.valueOf("black"), null, null)));
 		return scene1;
 	}
 	
@@ -392,7 +461,7 @@ public class gameView implements Observer{
 		GameMap currMap = controller.getOverlandMap();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
-		Image bg = new Image("/style/background.png");
+		Image bg = new Image("/background.png");
 		gc.drawImage(bg,  0,  0, WIDTH, HEIGHT);
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
@@ -406,10 +475,10 @@ public class gameView implements Observer{
 				for(Obstacle obs : toDraw) {
 					Image imgFile;
 					if(obs instanceof Tree) imgFile = images.tree;
-					if(obs instanceof Rock) imgFile = images.rock;
-					if(obs instanceof Grass) imgFile = images.grass;
-					if(obs instanceof Door) imgFile = images.door;
-					if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
+					else if(obs instanceof Rock) imgFile = images.rock;
+					else if(obs instanceof Grass) imgFile = images.grass;
+					else if(obs instanceof Door) imgFile = images.door;
+					else if(obs instanceof DungeonEntrance) imgFile = images.dungeonEntrance;
 					else imgFile = new Image("");
 					gc.drawImage(imgFile, 0, 0, obs.getWidth(), obs.getHeight(), 
 							obs.getLocation()[0]/3 + WIDTH/3*i, obs.getLocation()[1]/3 + HEIGHT/3*j, obs.getWidth()/3, obs.getHeight()/3);
@@ -439,6 +508,7 @@ public class gameView implements Observer{
 	 * starts up the game, creates the map and sets appropriate class variables
 	 * adds this view as an observer to the model and updates the screen when the model changes
 	 * every tick
+	 * @param model the model to build the game from
 	 */
 	public void startGame(GameModel model) {
 		controller = new GameController(model);
@@ -450,7 +520,7 @@ public class gameView implements Observer{
 		setupMouseClickListeners();
 		model.addObserver(this);
 		backgroundMusic.stopMusic();
-		backgroundMusic.playMusic("/style/backgroundmusic/zeldatheme.wav", 0);
+		backgroundMusic.playMusic("/Backgroundmusic/zeldatheme.wav", 0);
 		backgroundMusic.setVolume(0.4);
 		bgmStart = true;
 		update(model, controller.getArea());
@@ -464,14 +534,14 @@ public class gameView implements Observer{
 	 */
 	@Override
 	public void update(Observable model, Object area) {
-		
+		// update the sound effect of objects
 		Iterator<AudioClip> clips = controller.getSoundFX().iterator();
 		while(clips.hasNext()) {
 			AudioClip a = clips.next();
 			a.play();
 			clips.remove();			
 		}
-		
+		// get the players, obstacles and enemies
 		Player player = ((GameModel) model).getPlayer();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		CopyOnWriteArrayList<Obstacle> obstacles = ((Area) area).getObstacles();
@@ -481,9 +551,11 @@ public class gameView implements Observer{
 		gc.clearRect(0, 0, WIDTH, HEIGHT);
 		
 		//draws the background layer
+		
+		// check whether the player move into or out Dungeon and change the beckground music if the players move to different map layout
 		if(previousCheck != controller.inDungeon()) {
 			backgroundMusic.stopMusic();
-			backgroundMusic.playMusic("/style/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
+			backgroundMusic.playMusic("/Backgroundmusic/" + (controller.inDungeon() ? "spookydungeonmusic.wav" : "zeldatheme.wav"), 0);
 			backgroundMusic.setVolume(controller.inDungeon() ? 0.9 : 0.2);
 		}
 		previousCheck  = controller.inDungeon();
@@ -549,7 +621,7 @@ public class gameView implements Observer{
 			}
 		}
 		
-		//draw Player to screen
+		//draw Player to screen 
 		Image playerImage = images.player[player.getDirection()-1];		
 		if(!controller.playerStalled() || (controller.playerStalled() && ((GameModel) model).getPlayer().damaged())) {
 			//this is for in motion player characters
@@ -747,7 +819,7 @@ public class gameView implements Observer{
 
 	/**
 	 * returns whether the game has started or not
-	 * @return
+	 * @return true if the game has started, false otherwise
 	 */
 	public boolean gameStarted() {
 		return gameStarted;
@@ -765,7 +837,6 @@ public class gameView implements Observer{
 	 */
 	public void updateEnemyCollision() {
 		controller.enemyAttack();
-		
 	}
 
 	/**
@@ -781,5 +852,40 @@ public class gameView implements Observer{
 	 */
 	public void setAnimationTimer(AnimationTimer animationTimer) {
 		this.animationTimer = animationTimer;
+	}
+
+	public void checkWin() {
+		if(controller.getArea().getCoords()[0] == 2 && controller.getArea().getCoords()[1] == 0) {
+			animationTimer.stop();
+			backgroundMusic.stopMusic();
+			bgmStart = false;
+			winScreen();
+		}			
+	}
+
+	private void winScreen() {
+		deathTick = 0;
+		AnimationTimer animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {				
+				if(deathTick > 500) {
+					
+					this.stop();
+					invokMenu(true);
+				}
+				GraphicsContext gc = canvas.getGraphicsContext2D();
+				gc.clearRect(0, 0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("black"));
+				gc.fillRect(0,0, WIDTH, HEIGHT);
+				gc.setFill(Paint.valueOf("white"));
+				gc.setFont(new Font(20));
+				if(deathTick >= 0) gc.fillText("With Navi's death, a twenty year long reign of terror has been brought to an end.", 160, 200);
+				if(deathTick >= 100) gc.fillText("The evil fairy has finally harassed her last generation of impressionable youth.", 180, 250);;
+				if(deathTick >= 200) gc.fillText("Thanks for playing!", 400, 600);;
+				deathTick++;
+			}
+		};
+		animationTimer.start();
+		
 	}
 }

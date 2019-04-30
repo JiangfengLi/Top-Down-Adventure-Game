@@ -31,27 +31,27 @@ public class Overlay {
 	public Overlay() {
 		lifeBarLocation[0] = 580;
 		lifeBarLocation[1] = 40;
-		lifeBarImage = new Image("/style/life bar.png");
+		lifeBarImage = new Image("/life bar.png");
 		lifeBarWidth = 100;
 		lifeBarHeight = 16;
 		
 		heartLocation[0] = 590;
 		heartLocation[1] = 61;
-		heartImage[0] = new Image("/style/full heart.png");
-		heartImage[1] = new Image("/style/half heart.png");
-		heartImage[2] = new Image("/style/empty heart.png");
+		heartImage[0] = new Image("/full heart.png");
+		heartImage[1] = new Image("/half heart.png");
+		heartImage[2] = new Image("/empty heart.png");
 		heartHeight = 20;
 		heartWidth = 20;
 		
 		arrowLocation[0] = 330;
 		arrowLocation[1] = 40;
-		arrowImage = new Image("/style/inventory arrow.png");
+		arrowImage = new Image("/inventory arrow.png");
 		arrowWidth = 28;
 		arrowHeight = 16;
 		
 		keyLocation[0] = 455;
 		keyLocation[1] = 36;
-		keyImage = new Image("/style/inventory key.png");
+		keyImage = new Image("/inventory key.png");
 		keyWidth = 20;
 		keyHeight = 20;
 	}

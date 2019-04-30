@@ -12,8 +12,8 @@ import javafx.scene.image.Image;
  *
  */
 public class GameImages {
-	
-	public Image[] player = new Image[4];	
+	public Image[] player = new Image[4];
+	public Image playerDeath;
 	public Image[] tank = new Image[4];
 	public Image tankIdle;
 	public Image shieldPillar;
@@ -38,77 +38,78 @@ public class GameImages {
 	public Image key;
 	
 	public GameImages() {
-		player[0] = new Image("/style/playerSprites/link north.png");
-		player[1] = new Image("/style/playerSprites/link left.png");
-		player[2] = new Image("/style/playerSprites/Link south.png");
-		player[3] = new Image("/style/playerSprites/link right.png");
+		playerDeath = new Image(GameImages.class.getResource("/playerSprites/link death.png").toString());
+		player[0] = new Image(GameImages.class.getResource("/playerSprites/link north.png").toString());
+		player[1] = new Image(GameImages.class.getResource("/playerSprites/link left.png").toString());
+		player[2] = new Image(GameImages.class.getResource("/playerSprites/Link south.png").toString());
+		player[3] = new Image(GameImages.class.getResource("/playerSprites/link right.png").toString());
 		
-		tank[0] = new Image("/style/tank north.png");
-		tank[1] = new Image("/style/tank left.png");
-		tank[2] = new Image("/style/tank down.png");
-		tank[3] = new Image("/style/tank right.png");		
-		tankIdle = new Image("/style/tank idle.png");
+		tank[0] = new Image(GameImages.class.getResource("/tank north.png").toString());
+		tank[1] = new Image(GameImages.class.getResource("/tank left.png").toString());
+		tank[2] = new Image(GameImages.class.getResource("/tank down.png").toString());
+		tank[3] = new Image(GameImages.class.getResource("/tank right.png").toString());		
+		tankIdle = new Image(GameImages.class.getResource("/tank idle.png").toString());
 		
-		shieldPillar = new Image("/style/shield gen.png");
+		shieldPillar = new Image(GameImages.class.getResource("/shield gen.png").toString());
 		
-		rock = new Image("/style/rock.png");
+		rock = new Image(GameImages.class.getResource("/rock.png").toString());
 		
-		grass = new Image("/style/Grass and Cut.png");
+		grass = new Image(GameImages.class.getResource("/Grass and Cut.png").toString());
 		
-		playerSwing[0] = new Image("/style/playerSprites/sword north.png");
-		playerSwing[1] = new Image("/style/playerSprites/sword left.png");
-		playerSwing[2] = new Image("/style/playerSprites/sword south.png");
-		playerSwing[3] = new Image("/style/playerSprites/sword right.png");
+		playerSwing[0] = new Image(GameImages.class.getResource("/playerSprites/sword north.png").toString());
+		playerSwing[1] = new Image(GameImages.class.getResource("/playerSprites/sword left.png").toString());
+		playerSwing[2] = new Image(GameImages.class.getResource("/playerSprites/sword south.png").toString());
+		playerSwing[3] = new Image(GameImages.class.getResource("/playerSprites/sword right.png").toString());
 		
-		speedBuff = new Image("/style/speed buff.png");
+		speedBuff = new Image(GameImages.class.getResource("/speed buff.png").toString());
 		
-		tree = new Image("/style/Tree.png");
+		tree = new Image(GameImages.class.getResource("/tree.png").toString());
 		
-		mainBoss[0] = new Image("/style/boss.png");
-		mainBoss[1] = new Image("/style/boss.png");
-		mainBoss[2] = new Image("/style/boss.png");
-		mainBoss[3] = new Image("/style/boss.png");
+		mainBoss[0] = new Image(GameImages.class.getResource("/boss.png").toString());
+		mainBoss[1] = new Image(GameImages.class.getResource("/boss.png").toString());
+		mainBoss[2] = new Image(GameImages.class.getResource("/boss.png").toString());
+		mainBoss[3] = new Image(GameImages.class.getResource("/boss.png").toString());
 		
-		miniBoss [0] = new Image("/style/miniboss.png");
-		miniBoss[1] = new Image("/style/miniboss.png");
-		miniBoss[2] = new Image("/style/miniboss.png");
-		miniBoss[3] = new Image("/style/miniboss.png");
+		miniBoss [0] = new Image(GameImages.class.getResource("/miniboss.png").toString());
+		miniBoss[1] = new Image(GameImages.class.getResource("/miniboss.png").toString());
+		miniBoss[2] = new Image(GameImages.class.getResource("/miniboss.png").toString());
+		miniBoss[3] = new Image(GameImages.class.getResource("/miniboss.png").toString());
 		
-		heart = new Image("/style/health.png");
+		heart = new Image(GameImages.class.getResource("/health.png").toString());
 		
-		dungeonEntrance = new Image("/style/dungeon entrance.png");
+		dungeonEntrance = new Image(GameImages.class.getResource("/dungeon entrance.png").toString());
 		
-		flier[0] = new Image("/style/flier image.png");
-		flier[1] = new Image("/style/flier image.png");
-		flier[2] = new Image("/style/flier image.png");
-		flier[3] = new Image("/style/flier image.png");
-		flierIdle = new Image("/style/flier idle.png");
+		flier[0] = new Image(GameImages.class.getResource("/flier image.png").toString());
+		flier[1] = new Image(GameImages.class.getResource("/flier image.png").toString());
+		flier[2] = new Image(GameImages.class.getResource("/flier image.png").toString());
+		flier[3] = new Image(GameImages.class.getResource("/flier image.png").toString());
+		flierIdle = new Image(GameImages.class.getResource("/flier idle.png").toString());
 		
-		dps[0] = new Image("/style/dps north.png");
-		dps[1] = new Image("/style/dps left.png");
-		dps[2] = new Image("/style/dps south.png");
-		dps[3] = new Image("/style/dps right.png");
-		dpsIdle = new Image("/style/dps idle.png");
+		dps[0] = new Image(GameImages.class.getResource("/dps north.png").toString());
+		dps[1] = new Image(GameImages.class.getResource("/dps left.png").toString());
+		dps[2] = new Image(GameImages.class.getResource("/dps south.png").toString());
+		dps[3] = new Image(GameImages.class.getResource("/dps right.png").toString());
+		dpsIdle = new Image(GameImages.class.getResource("/dps idle.png").toString());
 		
-		door = new Image("/style/door.png");
+		door = new Image(GameImages.class.getResource("/door.png").toString());
 		
-		fireball[0] = new Image("/style/fireball.png");
-		fireball[1] = new Image("/style/fireball.png");
-		fireball[2] = new Image("/style/fireball.png");
-		fireball[3] = new Image("/style/fireball.png");
+		fireball[0] = new Image(GameImages.class.getResource("/fireball.png").toString());
+		fireball[1] = new Image(GameImages.class.getResource("/fireball.png").toString());
+		fireball[2] = new Image(GameImages.class.getResource("/fireball.png").toString());
+		fireball[3] = new Image(GameImages.class.getResource("/fireball.png").toString());
 		
-		bowShot[0] = new Image("/style/playerSprites/bow north.png");
-		bowShot[1] = new Image("/style/playerSprites/bow left.png");
-		bowShot[2] = new Image("/style/playerSprites/bow south.png");
-		bowShot[3] = new Image("/style/playerSprites/bow right.png");
+		bowShot[0] = new Image(GameImages.class.getResource("/playerSprites/bow north.png").toString());
+		bowShot[1] = new Image(GameImages.class.getResource("/playerSprites/bow left.png").toString());
+		bowShot[2] = new Image(GameImages.class.getResource("/playerSprites/bow south.png").toString());
+		bowShot[3] = new Image(GameImages.class.getResource("/playerSprites/bow right.png").toString());
 		
-		arrowShot[0] = new Image("/style/arrow up.png");
-		arrowShot[1] = new Image("/style/arrow left.png");
-		arrowShot[2] = new Image("/style/arrow down.png");
-		arrowShot[3] = new Image("/style/arrow right.png");
+		arrowShot[0] = new Image(GameImages.class.getResource("/arrow up.png").toString());
+		arrowShot[1] = new Image(GameImages.class.getResource("/arrow left.png").toString());
+		arrowShot[2] = new Image(GameImages.class.getResource("/arrow down.png").toString());
+		arrowShot[3] = new Image(GameImages.class.getResource("/arrow right.png").toString());
 		
-		arrow = new Image("/style/arrow drop.png");
+		arrow = new Image(GameImages.class.getResource("/arrow drop.png").toString());
 	
-		key = new Image("/style/bosskey.png"); 
+		key = new Image(GameImages.class.getResource("/bosskey.png").toString()); 
 	}
 }

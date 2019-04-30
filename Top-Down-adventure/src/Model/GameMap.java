@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Composed of a 4x4 array of Areas
+ * Composed of a 3x3 array of Areas
  * Initializes 1 of each Area in the correct
  * spot on the map, has methods to access various
  * game constants.
@@ -203,7 +203,7 @@ public class GameMap implements Serializable{
 	/**
 	 * this constructor sets up the design of the dungeon map in the same manner
 	 * as the previous did for the overland map
-	 * @param dungeon
+	 * @param dungeon any boolean, just overrides the constructor to make a dungeon
 	 */
 	public GameMap(boolean dungeon) {
 		length = 2;

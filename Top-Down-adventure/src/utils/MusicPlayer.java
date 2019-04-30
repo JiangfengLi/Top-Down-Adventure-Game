@@ -19,7 +19,8 @@ public class MusicPlayer {
     /**
      * Create the MediaPlayer class and play the music file specified by music File
      * passing in 0 will make it indefinite, any other number is the times to repeat.
-     * @param musicFile
+     * @param musicFile the file to play
+     * @param i the number of times to repeat
      */
     public void playMusic(String musicFile, int i) {
         try {

@@ -19,7 +19,7 @@ public class Key extends Item {
 	
 	/**
 	 * returns true if this is a bosskey, false otherwise.
-	 * @return
+	 * @return true if this is a bosskey, false otherwise.
 	 */
 	public boolean isBossKey() {
 		return isBoss;
