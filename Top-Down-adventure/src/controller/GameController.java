@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.net.URL;
@@ -215,28 +214,28 @@ public class GameController {
 		int[] temp = new int[2];
 		
 		//if the player is off the screen to the left, leave y coordinates the same
-		//and set him on the far right side of the screen.
+		//and set him on the far right side of the new screen.
 		if(getPlayerPosition()[0] < 0) {
 			temp[1] = getPlayerPosition()[1];
 			temp[0] = 948;
 			return temp;
 		}
 		
-		//if off screen to the right, y is the same and x is the left side of the screen
+		//if off screen to the right, y is the same and x is the left side of the new screen
 		if(getPlayerPosition()[0] > 949){
 			temp[1] = getPlayerPosition()[1];
 			temp[0] = 1;
 			return temp;
 		}
 		
-		//if offscreen to the bottom, set x the same and y to the top
+		//if offscreen to the bottom, set x the same and y to the top of the new screen
 		if(getPlayerPosition()[1] > 0) {
 			temp[0] = getPlayerPosition()[0];
 			temp[1] = 1;
 			return temp;
 		}
 		
-		//if off screen to the top, x is the same and y is to the bottom
+		//if off screen to the top, x is the same and y is to the bottom of the new screen
 		if(getPlayerPosition()[1] < 0) {
 			temp[0] = getPlayerPosition()[0];
 			temp[1] = 615;
@@ -261,7 +260,7 @@ public class GameController {
 	
 	/**
 	 * checks to see if the player collided with a given obstacle
-	 * @param playerPosition the int[2] of the player's x and y coordinates
+	 * @param playerPosition the array of integer int[2] of the player's x and y coordinates
 	 * @param obstacle the obstacle we are checking for collision
 	 * @return true if the player collided with the obstacle, false otherwise
 	 */
@@ -533,11 +532,12 @@ public class GameController {
 			//checks for collision with enemies
 			for(Enemy enemy : getArea().getEnemies()) {
 				if(weaponCollision(player, enemy)) {
+					// enemy was damaged
 					if(!(enemy instanceof Boss) || !((Boss) enemy).shielded()) {
 						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Enemy_Hit.wav")));
 						enemy.loseHP(player.getDamage());
 						enemy.addStall(5);
-					}
+					}// enemy wasn't damaged
 					else {
 						soundfx.add(new AudioClip(sformat("/soundfx/LTTP_Sword_Tap.wav")));
 					}
@@ -827,7 +827,7 @@ public class GameController {
 	 * @return true if the projectile and the object collide, false otherwise.
 	 */
 	private boolean projectileCollision(Character projectile, GameObject obj) {
-		//return true if the player rectangle overlaps the obstacle rectangle.
+		//return true if the projectile rectangle overlaps the obstacle rectangle.
 		
 		int[] position = projectile.getLocation();
 		if(position[0] <= obj.getLocation()[0] + obj.getWidth() && 
@@ -889,5 +889,9 @@ public class GameController {
 	 */
 	public GameModel getModel() {
 		return model;
+	}
+
+	public void setModel(GameModel model2) {
+		this.model = model2;		
 	}
 }

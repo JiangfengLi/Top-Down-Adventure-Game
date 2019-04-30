@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
  *
  */
 public class GameImages {
-	
 	public Image[] player = new Image[4];
 	public Image playerDeath;
 	public Image[] tank = new Image[4];

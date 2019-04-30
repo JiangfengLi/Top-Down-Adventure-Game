@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Composed of a 4x4 array of Areas
+ * Composed of a 3x3 array of Areas
  * Initializes 1 of each Area in the correct
  * spot on the map, has methods to access various
  * game constants.
