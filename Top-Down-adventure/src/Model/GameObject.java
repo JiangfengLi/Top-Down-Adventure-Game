@@ -45,7 +45,7 @@ public abstract class GameObject implements Serializable{
 		oldLocation[0] = location[0];
 		oldLocation[1] = location[1];
 		location[0] += d;
-		location[1] += e;
+		location[1] += e; 
 
 	}
 	
