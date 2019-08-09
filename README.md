@@ -23,7 +23,7 @@ You may also want to find an online emulator or look up screenshots of the game 
   ◦ These enemies should be able to both take and give damage to the player character.
   ◦ They should move around the screen, avoiding any obstacles which may inhabit the screen (rocks, trees . . .)
 • Pause Menu
-◦ Menu that allows the player to exit the game, save, load, view the map, view inventory, and any other information that the player might need for their journey.
+  ◦ Menu that allows the player to exit the game, save, load, view the map, view inventory, and any other information that the player might need for their journey.
 • Music
 ◦ Background music to play during the travels.
 
