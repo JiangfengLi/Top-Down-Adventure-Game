@@ -4,20 +4,18 @@ The goal for this project is to create a top down, 2d, adventure game similar to
  https://en.wikipedia.org/wiki/The_Legend_of_Zelda_(video_game )
 
 You may also want to find an online emulator or look up screenshots of the game to get a basic idea of the mechanics.
-
-Furthermore, here is the link for the project:
   
 
-GOALS
-• Playable character
-  ◦ Inventory with at least 3 collectible items (bombs, keys, money . . .)
-  ◦ Health
-  ◦ Weapon to fight enemies
-• Explorable World
-  ◦ At least 9 screens worth of explorable content (3x3 grid is one way to structure the screens)
-  ◦ A map the player can view to see where in the world they currently are
-  ◦ One screen should be the player’s end goal. Reaching this screen will result in the player winning the game.
-  ◦ One dungeon the player can enter. This dungeon should contain some sort of key item that allows the player to reach the final screen (see previous point).
+# GOALS
+• Playable character <br/>
+  ◦ Inventory with at least 3 collectible items (bombs, keys, money . . .)<br/>
+  ◦ Health<br/>
+  ◦ Weapon to fight enemies<br/>
+• Explorable World<br/>
+  ◦ At least 9 screens worth of explorable content (3x3 grid is one way to structure the screens)<br/>
+  ◦ A map the player can view to see where in the world they currently are<br/>
+  ◦ One screen should be the player’s end goal. Reaching this screen will result in the player winning the game.<br/>
+  ◦ One dungeon the player can enter. This dungeon should contain some sort of key item that allows the player to reach the final screen (see previous point).<br/>
   ◦ Screens should have obstacles scattered about (rocks, trees, debris, water . . .)
 • Enemies
   ◦ At least 3 types of enemies the player can encounter.
