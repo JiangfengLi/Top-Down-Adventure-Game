@@ -1,4 +1,4 @@
-# Top-Down-Adventure-Game
+## Top-Down-Adventure-Game
 The goal for this project is to create a top down, 2d, adventure game similar to the original Legend of Zelda. While the basic mechanics and structure will be based off of the original, For those of you who are not familiar with the original Zelda, here is a link to the wikipedia for the game.
 
  https://en.wikipedia.org/wiki/The_Legend_of_Zelda_(video_game )
@@ -6,7 +6,7 @@ The goal for this project is to create a top down, 2d, adventure game similar to
 You may also want to find an online emulator or look up screenshots of the game to get a basic idea of the mechanics.
   
 
-# GOALS
+## GOALS
 • Playable character <br/>
   ◦ Inventory with at least 3 collectible items (bombs, keys, money . . .)<br/>
   ◦ Health<br/>
